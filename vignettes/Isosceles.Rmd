@@ -1,0 +1,322 @@
+---
+title: "Introduction to the Isosceles package"
+author: "Michal Kabza, Tim Sterne-Weiler"
+output:
+  BiocStyle::html_document:
+    toc_depth: 1
+    toc_float: true
+package: Isosceles
+vignette: >
+  %\VignetteIndexEntry{Introduction to the Isosceles package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "##"
+)
+```
+
+# Introduction 
+
+Isosceles (**Iso**form **S**ingle-**Ce**ll and **L**ong-read **E**xpression 
+**S**uite) is an R package dedicated to transcript detection and quantification 
+from ONT reads, supporting both bulk RNA-Seq and scRNA-Seq technologies.
+
+Isosceles can be installed using the following command:
+```r
+devtools::install_github('bcb-htseq/Isosceles', 
+                          host = 'https://github.roche.com/api/v3')
+```
+
+Load the Isosceles package:
+```{r, message = FALSE}
+library(Isosceles)
+```
+
+# Input data
+
+Isosceles requires the following input files:
+
+  * BAM file(s) containing aligned ONT reads and (for scRNA-Seq data) cell barcode tags
+    * We recommend [minimap2](https://github.com/lh3/minimap2) for bulk RNA-Seq data and [Sicelore](https://github.com/ucagenomix/sicelore) for scRNA-Seq data
+  * FASTA file containing the genomic sequences
+  * GTF file containing the genomic annotations
+
+# Run modes
+
+Isosceles can used in of the following run modes:
+
+  * **strict** - only annotated reference transcripts will be quantified
+  * **de_novo_strict** - de novo transcripts whose all splice sites are known (i.e. found in reference annotations or provided by the user) are also included
+  * **de_novo_loose** - de novo transcripts whose all splice sites are reproducibly passing filters in the aligned reads are included as well
+
+# Bulk RNA-Seq analysis
+
+Get the input file paths: 
+```{r, message = FALSE, warning = FALSE}
+bam_file <- system.file(
+  "extdata", "SGNex_A549_directRNA_replicate5_run1_chr9_1_1000000.bam",
+  package = "Isosceles"
+)
+gtf_file <- system.file(
+  "extdata", "Homo_sapiens.GRCh38.91_chr9_1_1000000.gtf",
+  package = "Isosceles"
+)
+genome_fasta_file <- system.file(
+  "extdata", "Homo_sapiens.GRCh38.dna_sm.primary_assembly_chr9_1_1000000.fa",
+  package = "Isosceles"
+)
+```
+
+Extract read data from the BAM files:
+```{r, message = FALSE, warning = FALSE}
+bam_files <- c(Sample = bam_file)
+bam_parsed <- extract_read_structures(
+    bam_files = bam_files
+)
+```
+
+Prepare transcript data for the analysis:
+```{r, message = FALSE, warning = FALSE}
+transcript_data <- prepare_transcripts(
+    gtf_file = gtf_file,
+    genome_fasta_file = genome_fasta_file,
+    bam_parsed = bam_parsed,
+    min_bam_splice_read_count = 2,
+    min_bam_splice_fraction = 0.01
+)
+```
+
+Create a TCC (Transcript Compatibility Counts) SummarizedExperiment object:
+```{r, message = FALSE, warning = FALSE}
+se_tcc <- prepare_tcc_se(
+    bam_files = bam_files,
+    transcript_data = transcript_data,
+    run_mode = "de_novo_loose",
+    min_read_count = 1,
+    min_relative_expression = 0
+)
+se_tcc
+```
+
+Create a transcript-level SummarizedExperiment object:
+```{r, message = FALSE, warning = FALSE}
+se_transcript <- prepare_transcript_se(
+    se_tcc = se_tcc,
+    use_length_normalization = TRUE
+)
+se_transcript
+```
+
+Create a gene-level SummarizedExperiment object:
+```{r, message = FALSE, warning = FALSE}
+se_gene <- prepare_gene_se(
+    se_tcc = se_tcc
+)
+se_gene
+```
+
+# scRNA-Seq analysis
+
+Get the input file paths: 
+```{r, message = FALSE, warning = FALSE}
+bam_file <- system.file(
+    "extdata", "molecule.tags.GE.bam",
+    package = "Isosceles"
+)
+gtf_file <- system.file(
+    "extdata", "chr4.gtf.gz",
+    package = "Isosceles"
+)
+genome_fasta_file <- system.file(
+    "extdata", "chr4.fa.gz",
+    package = "Isosceles"
+)
+```
+
+Extract read data from the BAM files:
+```{r, message = FALSE, warning = FALSE}
+bam_files <- c(Sample = bam_file)
+bam_parsed <- extract_read_structures(
+    bam_files = bam_files
+)
+```
+
+Prepare transcript data for the analysis:
+```{r, message = FALSE, warning = FALSE}
+transcript_data <- prepare_transcripts(
+    gtf_file = gtf_file,
+    genome_fasta_file = genome_fasta_file,
+    bam_parsed = bam_parsed,
+    min_bam_splice_read_count = 1,
+    min_bam_splice_fraction = 0.01
+)
+```
+
+Create a TCC (Transcript Compatibility Counts) SummarizedExperiment object:
+```{r, message = FALSE, warning = FALSE}
+se_tcc <- prepare_tcc_se(
+    bam_files = bam_files,
+    transcript_data = transcript_data,
+    run_mode = "de_novo_loose",
+    min_read_count = 1,
+    min_relative_expression = 0,
+    is_single_cell = TRUE,
+    barcode_tag = "BC"
+)
+se_tcc
+```
+
+Create a transcript-level SummarizedExperiment object:
+```{r, message = FALSE, warning = FALSE}
+se_transcript <- prepare_transcript_se(
+    se_tcc = se_tcc[, 1:5], # use only 5 cells for speed
+    use_length_normalization = FALSE
+)
+se_transcript
+```
+
+Create a gene-level SummarizedExperiment object:
+```{r, message = FALSE, warning = FALSE}
+se_gene <- prepare_gene_se(
+    se_tcc = se_tcc
+)
+se_gene
+```
+
+Create a pseudobulk TCC SummarizedExperiment object:
+```{r, message = FALSE, warning = FALSE}
+set.seed(42)
+cell_labels <- sample(1:2, ncol(se_tcc), replace = TRUE)
+se_pseudobulk_tcc <- prepare_pseudobulk_se(
+    se_tcc = se_tcc,
+    cell_labels = cell_labels
+)
+se_pseudobulk_tcc
+```
+
+Create a pseudobulk transcript-level SummarizedExperiment object:
+```{r, message = FALSE, warning = FALSE}
+se_pseudobulk_transcript <- prepare_transcript_se(
+    se_tcc = se_pseudobulk_tcc,
+    use_length_normalization = FALSE
+)
+se_pseudobulk_transcript
+```
+
+Create a pseudobulk gene-level SummarizedExperiment object:
+```{r, message = FALSE, warning = FALSE}
+se_pseudobulk_gene <- prepare_gene_se(
+    se_tcc = se_pseudobulk_tcc
+)
+se_pseudobulk_gene
+```
+
+# PSI analysis
+
+Load a transcript-level SingleCellExperiment object containing expression levels 
+of transcripts of the CAV1 gene across 2,060 cells from a mix of ovarian cancer 
+cell lines:
+```{r, message = FALSE, warning = FALSE}
+sce_transcript <- readRDS(system.file("extdata", "sce_transcript_cav1.rds",
+                                      package = "Isosceles"))
+sce_transcript
+```
+
+Create a PSI (Percent Spliced In) SummarizedExperiment object:
+```{r, message = FALSE, warning = FALSE}
+se_psi <- prepare_psi_se(sce_transcript)
+se_psi
+```
+
+PSI value heatmap for the CAV1 gene:
+```{r, message = FALSE, warning = FALSE}
+# Prepare a PSI values matrix and remove cells with no CAV1 expression
+psi_matrix <- as.matrix(t(assay(se_psi, "psi")))
+psi_matrix <- psi_matrix[rowSums(psi_matrix) > 0,]
+# Prepare a heatmap column annotations data frame
+col_anno_df <- rowData(se_psi) %>%
+    as.data.frame %>%
+    dplyr::transmute(region = factor(
+        type, levels = c("TSS", "CE", "RI", "A5", "A3", "TES")
+    ))
+# Plot the PSI value heatmap
+pheatmap::pheatmap(
+    mat = psi_matrix,
+    annotation_col = col_anno_df,
+    color = viridis::cividis(100),
+    cluster_rows = TRUE, cluster_cols = FALSE,
+    show_rownames = FALSE, show_colnames = FALSE,
+    treeheight_row = 0, annotation_names_col = FALSE
+)
+```
+
+Plot the CAV1 transcript structures:
+```{r, message = FALSE, warning = FALSE}
+# Calculate the relative expression of transcripts based on overall TPM values
+# across all cells
+tx_tpm_sums <- rowSums(assay(sce_transcript, "tpm"))
+tx_rel_exprs <- tx_tpm_sums / sum(tx_tpm_sums) * 100
+# Prepare the GenomicRangesList object for visualization
+tx_granges_list <- rowRanges(sce_transcript)
+tx_granges_list <- unlist(tx_granges_list)
+mcols(tx_granges_list)$type <- "exon"
+mcols(tx_granges_list)$rel_expr <- tx_rel_exprs[names(tx_granges_list)]
+tx_granges_list <- split(tx_granges_list, names(tx_granges_list))
+# Plot the transcript structures
+ggbio::autoplot(
+    tx_granges_list,
+    ggplot2::aes(type = type, col = rel_expr, fill = rel_expr)
+)
+```
+
+Plot the CAV1 transcript structures with introns shrinked to max 1000 bp:
+```{r, message = FALSE, warning = FALSE}
+# Prepare the shrinkage function
+shrink_func <- biovizBase::shrinkageFun(
+    IRanges::gaps(unlist(tx_granges_list)), max.gap = 1000
+)
+# Prepare the shrinked GenomicRangesList object for visualization
+shrink_granges_list <- S4Vectors::endoapply(tx_granges_list, function(gr) {
+  gr <- shrink_func(gr)
+  mcols(gr)$.ori <- NULL
+  return(gr)
+})
+# Plot the transcript structures
+ggbio::autoplot(
+    shrink_granges_list,
+    ggplot2::aes(type = type, col = rel_expr, fill = rel_expr)
+)
+```
+
+## PSI UMAP plots {.tabset}
+
+```{r, message = FALSE, warning = FALSE, results = 'asis'}
+# Calculate UMAP coordinates based on PSI values
+sce_psi <- as(se_psi, "SingleCellExperiment")
+reducedDim(sce_psi, "UMAP") <- reducedDim(sce_transcript, "UMAP")
+sce_psi <- sce_psi[
+    , colSums(assay(sce_psi, "psi")) > 0
+]
+# Create UMAP plots colored by PSI values for each gene region
+for (region_id in rownames(sce_psi)) {
+    cat("\n\n### ", region_id, "\n")
+    umap_plot <- dittoSeq::dittoDimPlot(
+        sce_psi, region_id, size = 1,
+        min.color = "#0072B2", max.color = "#F0E442",
+        order = "increasing"
+    )
+    print(umap_plot)
+}
+```
+
+### {-}
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
