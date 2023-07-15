@@ -1,4 +1,4 @@
-# Introduction 
+# Isosceles 
 
 Isosceles (**Iso**forms from **S**ingle-**Ce**ll; **L**ong-read **E**xpression 
 **S**uite) is an R package dedicated to transcript detection and quantification 
