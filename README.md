@@ -6,7 +6,7 @@ from ONT reads, supporting both bulk RNA-Seq and scRNA-Seq technologies.
 
 Isosceles can be installed using the following command:
 ```r
-devtools::install_github('bcb-timbitz/Isosceles')
+devtools::install_github('timbitz/Isosceles')
 ```
 
 Load the Isosceles package:
