@@ -1,6 +1,6 @@
 # Introduction 
 
-Isosceles (**Iso**form **S**ingle-**Ce**ll and **L**ong-read **E**xpression 
+Isosceles (**Iso**forms from **S**ingle-**Ce**ll; **L**ong-read **E**xpression 
 **S**uite) is an R package dedicated to transcript detection and quantification 
 from ONT reads, supporting both bulk RNA-Seq and scRNA-Seq technologies.
 
