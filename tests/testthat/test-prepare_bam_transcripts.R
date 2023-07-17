@@ -150,7 +150,7 @@ test_that("prepare_bam_transcripts works as expected", {
             bam_parsed = bam_parsed, anno_data = anno_data,
             genome_fasta_file = genome_fasta_file
         ),
-        regexp = 'Joining, by = "hash_id"',
+        regexp = "hash_id",
         fixed = TRUE
     )
     expect_true(is.list(tx_list))

@@ -29,7 +29,7 @@ test_that("check_splicing_compatibility works as expected", {
         compatibility_df <- check_splicing_compatibility(
             subject = subject, target = target
         ),
-        regexp = 'Joining, by = "intron_idx"', fixed = TRUE
+        regexp = "intron_idx", fixed = TRUE
     )
     expect_true(is.data.frame(compatibility_df))
     expect_identical(colnames(compatibility_df),

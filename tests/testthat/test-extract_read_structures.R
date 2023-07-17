@@ -28,7 +28,7 @@ test_that("extract_read_structures works as expected", {
 
     # Testing if function returns the expected output
     expect_message(bam_data <- extract_read_structures(bam_files = bam_file),
-                   regexp = 'Joining, by = "read_id"',
+                   regexp = "read_id",
                    fixed = TRUE)
     expect_true(is.data.frame(bam_data))
     expect_identical(dim(bam_data), c(144L, 5L))

@@ -21,7 +21,7 @@ test_that("prepare_reference_annotations works as expected", {
         anno_data <- prepare_reference_annotations(
             gtf_file = gtf_file, is_technical = FALSE
         ),
-        regexp = 'Joining, by = "gene_id"',
+        regexp = "gene_id",
         fixed = TRUE
     )
     expect_true(is.list(anno_data))

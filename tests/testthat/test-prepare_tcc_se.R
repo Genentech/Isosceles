@@ -136,7 +136,7 @@ test_that("prepare_tcc_se works as expected", {
             bam_files = bam_files, transcript_data = transcript_data,
             run_mode = "strict"
         ),
-        regexp = 'Joining, by = "read_id"',
+        regexp = "read_id",
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")
@@ -186,7 +186,7 @@ test_that("prepare_tcc_se works as expected", {
             bam_files = bam_files, transcript_data = transcript_data,
             run_mode = "de_novo_strict", min_relative_expression = 0
         ),
-        regexp = 'Joining, by = "read_id"',
+        regexp = "read_id",
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")
@@ -237,7 +237,7 @@ test_that("prepare_tcc_se works as expected", {
             bam_files = bam_files, transcript_data = transcript_data,
             run_mode = "de_novo_loose", min_relative_expression = 0
         ),
-        regexp = 'Joining, by = "read_id"',
+        regexp = "read_id",
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")
@@ -288,7 +288,7 @@ test_that("prepare_tcc_se works as expected", {
             bam_files = bam_files, transcript_data = transcript_data,
             run_mode = "de_novo_full", min_relative_expression = 0
         ),
-        regexp = 'Joining, by = "read_id"',
+        regexp = "read_id",
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")
@@ -361,7 +361,7 @@ test_that("prepare_tcc_se works as expected", {
             is_single_cell = TRUE, barcode_tag = "BC",
             run_mode = "strict"
         ),
-        regexp = 'Joining, by = "read_id"',
+        regexp = "read_id",
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")
@@ -410,7 +410,7 @@ test_that("prepare_tcc_se works as expected", {
             is_single_cell = TRUE, barcode_tag = "BC",
             run_mode = "de_novo_strict", min_relative_expression = 0
         ),
-        regexp = 'Joining, by = "read_id"',
+        regexp = "read_id",
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")
@@ -460,7 +460,7 @@ test_that("prepare_tcc_se works as expected", {
             is_single_cell = TRUE, barcode_tag = "BC",
             run_mode = "de_novo_loose", min_relative_expression = 0
         ),
-        regexp = 'Joining, by = "read_id"',
+        regexp = "read_id",
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")
@@ -510,7 +510,7 @@ test_that("prepare_tcc_se works as expected", {
             is_single_cell = TRUE, barcode_tag = "BC",
             run_mode = "de_novo_full", min_relative_expression = 0
         ),
-        regexp = 'Joining, by = "read_id"',
+        regexp = "read_id",
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")

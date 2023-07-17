@@ -108,7 +108,7 @@ test_that("prepare_transcripts works as expected", {
             gtf_file = gtf_file, genome_fasta_file = genome_fasta_file,
             bam_parsed = bam_parsed
         ),
-        regexp = 'Joining, by = "hash_id"',
+        regexp = "hash_id",
         fixed = TRUE
     )
     expect_true(is.list(tx_list))
@@ -166,7 +166,7 @@ test_that("prepare_transcripts works as expected", {
             gtf_file = gtf_file, genome_fasta_file = genome_fasta_file,
             bam_parsed = NULL
         ),
-        regexp = 'Joining, by = "feature_id"',
+        regexp = "feature_id",
         fixed = TRUE
     )
     expect_true(is.list(tx_list))
