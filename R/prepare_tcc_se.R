@@ -209,7 +209,8 @@ prepare_tcc_se <- function(bam_files,
             chunk_spliced_df$introns <- sapply(chunk_spliced_df$intron_idx,
                                                paste0, collapse = ",")
             chunk_spliced_df <- chunk_spliced_df %>%
-                dplyr::left_join(chunk_spliced_position_df)
+                dplyr::left_join(chunk_spliced_position_df,
+                                 relationship = "many-to-many")
             chunk_spliced_df$read_id <- as.numeric(as.factor(chunk_spliced_df$read_id))
             chunk_intron_idx_unique <- unique(chunk_spliced_df$intron_idx)
             names(chunk_intron_idx_unique) <- sapply(chunk_intron_idx_unique, paste0,
@@ -258,7 +259,8 @@ prepare_tcc_se <- function(bam_files,
                     }
                 )
                 spliced_compatibility_df <- chunk_spliced_df %>%
-                    dplyr::left_join(spliced_compatibility_df)
+                    dplyr::left_join(spliced_compatibility_df,
+                                     relationship = "many-to-many")
                 spliced_compatibility_df <- spliced_compatibility_df %>%
                     dplyr::filter(.data$read_start >= .data$transcript_start - extend_spliced_transcripts,
                                   .data$read_end <= .data$transcript_end + extend_spliced_transcripts,

@@ -36,7 +36,8 @@ check_truncation_status <- function(tx_df,
                                        gsub("-\\d+", "", .data$last_grange))
         )
     tx_trunc_df <- tx_trunc_df %>%
-        dplyr::left_join(tx_splice_first_last_df)
+        dplyr::left_join(tx_splice_first_last_df,
+                         relationship = "many-to-many")
 
     # Prepare reference transcript data
     anno_splice_first_last_df <- anno_data$transcript_first_last_df %>%
@@ -53,7 +54,8 @@ check_truncation_status <- function(tx_df,
                                         gsub("-\\d+", "", .data$last_intron_ref))
         )
     tx_trunc_df <- tx_trunc_df %>%
-        dplyr::inner_join(anno_splice_first_last_df)
+        dplyr::inner_join(anno_splice_first_last_df,
+                          relationship = "many-to-many")
 
 
     # Calculate 5' and 3' support

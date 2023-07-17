@@ -24,7 +24,8 @@ merge_annotated_genes <- function(gene_df, intron_df) {
     )
     intron_pairs <- dplyr::distinct(intron_pairs)
     intron_pairs <- intron_pairs %>%
-        dplyr::full_join(intron_pairs, by = "intron_idx") %>%
+        dplyr::full_join(intron_pairs, by = "intron_idx",
+                         relationship = "many-to-many") %>%
         dplyr::select(-"intron_idx") %>%
         dplyr::filter(.data$gene_idx.x < .data$gene_idx.y) %>%
         dplyr::distinct()

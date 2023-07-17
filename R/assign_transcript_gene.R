@@ -38,9 +38,11 @@ assign_transcript_gene <- function(tx_df,
 
     # Detect transcripts sharing splice sites with annotated genes
     tx_gene_splice_5p_df <- tx_gene_splice_5p_df %>%
-        dplyr::inner_join(gene_anno_splice_5p_df)
+        dplyr::inner_join(gene_anno_splice_5p_df,
+                          relationship = "many-to-many")
     tx_gene_splice_3p_df <- tx_gene_splice_3p_df %>%
-        dplyr::inner_join(gene_anno_splice_3p_df)
+        dplyr::inner_join(gene_anno_splice_3p_df,
+                          relationship = "many-to-many")
     tx_gene_splice_df <- rbind(tx_gene_splice_5p_df, tx_gene_splice_3p_df)
     tx_gene_splice_df <- tx_gene_splice_df %>%
         dplyr::group_by(.data$hash_id) %>%

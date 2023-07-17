@@ -27,7 +27,7 @@ check_splicing_compatibility <- function(subject, target) {
         dplyr::rename(target_idx = "name", intron_idx = "value") %>%
         tidyr::unchop("intron_idx")
     compatibility_df <- subject_df %>%
-        dplyr::inner_join(target_df) %>%
+        dplyr::inner_join(target_df, relationship = "many-to-many") %>%
         dplyr::select(-"intron_idx") %>%
         dplyr::distinct()
 
