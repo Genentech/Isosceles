@@ -25,10 +25,14 @@ Isosceles (**Iso**form **S**ingle-**Ce**ll and **L**ong-read **E**xpression
 **S**uite) is an R package dedicated to transcript detection and quantification 
 from ONT reads, supporting both bulk RNA-Seq and scRNA-Seq technologies.
 
-Isosceles can be installed using the following command:
+Isosceles can be installed using the following commands:
 ```r
-devtools::install_github('bcb-htseq/Isosceles', 
-                          host = 'https://github.roche.com/api/v3')
+# Install Bioconductor dependencies (basic installation)
+BiocManager::install(c("scuttle", "GenomicFeatures", "BSgenome"))
+# Install Bioconductor dependencies (building the vignette)
+BiocManager::install(c("dittoSeq", "ggbio", "BiocStyle"))
+# Install Isosceles
+devtools::install_github('timbitz/Isosceles')
 ```
 
 Load the Isosceles package:
