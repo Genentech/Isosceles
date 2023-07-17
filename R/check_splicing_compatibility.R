@@ -20,15 +20,15 @@ check_splicing_compatibility <- function(subject, target) {
     # Find transcripts sharing at least one intron
     subject_df <- subject %>%
         tibble::enframe() %>%
-        dplyr::rename(subject_idx = .data$name, intron_idx = .data$value) %>%
-        tidyr::unchop(.data$intron_idx)
+        dplyr::rename(subject_idx = "name", intron_idx = "value") %>%
+        tidyr::unchop("intron_idx")
     target_df <- target %>%
         tibble::enframe() %>%
-        dplyr::rename(target_idx = .data$name, intron_idx = .data$value) %>%
-        tidyr::unchop(.data$intron_idx)
+        dplyr::rename(target_idx = "name", intron_idx = "value") %>%
+        tidyr::unchop("intron_idx")
     compatibility_df <- subject_df %>%
         dplyr::inner_join(target_df) %>%
-        dplyr::select(-.data$intron_idx) %>%
+        dplyr::select(-"intron_idx") %>%
         dplyr::distinct()
 
     # Check splicing compatibility
@@ -41,7 +41,7 @@ check_splicing_compatibility <- function(subject, target) {
     # Prepare a data frame of compatible transcript indices
     compatibility_df <- compatibility_df %>%
         dplyr::filter(.data$is_compatible) %>%
-        dplyr::select(-.data$is_compatible)
+        dplyr::select(-"is_compatible")
 
     return(compatibility_df)
 }

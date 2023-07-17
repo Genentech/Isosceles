@@ -221,8 +221,8 @@ prepare_tcc_se <- function(bam_files,
                 )
                 spliced_compatibility_df <- spliced_compatibility_df %>%
                     dplyr::rename(
-                        introns = .data$subject_idx,
-                        transcript_idx = .data$target_idx
+                        introns = "subject_idx",
+                        transcript_idx = "target_idx"
                     )
                 spliced_compatibility_df$transcript_start <-
                     tx_starts[spliced_compatibility_df$transcript_idx]
@@ -402,7 +402,7 @@ prepare_tcc_se <- function(bam_files,
     )
     ec_compatibility_df$transcript_idx <- strsplit(ec_compatibility_df$ec_id, ",")
     ec_compatibility_df <- ec_compatibility_df %>%
-        tidyr::unchop(.data$transcript_idx) %>%
+        tidyr::unchop("transcript_idx") %>%
         dplyr::mutate(transcript_idx = as.integer(.data$transcript_idx))
     ec_compatibility <- Matrix::sparseMatrix(
         i = ec_compatibility_df$ec_idx,

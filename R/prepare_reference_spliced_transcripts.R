@@ -96,8 +96,8 @@ prepare_reference_spliced_transcripts <- function(anno_data,
     tx_intron_granges_df <- tx_df$intron_positions %>%
         strsplit(",") %>%
         tibble::enframe() %>%
-        dplyr::rename(tx_idx = .data$name, intron_position = .data$value) %>%
-        tidyr::unchop(.data$intron_position)
+        dplyr::rename(tx_idx = "name", intron_position = "value") %>%
+        tidyr::unchop("intron_position")
     tx_intron_granges <- methods::as(
         tx_intron_granges_df$intron_position, "GRanges"
     )

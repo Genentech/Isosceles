@@ -75,7 +75,7 @@ extract_read_structures <- function(bam_files,
                 end = BiocGenerics::end(chunk_spliced)
             )  %>%
                 dplyr::left_join(chunk_intron_summary) %>%
-                dplyr::select(-.data$read_id)
+                dplyr::select(-"read_id")
             bam_read_summary <- rbind(bam_read_summary,
                                       as.data.frame(chunk_read_summary))
         }

@@ -36,7 +36,7 @@ prepare_reference_annotations <- function(gtf_file, is_technical = FALSE) {
     # Prepare gene data
     gene_df <- S4Vectors::mcols(exon_granges) %>%
         as.data.frame() %>%
-        dplyr::select(.data$gene_id, .data$gene_name) %>%
+        dplyr::select("gene_id", "gene_name") %>%
         dplyr::distinct()
 
     # Prepare intron data
@@ -133,17 +133,17 @@ prepare_reference_annotations <- function(gtf_file, is_technical = FALSE) {
     transcript_exon_first_last_df <-
         GenomicFeatures::exonsBy(txdb, by = "tx", use.names = TRUE) %>%
         get_first_last_grange() %>%
-        dplyr::rename(transcript_id = .data$feature_id,
-                      first_exon_ref = .data$first_grange,
-                      last_exon_ref = .data$last_grange)
+        dplyr::rename(transcript_id = "feature_id",
+                      first_exon_ref = "first_grange",
+                      last_exon_ref = "last_grange")
     transcript_intron_first_last_df <-
         GenomicFeatures::intronsByTranscript(txdb, use.names = TRUE) %>%
         get_first_last_grange() %>%
-        dplyr::rename(transcript_id = .data$feature_id,
-                      first_intron_ref = .data$first_grange,
-                      last_intron_ref = .data$last_grange)
+        dplyr::rename(transcript_id = "feature_id",
+                      first_intron_ref = "first_grange",
+                      last_intron_ref = "last_grange")
     transcript_first_last_df <- transcript_df %>%
-        dplyr::select(.data$transcript_id, .data$gene_id) %>%
+        dplyr::select("transcript_id", "gene_id") %>%
         dplyr::filter(.data$transcript_id %in% confirmed_transcripts) %>%
         dplyr::inner_join(transcript_exon_first_last_df) %>%
         dplyr::inner_join(transcript_intron_first_last_df)

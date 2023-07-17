@@ -19,7 +19,7 @@ check_truncation_status <- function(tx_df,
     tx_trunc_df <- tx_df %>%
         dplyr::filter(.data$splicing_support_level %in% c("PC", "EC", "NC", "DN")) %>%
         dplyr::filter(!is.na(.data$gene_id)) %>%
-        dplyr::select(.data$hash_id, .data$gene_id)
+        dplyr::select("hash_id", "gene_id")
     tx_splice_first_last_df <- get_first_last_grange(
         tx_intron_granges_list[tx_trunc_df$hash_id]
     ) %>%

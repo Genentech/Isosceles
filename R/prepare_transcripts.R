@@ -137,7 +137,7 @@ prepare_transcripts <- function(gtf_file,
     assertthat::assert_that(
         length(transcript_id) == length(unique(transcript_id))
     )
-    tx_df <- dplyr::rename(tx_df, transcript_id = .data$hash_id)
+    tx_df <- dplyr::rename(tx_df, transcript_id = "hash_id")
     tx_df$transcript_id <- transcript_id
     names(tx_granges) <- transcript_id
     names(tx_exon_granges_list) <- transcript_id

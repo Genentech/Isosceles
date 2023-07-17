@@ -25,7 +25,7 @@ merge_annotated_genes <- function(gene_df, intron_df) {
     intron_pairs <- dplyr::distinct(intron_pairs)
     intron_pairs <- intron_pairs %>%
         dplyr::full_join(intron_pairs, by = "intron_idx") %>%
-        dplyr::select(-.data$intron_idx) %>%
+        dplyr::select(-"intron_idx") %>%
         dplyr::filter(.data$gene_idx.x < .data$gene_idx.y) %>%
         dplyr::distinct()
 
@@ -45,7 +45,7 @@ merge_annotated_genes <- function(gene_df, intron_df) {
             merged_gene_name = paste0(.data$gene_name, collapse = ",")
         ) %>%
         dplyr::ungroup() %>%
-        dplyr::select(-.data$gene_cluster_id) %>%
+        dplyr::select(-"gene_cluster_id") %>%
         as.data.frame()
 
     return(merged_gene_df)

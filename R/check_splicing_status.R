@@ -43,7 +43,7 @@ check_splicing_status <- function(tx_df,
     # Prepare splice sites confirmed by aligned reads
     bam_splice_df <- data.frame(read_count = bam_parsed$read_count)
     bam_splice_df$intron_idx <- tx_intron_idx
-    bam_splice_df <- tidyr::unchop(bam_splice_df, .data$intron_idx)
+    bam_splice_df <- tidyr::unchop(bam_splice_df, "intron_idx")
     bam_splice_df$splice_5p_position <-
         gsub("-\\d+", "", nr_intron_positions[bam_splice_df$intron_idx])
     bam_splice_df$splice_3p_position <-

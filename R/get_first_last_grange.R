@@ -30,28 +30,28 @@ get_first_last_grange <- function(feature_grangeslist) {
     feature_first_plus <- feature_df_plus %>%
         dplyr::group_by(.data$feature_id) %>%
         dplyr::slice_min(.data$idx) %>%
-        dplyr::select(.data$feature_id, .data$grange)
+        dplyr::select("feature_id", "grange")
     feature_last_plus <- feature_df_plus %>%
         dplyr::group_by(.data$feature_id) %>%
         dplyr::slice_max(.data$idx) %>%
-        dplyr::select(.data$feature_id, .data$grange)
+        dplyr::select("feature_id", "grange")
 
     # Get first and last features (- strand)
     feature_df_minus <- dplyr::filter(feature_df, .data$strand == "-")
     feature_first_minus <- feature_df_minus %>%
         dplyr::group_by(.data$feature_id) %>%
         dplyr::slice_max(.data$idx) %>%
-        dplyr::select(.data$feature_id, .data$grange)
+        dplyr::select("feature_id", "grange")
     feature_last_minus <- feature_df_minus %>%
         dplyr::group_by(.data$feature_id) %>%
         dplyr::slice_min(.data$idx) %>%
-        dplyr::select(.data$feature_id, .data$grange)
+        dplyr::select("feature_id", "grange")
 
     # Merge the first and last features for both strands
     feature_first_df <- rbind(feature_first_plus, feature_first_minus) %>%
-        dplyr::rename(first_grange = .data$grange)
+        dplyr::rename(first_grange = "grange")
     feature_last_df <- rbind(feature_last_plus, feature_last_minus) %>%
-        dplyr::rename(last_grange = .data$grange)
+        dplyr::rename(last_grange = "grange")
     feature_first_last_df <- data.frame(
         feature_id = names(feature_grangeslist)
     ) %>%

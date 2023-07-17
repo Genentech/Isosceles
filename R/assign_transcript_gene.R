@@ -16,7 +16,7 @@ assign_transcript_gene <- function(tx_df,
         anno_data$gene_df$gene_name, anno_data$gene_df$gene_id
     )
     gene_anno_intron_df <- anno_data$intron_df %>%
-        dplyr::select(.data$gene_id, .data$position) %>%
+        dplyr::select("gene_id", "position") %>%
         dplyr::distinct()
     gene_anno_splice_5p_df <- gene_anno_intron_df %>%
         dplyr::mutate(position = gsub("-\\d+", "", .data$position))
@@ -25,12 +25,12 @@ assign_transcript_gene <- function(tx_df,
 
     # Get transcript splice sites
     tx_gene_intron_df <- tx_df %>%
-        dplyr::select(.data$hash_id, .data$intron_positions) %>%
+        dplyr::select("hash_id", "intron_positions") %>%
         dplyr::transmute(
             hash_id = .data$hash_id,
             position = strsplit(.data$intron_positions, ",")
         ) %>%
-        tidyr::unchop(.data$position)
+        tidyr::unchop("position")
     tx_gene_splice_5p_df <- tx_gene_intron_df %>%
         dplyr::mutate(position = gsub("-\\d+", "", .data$position))
     tx_gene_splice_3p_df <- tx_gene_intron_df %>%
@@ -53,7 +53,7 @@ assign_transcript_gene <- function(tx_df,
 
     # Assign transcripts to annotated genes
     tx_gene_df <- tx_df %>%
-        dplyr::select(.data$hash_id) %>%
+        dplyr::select("hash_id") %>%
         dplyr::left_join(tx_gene_splice_df) %>%
         tidyr::replace_na(list(compatible_gene_count = 0))
     tx_gene_df$gene_id <- ifelse(

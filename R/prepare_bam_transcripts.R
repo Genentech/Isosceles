@@ -148,8 +148,8 @@ prepare_bam_transcripts <- function(bam_parsed,
     # Prepare transcript intron & exon GRangesList object
     tx_intron_granges_df <- tx_intron_idx %>%
         tibble::enframe() %>%
-        dplyr::rename(tx_idx = .data$name, intron_idx = .data$value) %>%
-        tidyr::unchop(.data$intron_idx)
+        dplyr::rename(tx_idx = "name", intron_idx = "value") %>%
+        tidyr::unchop("intron_idx")
     tx_intron_granges <- methods::as(
         nr_intron_positions[tx_intron_granges_df$intron_idx], "GRanges"
     )
