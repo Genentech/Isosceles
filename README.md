@@ -19,4 +19,4 @@ Load the Isosceles package:
 library(Isosceles)
 ```
 
-Vignette [here](https://timbitz.github.io/Isosceles/inst/doc/Isosceles.html)!
+You can follow along with our vignette [here](https://timbitz.github.io/Isosceles/inst/doc/Isosceles.html)!
