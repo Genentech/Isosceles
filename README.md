@@ -15,6 +15,8 @@ devtools::install_github('timbitz/Isosceles')
 ```
 
 Load the Isosceles package:
-```{r, message = FALSE}
+```r
 library(Isosceles)
 ```
+
+Vignette [here](https://timbitz.github.io/Isosceles/inst/doc/Isosceles.html)!
