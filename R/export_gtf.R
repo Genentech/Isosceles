@@ -11,10 +11,10 @@ export_gtf <- function(se,
                        file) {
 
     # Check arguments
-    assertthat::assert_that(grepl("SummarizedExperiment", class(se)))
-    assertthat::assert_that(
-        grepl("GRangesList", class(SummarizedExperiment::rowRanges(se)))
-    )
+    assertthat::assert_that(methods::is(se, "SummarizedExperiment"))
+    assertthat::assert_that(methods::is(
+        SummarizedExperiment::rowRanges(se), "GRangesList"
+    ))
     assertthat::assert_that(assertthat::is.string(file))
 
     # Prepare GTF file exon GRanges

@@ -8,8 +8,8 @@ check_truncation_status <- function(tx_df,
     # Check arguments
     assertthat::assert_that(is.data.frame(tx_df))
     assertthat::assert_that(assertthat::has_name(tx_df, "hash_id"))
-    assertthat::assert_that(grepl("GRangesList", class(tx_exon_granges_list)))
-    assertthat::assert_that(grepl("GRangesList", class(tx_intron_granges_list)))
+    assertthat::assert_that(methods::is(tx_exon_granges_list, "GRangesList"))
+    assertthat::assert_that(methods::is(tx_intron_granges_list, "GRangesList"))
     assertthat::assert_that(is.list(anno_data))
     assertthat::assert_that(
         assertthat::has_name(anno_data, "transcript_first_last_df")

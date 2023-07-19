@@ -34,12 +34,12 @@ test_that("export_gtf works as expected", {
 
     # Testing if function throws the expected errors
     expect_error(export_gtf(se = NULL),
-                 regexp = "x = class(se)) is not TRUE",
+                 regexp = "methods::is(object = se, class2 =",
                  fixed = TRUE)
     se_copy <- se
     SummarizedExperiment::rowRanges(se_copy) <- NULL
     expect_error(export_gtf(se = se_copy),
-                 regexp = "rowRanges(se))) is not TRUE",
+                 regexp = "SummarizedExperiment::rowRanges(se), class2 =",
                  fixed = TRUE)
     expect_error(export_gtf(se = se,
                             file = NULL),

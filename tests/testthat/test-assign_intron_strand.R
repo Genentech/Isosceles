@@ -24,7 +24,7 @@ test_that("assign_intron_strand works as expected", {
 
     # Testing if function throws the expected errors
     expect_error(assign_intron_strand(intron_granges = NULL),
-                 regexp = 'class(intron_granges) not equal to "GRanges"',
+                 regexp = "methods::is(object = intron_granges, class2 =",
                  fixed = TRUE)
     expect_error(assign_intron_strand(intron_granges = intron_granges,
                                       anno_data = NULL),

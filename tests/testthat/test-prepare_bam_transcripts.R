@@ -111,7 +111,7 @@ test_that("prepare_bam_transcripts works as expected", {
                                          anno_data = anno_data,
                                          genome_fasta_file = genome_fasta_file,
                                          known_intron_granges = 42),
-                 regexp = 'class(known_intron_granges) not equal to "GRanges"',
+                 regexp = "methods::is(object = known_intron_granges, class2 = ",
                  fixed = TRUE)
     expect_error(prepare_bam_transcripts(bam_parsed = bam_parsed,
                                          anno_data = anno_data,

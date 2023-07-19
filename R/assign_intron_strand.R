@@ -24,7 +24,7 @@ assign_intron_strand <- function(intron_granges,
                                  rescue_annotated_introns = FALSE) {
 
     # Check arguments
-    assertthat::assert_that(class(intron_granges) == "GRanges")
+    assertthat::assert_that(methods::is(intron_granges, "GRanges"))
     assertthat::assert_that(is.list(anno_data))
     assertthat::assert_that(assertthat::has_name(anno_data, "intron_df"))
     assertthat::assert_that(is.data.frame(anno_data$intron_df))

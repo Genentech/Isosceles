@@ -27,7 +27,7 @@ test_that("prepare_gene_se works as expected", {
 
     # Testing if function throws the expected errors
     expect_error(prepare_gene_se(se_tcc = NULL),
-                 regexp = "x = class(se_tcc)) is not TRUE",
+                 regexp = "methods::is(object = se_tcc, class2 =",
                  fixed = TRUE)
     se_copy <- se_tcc
     SummarizedExperiment::assay(se_copy, "counts") <- NULL

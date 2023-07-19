@@ -21,7 +21,7 @@ test_that("get_first_last_grange works as expected", {
 
     # Testing if function throws the expected errors
     expect_error(get_first_last_grange(NULL),
-                 regexp = "`%in%`(x = class(feature_grangeslist)",
+                 regexp = "methods::is(object = feature_grangeslist, class2 =",
                  fixed = TRUE)
 
     # Testing if function returns the expected output

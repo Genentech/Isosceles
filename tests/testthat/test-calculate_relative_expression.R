@@ -24,7 +24,7 @@ test_that("calculate_relative_expression works as expected", {
 
     # Testing if function throws the expected errors
     expect_error(calculate_relative_expression(se = NULL),
-                 regexp = "x = class(se)) is not TRUE",
+                 regexp = "methods::is(object = se, class2 =",
                  fixed = TRUE)
     se_copy <- se
     SummarizedExperiment::assay(se_copy, "tpm") <- NULL

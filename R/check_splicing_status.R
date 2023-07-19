@@ -24,7 +24,7 @@ check_splicing_status <- function(tx_df,
     assertthat::assert_that(is.list(tx_intron_idx))
     assertthat::assert_that(is.list(tx_anno_intron_idx))
     if (!is.null(known_intron_granges)) {
-        assertthat::assert_that(class(known_intron_granges) == "GRanges")
+        assertthat::assert_that(methods::is(known_intron_granges, "GRanges"))
     }
     assertthat::assert_that(assertthat::is.count(min_bam_splice_read_count))
     assertthat::assert_that(is.numeric(min_bam_splice_fraction))

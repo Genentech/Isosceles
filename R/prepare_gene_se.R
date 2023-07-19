@@ -10,7 +10,7 @@
 prepare_gene_se <- function(se_tcc) {
 
     # Check arguments
-    assertthat::assert_that(grepl("SummarizedExperiment", class(se_tcc)))
+    assertthat::assert_that(methods::is(se_tcc, "SummarizedExperiment"))
     assertthat::assert_that(is.element(
         "counts", SummarizedExperiment::assayNames(se_tcc)
     ))

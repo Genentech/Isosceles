@@ -63,7 +63,7 @@ test_that("prepare_transcripts works as expected", {
                                      genome_fasta_file = genome_fasta_file,
                                      bam_parsed = bam_parsed,
                                      known_intron_granges = 42),
-                 regexp = 'class(known_intron_granges) not equal to "GRanges"',
+                 regexp = "methods::is(object = known_intron_granges, class2 =",
                  fixed = TRUE)
     expect_error(prepare_transcripts(gtf_file = gtf_file,
                                      genome_fasta_file = genome_fasta_file,

@@ -11,10 +11,7 @@
 calculate_tpm <- function(se) {
 
     # Check arguments
-    assertthat::assert_that(
-        grepl("SummarizedExperiment", class(se)) ||
-            grepl("SingleCellExperiment", class(se))
-    )
+    assertthat::assert_that(methods::is(se, "SummarizedExperiment"))
     assertthat::assert_that(is.element(
         "counts", SummarizedExperiment::assayNames(se)
     ))

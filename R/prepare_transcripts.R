@@ -61,7 +61,7 @@ prepare_transcripts <- function(gtf_file,
     assertthat::assert_that(is.character(known_intron_motifs))
     assertthat::assert_that(assertthat::is.flag(rescue_annotated_introns))
     if (!is.null(known_intron_granges)) {
-        assertthat::assert_that(class(known_intron_granges) == "GRanges")
+        assertthat::assert_that(methods::is(known_intron_granges, "GRanges"))
     }
     assertthat::assert_that(assertthat::is.count(min_bam_splice_read_count))
     assertthat::assert_that(is.numeric(min_bam_splice_fraction))

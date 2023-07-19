@@ -13,8 +13,7 @@
 get_first_last_grange <- function(feature_grangeslist) {
 
     # Check arguments
-    assertthat::assert_that(class(feature_grangeslist) %in%
-                                c("SimpleGRangesList", "CompressedGRangesList"))
+    assertthat::assert_that(methods::is(feature_grangeslist, "GRangesList"))
 
     # Convert GRangesList to a feature data frame
     feature_granges <- BiocGenerics::sort(unlist(feature_grangeslist))
