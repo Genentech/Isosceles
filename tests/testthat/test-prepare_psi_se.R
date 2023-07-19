@@ -57,6 +57,10 @@ test_that("prepare_psi_se works as expected", {
     expect_error(prepare_psi_se(se = se_copy),
                  regexp = "rowRanges(se))) is not TRUE",
                  fixed = TRUE)
+    expect_error(prepare_psi_se(se = se_transcript,
+                                ncpu = NULL),
+                 regexp = "ncpu is not a count",
+                 fixed = TRUE)
 
     # Testing if function returns the expected output (bulk RNA-Seq data)
     expect_silent(

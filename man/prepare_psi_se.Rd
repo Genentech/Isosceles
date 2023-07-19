@@ -4,11 +4,14 @@
 \alias{prepare_psi_se}
 \title{Prepare a PSI SummarizedExperiment object}
 \usage{
-prepare_psi_se(se)
+prepare_psi_se(se, ncpu = 1)
 }
 \arguments{
 \item{se}{A transcript-level SummarizedExperiment object returned by the
 \code{\link{prepare_transcript_se}} function}
+
+\item{ncpu}{An integer scalar specifying the number of cores to use for
+multicore parallelization}
 }
 \value{
 A SummarizedExperiment object containing PSI annotation and

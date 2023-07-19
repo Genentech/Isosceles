@@ -5,10 +5,13 @@
 #'
 #' @param se A transcript-level SummarizedExperiment object returned by the
 #' \code{\link{prepare_transcript_se}} function
+#' @param ncpu An integer scalar specifying the number of cores to use for
+#' multicore parallelization
 #' @return A SummarizedExperiment object containing PSI annotation and
 #' quantification data
 #' @export
-prepare_psi_se <- function(se) {
+prepare_psi_se <- function(se,
+                           ncpu = 1) {
 
     # Check arguments
     assertthat::assert_that(methods::is(se, "SummarizedExperiment"))
@@ -27,9 +30,13 @@ prepare_psi_se <- function(se) {
     assertthat::assert_that(
         grepl("GRangesList", class(SummarizedExperiment::rowRanges(se)))
     )
+    assertthat::assert_that(assertthat::is.count(ncpu))
 
     # Fix the "No visible binding for global variable '.'" issue
     . = NULL
+
+    # Prepare the parallelization backend
+    BPPARAM <- BiocParallel::MulticoreParam(ncpu)
 
     # Remove unspliced transcripts from the SummarizedExperiment
     se <- se[!is.na(SummarizedExperiment::rowData(se)$intron_positions),]
@@ -44,7 +51,7 @@ prepare_psi_se <- function(se) {
         split(.$gene_id)
 
     # Prepare non-overlapping transcript regions
-    regions_data <- lapply(tx_data_list, function(tx_data_df) {
+    regions_data <- BiocParallel::bplapply(tx_data_list, function(tx_data_df) {
 
         # Prepare transcript data
         tx_granges <- methods::as(tx_data_df$position, "GRanges")
@@ -172,7 +179,7 @@ prepare_psi_se <- function(se) {
             transcripts = unname(region_transcripts)
         )
         return(regions_tbl)
-    })
+    }, BPPARAM = BPPARAM)
     regions_data <- do.call(rbind, regions_data)
 
     # Calculate PSI values
