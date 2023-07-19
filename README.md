@@ -6,12 +6,8 @@ from ONT reads, supporting both bulk RNA-Seq and scRNA-Seq technologies.
 
 Isosceles can be installed using the following commands:
 ```r
-# Install Bioconductor dependencies (basic installation)
-BiocManager::install(c("scuttle", "GenomicFeatures", "BSgenome"))
-# Install Bioconductor dependencies (building the vignette)
-BiocManager::install(c("dittoSeq", "ggbio", "BiocStyle"))
-# Install Isosceles
-devtools::install_github('timbitz/Isosceles')
+BiocManager::install(c("scuttle", "dittoSeq", "ggbio", "BiocStyle"))# Install Isosceles
+devtools::install_github("timbitz/Isosceles", dependencies = TRUE, upgrade = TRUE)
 ```
 
 Load the Isosceles package:
