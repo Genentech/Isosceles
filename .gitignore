@@ -1,5 +1,10 @@
 # ============================== main settings
 
+# R package related files
+inst/doc
+doc
+Meta
+
 # History files
 .Rhistory
 .Rapp.history
