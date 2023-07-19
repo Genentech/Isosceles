@@ -79,6 +79,7 @@ extract_read_structures <- function(bam_files,
             bam_read_summary <- rbind(bam_read_summary,
                                       as.data.frame(chunk_read_summary))
         }
+        close(bam_file_con)
 
         ## Collapse BAM file read structure data
         bam_read_summary <- bam_read_summary %>%
