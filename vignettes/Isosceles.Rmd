@@ -309,6 +309,15 @@ se_psi <- prepare_psi_se(sce_transcript)
 se_psi
 ```
 
+PSI values are calculated for the following types of regions:
+
+  * **TSS** - transcription start sites
+  * **TES** - transcription end sites
+  * **CE** - core exonic regions
+  * **RI** - retained intronic regions
+  * **A5** - 5' alternative exonic regions
+  * **A3** - 3' alternative exonic regions
+
 PSI value heatmap for the CAV1 gene:
 ```{r, message = FALSE, warning = FALSE}
 # Prepare a PSI values matrix and remove cells with no CAV1 expression
