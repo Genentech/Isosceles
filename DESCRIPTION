@@ -54,7 +54,10 @@ Suggests:
     ggbio (>= 1.44.1),
     ggplot2 (>= 3.3.6),
     biovizBase (>= 1.44.0),
-    dittoSeq (>= 1.8.1)
+    dittoSeq (>= 1.8.1),
+    scran (>= 1.24.0),
+    scater (>= 1.24.0),
+    bluster (>= 1.6.0)
 Config/testthat/edition: 3
 LinkingTo: 
     Rcpp (>= 1.0.9),

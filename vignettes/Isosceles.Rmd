@@ -216,6 +216,81 @@ se_pseudobulk_gene <- prepare_gene_se(
 se_pseudobulk_gene
 ```
 
+# Downstream analysis
+
+Load a transcript-level SummarizedExperiment object containing expression levels 
+of 100 highly variable transcripts across 200 cells from a mix of ovarian cancer 
+cell lines:
+```{r, message = FALSE, warning = FALSE}
+se <- readRDS(system.file("extdata", "se_transcript_100_hvts.rds",
+                          package = "Isosceles"))
+se
+```
+
+Run a basic scRNA-Seq data analysis using Bioconductor packages:
+```{r, message = FALSE, warning = FALSE}
+sce <- as(se, "SingleCellExperiment")
+sce <- scuttle::computeLibraryFactors(sce)
+sce <- scuttle::logNormCounts(sce)
+dec <- scran::modelGeneVar(sce)
+top_hvgs <- scran::getTopHVGs(dec, n = 100)
+set.seed(42)
+sce <- scran::denoisePCA(sce, technical = dec, subset.row = top_hvgs)
+set.seed(42)
+sce <- scater::runUMAP(sce, dimred = "PCA")
+sce
+```
+
+Cell clustering using k-means:
+```{r, message = FALSE, warning = FALSE}
+set.seed(42)
+colLabels(sce) <- bluster::clusterRows(reducedDim(sce, "PCA"),
+                                       bluster::KmeansParam(3))
+dittoSeq::dittoDimPlot(sce, "label", reduction.use = "UMAP",
+                       size = 2, main = "",
+                       do.label = TRUE, labels.highlight = TRUE,
+                       legend.show = FALSE)
+```
+
+Identify marker transcripts for individual clusters:
+```{r, message = FALSE, warning = FALSE}
+markers <- scran::findMarkers(sce, groups = sce$label, test.type = "t",
+                              pval.type = "all", direction = "up")
+markers
+head(markers[[1]])
+```
+
+Get top 3 marker transcripts for each cluster:
+```{r, message = FALSE, warning = FALSE}
+top_markers <- markers %>%
+  lapply(function(x) rownames(x)[1:3]) %>%
+  unlist() %>%
+  unname()
+top_markers
+```
+
+Top marker transcript heatmap:
+```{r, message = FALSE, warning = FALSE}
+dittoSeq::dittoHeatmap(sce, top_markers, annot.by = "label",
+                       cluster_rows = TRUE, fontsize_row = 6)
+```
+
+## Transcript expression UMAP plots {.tabset}
+
+```{r, message = FALSE, warning = FALSE, results = 'asis'}
+for (transcript_id in top_markers) {
+    cat("\n\n### ", transcript_id, "\n")
+    umap_plot <- dittoSeq::dittoDimPlot(
+        sce, transcript_id, size = 2,
+        min.color = "#0072B2", max.color = "#F0E442",
+        order = "increasing"
+    )
+    print(umap_plot)
+}
+```
+
+### {-}
+
 # PSI analysis
 
 Load a transcript-level SingleCellExperiment object containing expression levels 
