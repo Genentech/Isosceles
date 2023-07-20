@@ -3,6 +3,7 @@
 export("%>%")
 export(export_gtf)
 export(extract_read_structures)
+export(merge_sc_neighbors)
 export(prepare_gene_se)
 export(prepare_pseudobulk_se)
 export(prepare_psi_se)

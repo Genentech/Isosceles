@@ -24,6 +24,7 @@ Imports:
     Rcpp (>= 1.0.9),
     Matrix (>= 1.4-1),
     BiocParallel (>= 1.30.3),
+    BiocNeighbors (>= 1.14.0),
     S4Vectors (>= 0.34.0),
     BiocGenerics (>= 0.42.0),
     Biostrings (>= 2.64.0),
