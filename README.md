@@ -6,7 +6,7 @@ from ONT reads, supporting both bulk RNA-Seq and scRNA-Seq technologies.
 
 Isosceles can be installed using the following commands:
 ```r
-BiocManager::install(c("scuttle", "dittoSeq", "ggbio", "BiocStyle"))
+BiocManager::install(c("scran", "scater", "uwot", "dittoSeq", "ggbio", "BiocStyle"))
 devtools::install_github("timbitz/Isosceles", dependencies = TRUE, upgrade = TRUE)
 ```
 
