@@ -1,7 +1,18 @@
 #' Prepare a PSI SummarizedExperiment object
 #'
 #' Prepares a PSI (Percent Spliced In) SummarizedExperiment object
-#' for the given transcript-level SummarizedExperiment object
+#' for the given transcript-level SummarizedExperiment object. PSI values
+#' are calculated for the following types of regions:
+#' \itemize{
+#'   \item{**TSS** - transcription start sites}
+#'   \item{**TES** - transcription end sites}
+#'   \item{**CE** - core exonic regions}
+#'   \item{**RI** - retained intronic regions}
+#'   \item{**A5** - 5' alternative exonic regions}
+#'   \item{**A3** - 3' alternative exonic regions}
+#' }
+#' TSS and TES positions are calculated based on transcripts' binned start and
+#' end coordinates extracted from their identifiers
 #'
 #' @param se A transcript-level SummarizedExperiment object returned by the
 #' \code{\link{prepare_transcript_se}} function

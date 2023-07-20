@@ -19,5 +19,16 @@ quantification data
 }
 \description{
 Prepares a PSI (Percent Spliced In) SummarizedExperiment object
-for the given transcript-level SummarizedExperiment object
+for the given transcript-level SummarizedExperiment object. PSI values
+are calculated for the following types of regions:
+\itemize{
+\item{\strong{TSS} - transcription start sites}
+\item{\strong{TES} - transcription end sites}
+\item{\strong{CE} - core exonic regions}
+\item{\strong{RI} - retained intronic regions}
+\item{\strong{A5} - 5' alternative exonic regions}
+\item{\strong{A3} - 3' alternative exonic regions}
+}
+TSS and TES positions are calculated based on transcripts' binned start and
+end coordinates extracted from their identifiers
 }
