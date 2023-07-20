@@ -72,7 +72,8 @@ prepare_gene_se <- function(se_tcc) {
             tpm = gene_tpm,
             relative_expression = gene_rel_expr
         ),
-        rowData = gene_df
+        rowData = gene_df,
+        colData = SummarizedExperiment::colData(se_tcc)
     )
 
     return(se)

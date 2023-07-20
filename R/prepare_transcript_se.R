@@ -107,7 +107,8 @@ prepare_transcript_se <- function(se_tcc,
     # Prepare the SummarizedExperiment object
     se <- SummarizedExperiment::SummarizedExperiment(
         assays = list(counts = tx_count_matrix),
-        rowRanges = S4Vectors::metadata(se_tcc)$transcript_exon_granges_list
+        rowRanges = S4Vectors::metadata(se_tcc)$transcript_exon_granges_list,
+        colData = SummarizedExperiment::colData(se_tcc)
     )
     SummarizedExperiment::rowData(se) <- S4Vectors::metadata(se_tcc)$transcript_df
     SummarizedExperiment::assay(se, "tpm") <- calculate_tpm(se)

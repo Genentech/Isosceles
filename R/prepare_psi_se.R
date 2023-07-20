@@ -208,7 +208,8 @@ prepare_psi_se <- function(se,
     # Create the SummarizedExperiment object
     se_psi <- SummarizedExperiment::SummarizedExperiment(
         assays = list(psi = psi_matrix),
-        rowRanges = methods::as(regions_data$range, "GRanges")
+        rowRanges = methods::as(regions_data$range, "GRanges"),
+        colData = SummarizedExperiment::colData(se)
     )
     row_data_columns <- c("gene_id", "type")
     SummarizedExperiment::rowData(se_psi) <- regions_data[, row_data_columns]
