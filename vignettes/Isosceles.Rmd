@@ -175,7 +175,7 @@ se_tcc
 Create a transcript-level SummarizedExperiment object:
 ```{r, message = FALSE, warning = FALSE}
 se_transcript <- prepare_transcript_se(
-    se_tcc = se_tcc[, 1:5], # use only 5 cells for speed
+    se_tcc = se_tcc,
     use_length_normalization = FALSE
 )
 se_transcript
@@ -215,6 +215,34 @@ se_pseudobulk_gene <- prepare_gene_se(
     se_tcc = se_pseudobulk_tcc
 )
 se_pseudobulk_gene
+```
+
+Isosceles also allows adding counts from neighboring cells to each cell, 
+potentially improving the quantification results:
+```{r, message = FALSE, warning = FALSE}
+# Get PCA coordinates of each cell from transcript expression data
+sce_transcript <- methods::as(se_transcript, "SingleCellExperiment")
+sce_transcript <- scuttle::computeLibraryFactors(sce_transcript)
+sce_transcript <- scuttle::logNormCounts(sce_transcript)
+set.seed(42)
+sce_transcript <- scater::runPCA(sce_transcript, ncomponents = 2)
+pca_mat <- SingleCellExperiment::reducedDim(sce_transcript, "PCA")
+# Add TCC values from two nearest cells to each cell
+se_merged_tcc <- merge_sc_neighbors(
+    se_tcc = se_tcc,
+    pca_mat = pca_mat,
+    k = 2
+)
+se_merged_tcc
+```
+
+Recalculate transcript expression values from merged data:
+```{r, message = FALSE, warning = FALSE}
+se_merged_transcript <- prepare_transcript_se(
+    se_tcc = se_merged_tcc,
+    use_length_normalization = FALSE
+)
+se_merged_transcript
 ```
 
 # Downstream analysis
