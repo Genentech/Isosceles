@@ -3,7 +3,7 @@
 #' Prepares a gene-level SummarizedExperiment from TCC data
 #'
 #' @param se_tcc A TCC SummarizedExperiment object returned by a function from
-#' the \code{\link{Isosceles}} package
+#' the \code{\link{Isosceles-package}}
 #' @return A SummarizedExperiment object containing gene annotation and
 #' quantification data
 #' @export

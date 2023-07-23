@@ -8,7 +8,7 @@ prepare_gene_se(se_tcc)
 }
 \arguments{
 \item{se_tcc}{A TCC SummarizedExperiment object returned by a function from
-the \code{\link{Isosceles}} package}
+the \code{\link{Isosceles-package}}}
 }
 \value{
 A SummarizedExperiment object containing gene annotation and

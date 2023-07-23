@@ -14,7 +14,7 @@ prepare_transcript_se(
 }
 \arguments{
 \item{se_tcc}{A TCC SummarizedExperiment object returned by a function from
-the \code{\link{Isosceles}} package}
+the \code{\link{Isosceles-package}}}
 
 \item{em.maxiter}{An integer scalar specifying the maximum number of EM
 iterations}

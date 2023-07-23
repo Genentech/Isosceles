@@ -4,7 +4,7 @@
 #' algorithm
 #'
 #' @param se_tcc A TCC SummarizedExperiment object returned by a function from
-#' the \code{\link{Isosceles}} package
+#' the \code{\link{Isosceles-package}}
 #' @param em.maxiter An integer scalar specifying the maximum number of EM
 #' iterations
 #' @param em.conv A numeric scalar specifying the EM convergence threshold
