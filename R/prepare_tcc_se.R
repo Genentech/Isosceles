@@ -13,7 +13,7 @@
 #' @param min_relative_expression A numeric scalar specifying the relative
 #' expression threshold for transcripts extracted from the BAM files
 #' @param extend_spliced_transcripts An integer scalar specifying the number of
-#' base pairs by which transcript starts and ends are extended for read
+#' base pairs by which transcript starts and ends are extended for spliced read
 #' compatibility search
 #' @param is_single_cell A logical scalar specifying if the BAM files contain
 #' single cell data

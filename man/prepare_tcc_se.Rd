@@ -33,7 +33,7 @@ for transcripts extracted from the BAM files}
 expression threshold for transcripts extracted from the BAM files}
 
 \item{extend_spliced_transcripts}{An integer scalar specifying the number of
-base pairs by which transcript starts and ends are extended for read
+base pairs by which transcript starts and ends are extended for spliced read
 compatibility search}
 
 \item{is_single_cell}{A logical scalar specifying if the BAM files contain
