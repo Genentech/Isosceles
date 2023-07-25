@@ -15,5 +15,5 @@ Load the Isosceles package:
 library(Isosceles)
 ```
 
-You can follow along with our [vignette](https://timbitz.github.io/Isosceles/inst/vignette/Isosceles.html) 
-or the [reference manual](https://github.com/timbitz/Isosceles/blob/devel/inst/vignette/Isosceles.pdf)!
+You can follow along with our [vignette](https://timbitz.github.io/Isosceles/docs/Isosceles.html) 
+or the [reference manual](https://github.com/timbitz/Isosceles/blob/devel/docs/Isosceles.pdf)!
