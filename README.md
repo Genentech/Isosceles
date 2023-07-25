@@ -4,6 +4,10 @@ Isosceles (**Iso**forms from **S**ingle-**Ce**ll; **L**ong-read **E**xpression
 **S**uite) is an R package dedicated to transcript detection and quantification 
 from ONT reads, supporting both bulk RNA-Seq and scRNA-Seq technologies.
 
+<p align="center">
+  <img src="docs/Isosceles_header.gif" width="600">
+</p>
+
 Isosceles can be installed using the following commands:
 ```r
 BiocManager::install(c("scran", "scater", "uwot", "dittoSeq", "ggbio", "BiocStyle"))
