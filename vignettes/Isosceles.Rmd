@@ -57,7 +57,6 @@ Isosceles requires the following input files:
   * FASTA file containing the genomic sequences
   * GTF file containing the genomic annotations
     * Isosceles requires the chromosome names to match between the FASTA file and the GTF file. No automatic conversion between alternative chromosome naming conventions (e.g. '1' and 'chr1') is performed
-    * Isosceles was designed to work with GTF files originating from Ensembl / GENCODE (it uses some tags from these files by default). For datasets where such annotations are not available (e.g. SIRV data) the *is_technical* flag of the `prepare_transcripts` function can be set to TRUE in order to make Isosceles accept the GTF file
 
 # Run modes
 
