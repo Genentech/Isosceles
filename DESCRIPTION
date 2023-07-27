@@ -4,7 +4,7 @@ Version: 0.0.1.9000
 Authors@R: c(
     person("Michal", "Kabza", email = "michal.kabza@contractors.roche.com", role = c("aut", "cre")),
     person("Tim", "Sterne-Weiler", email = "sternewt@gene.com", role = c("aut")))
-Description: Transcript detection and quantification from ONT reads.
+Description: Transcript detection and quantification from long reads.
 Depends: 
     R (>= 4.2.0),
     SingleCellExperiment (>= 1.18.0)

@@ -1,6 +1,6 @@
 #' Isosceles: Isoform Single-Cell and Long-read Expression Suite
 #'
-#' Transcript detection and quantification from ONT reads
+#' Transcript detection and quantification from long reads
 #'
 #' @docType package
 #' @name Isosceles-package

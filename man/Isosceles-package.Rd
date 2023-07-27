@@ -5,7 +5,7 @@
 \alias{Isosceles-package}
 \title{Isosceles: Isoform Single-Cell and Long-read Expression Suite}
 \description{
-Transcript detection and quantification from ONT reads
+Transcript detection and quantification from long reads
 }
 \author{
 Tim Sterne-Weiler \href{mailto:sternewt@gene.com}{sternewt@gene.com}
