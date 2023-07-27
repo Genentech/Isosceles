@@ -1,6 +1,15 @@
 ---
 title: "Introduction to the Isosceles package"
-author: "Michal Kabza, Tim Sterne-Weiler"
+author:
+- name: Michal Kabza
+  affiliation:
+    - Roche Informatics, F. Hoffmann-La Roche Ltd., Poznań, Poland
+  email: michal.kabza@contractors.roche.com
+- name: Tim Sterne-Weiler
+  affiliation:
+    - Department of Oncology Bioinformatics, Genentech Inc., South San Francisco, USA
+    - Department of Discovery Oncology, Genentech Inc., South San Francisco, USA
+  email: sternewt@gene.com
 output:
   BiocStyle::html_document:
     toc_depth: 1
@@ -42,10 +51,13 @@ library(Isosceles)
 
 Isosceles requires the following input files:
 
-  * BAM file(s) containing aligned ONT reads and (for scRNA-Seq data) cell barcode tags
+  * BAM file(s) containing aligned long reads
     * We recommend [minimap2](https://github.com/lh3/minimap2) for bulk RNA-Seq data and [Sicelore](https://github.com/ucagenomix/sicelore) for scRNA-Seq data
+    * Isosceles requires the BAM file for scRNA-Seq data to contain a tag storing the cell barcode. By default, the tag name for Sicelore ('BC') is assumed, but it can be changed using the *barcode_tag* argument of the `prepare_tcc_se` function
   * FASTA file containing the genomic sequences
   * GTF file containing the genomic annotations
+    * Isosceles requires the chromosome names to match between the FASTA file and the GTF file. No automatic conversion between alternative chromosome naming conventions (e.g. '1' and 'chr1') is performed
+    * Isosceles was designed to work with GTF files originating from Ensembl / GENCODE (it uses some tags from these files by default). For datasets where such annotations are not available (e.g. SIRV data) the *is_technical* flag of the `prepare_transcripts` function can be set to TRUE in order to make Isosceles accept the GTF file
 
 # Run modes
 
@@ -57,7 +69,9 @@ Isosceles can used in of the following run modes:
 
 # Bulk RNA-Seq analysis
 
-Get the input file paths: 
+## Preparing input data
+
+Get the input file paths for a small bulk RNA-Seq dataset: 
 ```{r, message = FALSE, warning = FALSE}
 bam_file <- system.file(
   "extdata", "SGNex_A549_directRNA_replicate5_run1_chr9_1_1000000.bam",
@@ -72,6 +86,8 @@ genome_fasta_file <- system.file(
   package = "Isosceles"
 )
 ```
+
+## Basic Isosceles analysis
 
 Extract read data from the BAM files:
 ```{r, message = FALSE, warning = FALSE}
@@ -104,7 +120,7 @@ se_tcc <- prepare_tcc_se(
 se_tcc
 ```
 
-Create a transcript-level SummarizedExperiment object:
+Create a transcript-level SummarizedExperiment object using the EM algorithm:
 ```{r, message = FALSE, warning = FALSE}
 se_transcript <- prepare_transcript_se(
     se_tcc = se_tcc,
@@ -123,7 +139,9 @@ se_gene
 
 # scRNA-Seq analysis
 
-Get the input file paths: 
+## Preparing input data
+
+Get the input file paths for a small scRNA-Seq dataset: 
 ```{r, message = FALSE, warning = FALSE}
 bam_file <- system.file(
     "extdata", "molecule.tags.GE.bam",
@@ -138,6 +156,8 @@ genome_fasta_file <- system.file(
     package = "Isosceles"
 )
 ```
+
+## Basic Isosceles analysis
 
 Extract read data from the BAM files:
 ```{r, message = FALSE, warning = FALSE}
@@ -172,7 +192,7 @@ se_tcc <- prepare_tcc_se(
 se_tcc
 ```
 
-Create a transcript-level SummarizedExperiment object:
+Create a transcript-level SummarizedExperiment object using the EM algorithm:
 ```{r, message = FALSE, warning = FALSE}
 se_transcript <- prepare_transcript_se(
     se_tcc = se_tcc,
@@ -189,10 +209,14 @@ se_gene <- prepare_gene_se(
 se_gene
 ```
 
+## Pseudo-bulk analysis
+
 Create a pseudobulk TCC SummarizedExperiment object:
 ```{r, message = FALSE, warning = FALSE}
+# Randomly choose one of two labels ('1' or '2') for each cell
 set.seed(42)
 cell_labels <- sample(1:2, ncol(se_tcc), replace = TRUE)
+# Prepare pseudobulk TCC data for given labels
 se_pseudobulk_tcc <- prepare_pseudobulk_se(
     se_tcc = se_tcc,
     cell_labels = cell_labels
@@ -200,7 +224,7 @@ se_pseudobulk_tcc <- prepare_pseudobulk_se(
 se_pseudobulk_tcc
 ```
 
-Create a pseudobulk transcript-level SummarizedExperiment object:
+Create a pseudobulk transcript-level SummarizedExperiment object using the EM algorithm:
 ```{r, message = FALSE, warning = FALSE}
 se_pseudobulk_transcript <- prepare_transcript_se(
     se_tcc = se_pseudobulk_tcc,
@@ -216,6 +240,8 @@ se_pseudobulk_gene <- prepare_gene_se(
 )
 se_pseudobulk_gene
 ```
+
+## Merging neighboring cell data
 
 Isosceles also allows adding counts from neighboring cells to each cell, 
 potentially improving the quantification results:
@@ -236,7 +262,7 @@ se_merged_tcc <- merge_sc_neighbors(
 se_merged_tcc
 ```
 
-Recalculate transcript expression values from merged data:
+Recalculate transcript expression values from merged data using the EM algorithm:
 ```{r, message = FALSE, warning = FALSE}
 se_merged_transcript <- prepare_transcript_se(
     se_tcc = se_merged_tcc,
@@ -247,6 +273,8 @@ se_merged_transcript
 
 # Downstream analysis
 
+## Preparing input data
+
 Load a transcript-level SummarizedExperiment object containing expression levels 
 of 100 highly variable transcripts across 200 cells from a mix of ovarian cancer 
 cell lines:
@@ -255,6 +283,8 @@ se <- readRDS(system.file("extdata", "se_transcript_100_hvts.rds",
                           package = "Isosceles"))
 se
 ```
+
+## Basic scRNA-Seq analysis
 
 Run a basic scRNA-Seq data analysis using Bioconductor packages:
 ```{r, message = FALSE, warning = FALSE}
@@ -280,6 +310,8 @@ dittoSeq::dittoDimPlot(sce, "label", reduction.use = "UMAP",
                        do.label = TRUE, labels.highlight = TRUE,
                        legend.show = FALSE)
 ```
+
+## Identifying marker transcripts
 
 Identify marker transcripts for individual clusters:
 ```{r, message = FALSE, warning = FALSE}
@@ -322,6 +354,8 @@ for (transcript_id in top_markers) {
 
 # PSI analysis
 
+## Preparing input data
+
 Load a transcript-level SingleCellExperiment object containing expression levels 
 of transcripts of the CAV1 gene across 2,060 cells from a mix of ovarian cancer 
 cell lines:
@@ -330,6 +364,8 @@ sce_transcript <- readRDS(system.file("extdata", "sce_transcript_cav1.rds",
                                       package = "Isosceles"))
 sce_transcript
 ```
+
+## PSI analysis using Isosceles
 
 Create a PSI (Percent Spliced In) SummarizedExperiment object:
 ```{r, message = FALSE, warning = FALSE}
@@ -345,6 +381,8 @@ PSI values are calculated for the following types of regions:
   * **RI** - retained intronic regions
   * **A5** - 5' alternative exonic regions
   * **A3** - 3' alternative exonic regions
+
+## PSI region visualization
 
 PSI value heatmap for the CAV1 gene:
 ```{r, message = FALSE, warning = FALSE}
