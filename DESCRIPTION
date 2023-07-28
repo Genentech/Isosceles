@@ -1,6 +1,6 @@
 Package: Isosceles
 Title: Isoform Single-Cell and Long-read Expression Suite
-Version: 0.0.1.9000
+Version: 0.0.2
 Authors@R: c(
     person("Michal", "Kabza", email = "michal.kabza@contractors.roche.com", role = c("aut", "cre")),
     person("Tim", "Sterne-Weiler", email = "sternewt@gene.com", role = c("aut")))
