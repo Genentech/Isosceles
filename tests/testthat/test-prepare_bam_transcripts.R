@@ -13,7 +13,7 @@ test_that("prepare_bam_transcripts works as expected", {
         "extdata", "Homo_sapiens.GRCh38.dna_sm.primary_assembly_chr9_1_1000000.fa",
         package = "Isosceles"
     )
-    anno_data <- prepare_reference_annotations(gtf_file, is_technical = FALSE)
+    anno_data <- prepare_reference_annotations(gtf_file)
     bam_parsed <- extract_read_structures(bam_file)
 
     # Testing if function throws the expected errors
@@ -180,7 +180,7 @@ test_that("prepare_bam_transcripts works as expected", {
     expect_identical(names(table(tx_list$tx_df$fivethree_support_level)),
                      c("3T", "5T", "FL", "FT", "NA"))
     expect_identical(as.numeric(table(tx_list$tx_df$fivethree_support_level)),
-                     c(2, 42, 9, 13, 78))
+                     c(3, 36, 18, 9, 78))
     expect_identical(sum(tx_list$tx_df$read_count), 399L)
     expect_identical(sum(is.na(tx_list$tx_df$relative_expression)), 12L)
     expect_identical(sum(tx_list$tx_df$relative_expression, na.rm = TRUE), 5)

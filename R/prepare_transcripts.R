@@ -8,9 +8,6 @@
 #' @param bam_parsed A data frame containing non-redundant read structure data
 #' returned by the \code{\link{extract_read_structures}} function. If NULL,
 #' only reference transcripts are used
-#' @param is_technical A boolean scalar specifying if the GTF file describes
-#' technical sequences (e.g. SIRV or ERCC) rather than originating from
-#' Ensembl / GENCODE
 #' @param min_intron_length An integer scalar specifying the minimal length
 #' of introns to assign strand to
 #' @param known_intron_motifs A character vector specifying the known intron
@@ -39,7 +36,6 @@
 prepare_transcripts <- function(gtf_file,
                                 genome_fasta_file,
                                 bam_parsed,
-                                is_technical = FALSE,
                                 min_intron_length = 30,
                                 known_intron_motifs = c("GT-AG"),
                                 rescue_annotated_introns = FALSE,
@@ -56,7 +52,6 @@ prepare_transcripts <- function(gtf_file,
     if (!is.null(bam_parsed)) {
         assertthat::assert_that(is.data.frame(bam_parsed))
     }
-    assertthat::assert_that(assertthat::is.flag(is_technical))
     assertthat::assert_that(assertthat::is.count(min_intron_length))
     assertthat::assert_that(is.character(known_intron_motifs))
     assertthat::assert_that(assertthat::is.flag(rescue_annotated_introns))
@@ -71,7 +66,7 @@ prepare_transcripts <- function(gtf_file,
     assertthat::assert_that(assertthat::is.count(bin_size))
 
     # Prepare reference annotation data
-    anno_data <- prepare_reference_annotations(gtf_file, is_technical = is_technical)
+    anno_data <- prepare_reference_annotations(gtf_file)
 
     # Prepare spliced reference transcripts
     tx_list_spliced <- prepare_reference_spliced_transcripts(

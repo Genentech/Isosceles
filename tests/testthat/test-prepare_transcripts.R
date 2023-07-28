@@ -38,12 +38,6 @@ test_that("prepare_transcripts works as expected", {
     expect_error(prepare_transcripts(gtf_file = gtf_file,
                                      genome_fasta_file = genome_fasta_file,
                                      bam_parsed = bam_parsed,
-                                     is_technical = NULL),
-                 regexp = "is_technical is not a flag",
-                 fixed = TRUE)
-    expect_error(prepare_transcripts(gtf_file = gtf_file,
-                                     genome_fasta_file = genome_fasta_file,
-                                     bam_parsed = bam_parsed,
                                      min_intron_length = NULL),
                  regexp = "min_intron_length is not a count",
                  fixed = TRUE)
@@ -138,7 +132,7 @@ test_that("prepare_transcripts works as expected", {
     expect_identical(names(table(tx_list$tx_df$fivethree_support_level)),
                      c("3T", "5T", "FL", "FT", "NA"))
     expect_identical(as.numeric(table(tx_list$tx_df$fivethree_support_level)),
-                     c(2, 42, 114, 13, 78))
+                     c(3, 36, 123, 9, 78))
     expect_identical(sum(is.na(tx_list$tx_df$read_count)), 105L)
     expect_identical(sum(tx_list$tx_df$read_count, na.rm = TRUE), 399L)
     expect_identical(sum(is.na(tx_list$tx_df$relative_expression)), 117L)

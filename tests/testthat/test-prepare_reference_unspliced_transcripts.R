@@ -5,7 +5,7 @@ test_that("prepare_reference_unspliced_transcripts works as expected", {
         "extdata", "Homo_sapiens.GRCh38.91_chr9_1_1000000.gtf",
         package = "Isosceles"
     )
-    anno_data <- prepare_reference_annotations(gtf_file, is_technical = FALSE)
+    anno_data <- prepare_reference_annotations(gtf_file)
 
     # Testing if function throws the expected errors
     expect_error(prepare_reference_unspliced_transcripts(anno_data = NULL),

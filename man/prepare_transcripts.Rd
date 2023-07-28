@@ -8,7 +8,6 @@ prepare_transcripts(
   gtf_file,
   genome_fasta_file,
   bam_parsed,
-  is_technical = FALSE,
   min_intron_length = 30,
   known_intron_motifs = c("GT-AG"),
   rescue_annotated_introns = FALSE,
@@ -26,10 +25,6 @@ prepare_transcripts(
 \item{bam_parsed}{A data frame containing non-redundant read structure data
 returned by the \code{\link{extract_read_structures}} function. If NULL,
 only reference transcripts are used}
-
-\item{is_technical}{A boolean scalar specifying if the GTF file describes
-technical sequences (e.g. SIRV or ERCC) rather than originating from
-Ensembl / GENCODE}
 
 \item{min_intron_length}{An integer scalar specifying the minimal length
 of introns to assign strand to}

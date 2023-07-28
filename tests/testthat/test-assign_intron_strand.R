@@ -13,7 +13,7 @@ test_that("assign_intron_strand works as expected", {
         "extdata", "Homo_sapiens.GRCh38.dna_sm.primary_assembly_chr9_1_1000000.fa",
         package = "Isosceles"
     )
-    anno_data <- prepare_reference_annotations(gtf_file, is_technical = FALSE)
+    anno_data <- prepare_reference_annotations(gtf_file)
     bam_data <- extract_read_structures(bam_file)
     intron_granges <- bam_data$intron_positions %>%
         strsplit(",") %>%

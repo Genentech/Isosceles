@@ -3,9 +3,6 @@
 #' Extract required reference annotation from a GTF file
 #'
 #' @param gtf_file A string containing a GTF file path
-#' @param is_technical A boolean scalar specifying if the GTF file describes
-#' technical sequences (e.g. SIRV or ERCC) rather than originating from
-#' Ensembl / GENCODE
 #' @return A named list containing following elements:
 #' \describe{
 #'   \item{gene_df}{a data frame storing annotated gene data}
@@ -15,12 +12,11 @@
 #'   \item{transcript_first_last_df}{a data frame storing confirmed transcript first/last exon/intron positions}
 #' }
 #' @keywords internal
-prepare_reference_annotations <- function(gtf_file, is_technical = FALSE) {
+prepare_reference_annotations <- function(gtf_file) {
 
     # Check arguments
     assertthat::assert_that(assertthat::is.string(gtf_file))
     assertthat::assert_that(file.exists(gtf_file))
-    assertthat::assert_that(assertthat::is.flag(is_technical))
 
     # Read annotation data from the GTF file
     txdb <- suppressWarnings(
@@ -28,7 +24,7 @@ prepare_reference_annotations <- function(gtf_file, is_technical = FALSE) {
     )
     gtf_granges <- rtracklayer::import(gtf_file, format = "gtf")
     exon_granges <- gtf_granges[S4Vectors::mcols(gtf_granges)$type == "exon"]
-    if (is_technical && is.null(S4Vectors::mcols(exon_granges)$gene_name)) {
+    if (is.null(S4Vectors::mcols(exon_granges)$gene_name)) {
         S4Vectors::mcols(exon_granges)$gene_name <-
             S4Vectors::mcols(exon_granges)$gene_id
     }
@@ -115,20 +111,6 @@ prepare_reference_annotations <- function(gtf_file, is_technical = FALSE) {
         ) %>%
         as.data.frame()
 
-    # Prepare confirmed transcripts
-    confirmed_transcripts <- S4Vectors::mcols(exon_granges) %>%
-        as.data.frame() %>%
-        dplyr::select(tidyselect::any_of(c("transcript_id", "tag"))) %>%
-        dplyr::distinct()
-    if (is_technical) {
-        confirmed_transcripts <- confirmed_transcripts %>%
-            dplyr::pull(.data$transcript_id)
-    } else {
-        confirmed_transcripts <- confirmed_transcripts %>%
-            dplyr::filter(.data$tag %in% c("basic")) %>%
-            dplyr::pull(.data$transcript_id)
-    }
-
     # Prepare transcript first/last exon/intron data
     transcript_exon_first_last_df <-
         GenomicFeatures::exonsBy(txdb, by = "tx", use.names = TRUE) %>%
@@ -144,7 +126,6 @@ prepare_reference_annotations <- function(gtf_file, is_technical = FALSE) {
                       last_intron_ref = "last_grange")
     transcript_first_last_df <- transcript_df %>%
         dplyr::select("transcript_id", "gene_id") %>%
-        dplyr::filter(.data$transcript_id %in% confirmed_transcripts) %>%
         dplyr::inner_join(transcript_exon_first_last_df) %>%
         dplyr::inner_join(transcript_intron_first_last_df)
 

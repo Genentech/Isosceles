@@ -4,14 +4,10 @@
 \alias{prepare_reference_annotations}
 \title{GTF reference annotation data processing}
 \usage{
-prepare_reference_annotations(gtf_file, is_technical = FALSE)
+prepare_reference_annotations(gtf_file)
 }
 \arguments{
 \item{gtf_file}{A string containing a GTF file path}
-
-\item{is_technical}{A boolean scalar specifying if the GTF file describes
-technical sequences (e.g. SIRV or ERCC) rather than originating from
-Ensembl / GENCODE}
 }
 \value{
 A named list containing following elements:

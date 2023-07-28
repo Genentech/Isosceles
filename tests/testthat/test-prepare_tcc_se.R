@@ -190,7 +190,7 @@ test_that("prepare_tcc_se works as expected", {
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")
-    expect_identical(dim(se), c(31L, 1L))
+    expect_identical(dim(se), c(32L, 1L))
     expect_identical(colnames(se), names(bam_files))
     expect_identical(dim(SummarizedExperiment::colData(se)), c(1L, 0L))
     expect_identical(colnames(SummarizedExperiment::rowData(se)),
@@ -204,7 +204,7 @@ test_that("prepare_tcc_se works as expected", {
     expect_true(is.matrix(SummarizedExperiment::assay(se, "tpm")))
     expect_true(is.matrix(SummarizedExperiment::assay(se, "relative_expression")))
     expect_identical(round(colSums(SummarizedExperiment::assay(se, "counts"))),
-                     c(Sample = 261))
+                     c(Sample = 262))
     expect_identical(round(colSums(SummarizedExperiment::assay(se, "tpm"))),
                      c(Sample = 1e6))
     expect_identical(round(colSums(SummarizedExperiment::assay(se, "relative_expression"))),
@@ -215,10 +215,10 @@ test_that("prepare_tcc_se works as expected", {
                        "transcript_exon_granges_list", "mean_read_length"))
     expect_true(class(S4Vectors::metadata(se)$compatibility_matrix) == "dgCMatrix")
     expect_identical(dim(S4Vectors::metadata(se)$compatibility_matrix),
-                     c(31L, 109L))
+                     c(32L, 110L))
     expect_true(is.data.frame(S4Vectors::metadata(se)$transcript_df))
     expect_identical(dim(S4Vectors::metadata(se)$transcript_df),
-                     c(109L, 12L))
+                     c(110L, 12L))
     expect_identical(colnames(S4Vectors::metadata(se)$transcript_df),
                      colnames(transcript_data$tx_df))
     expect_true(all(S4Vectors::metadata(se)$transcript_df$fivethree_support_level == "FL"))
@@ -226,9 +226,9 @@ test_that("prepare_tcc_se works as expected", {
                         c("AP", "EC", "NC")))
     expect_true(grepl("GRangesList", class(S4Vectors::metadata(se)$transcript_exon_granges_list)))
     expect_identical(length(S4Vectors::metadata(se)$transcript_exon_granges_list),
-                     109L)
+                     110L)
     expect_identical(length(unlist(S4Vectors::metadata(se)$transcript_exon_granges_list)),
-                     887L)
+                     896L)
     expect_identical(round(S4Vectors::metadata(se)$mean_read_length), 1028)
 
     # Testing if function returns the expected output (bulk RNA-Seq data, de_novo_loose mode)
@@ -241,7 +241,7 @@ test_that("prepare_tcc_se works as expected", {
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")
-    expect_identical(dim(se), c(45L, 1L))
+    expect_identical(dim(se), c(49L, 1L))
     expect_identical(colnames(se), names(bam_files))
     expect_identical(dim(SummarizedExperiment::colData(se)), c(1L, 0L))
     expect_identical(colnames(SummarizedExperiment::rowData(se)),
@@ -255,7 +255,7 @@ test_that("prepare_tcc_se works as expected", {
     expect_true(is.matrix(SummarizedExperiment::assay(se, "tpm")))
     expect_true(is.matrix(SummarizedExperiment::assay(se, "relative_expression")))
     expect_identical(round(colSums(SummarizedExperiment::assay(se, "counts"))),
-                     c(Sample = 275))
+                     c(Sample = 282))
     expect_identical(round(colSums(SummarizedExperiment::assay(se, "tpm"))),
                      c(Sample = 1e6))
     expect_identical(round(colSums(SummarizedExperiment::assay(se, "relative_expression"))),
@@ -266,10 +266,10 @@ test_that("prepare_tcc_se works as expected", {
                        "transcript_exon_granges_list", "mean_read_length"))
     expect_true(class(S4Vectors::metadata(se)$compatibility_matrix) == "dgCMatrix")
     expect_identical(dim(S4Vectors::metadata(se)$compatibility_matrix),
-                     c(45L, 117L))
+                     c(49L, 121L))
     expect_true(is.data.frame(S4Vectors::metadata(se)$transcript_df))
     expect_identical(dim(S4Vectors::metadata(se)$transcript_df),
-                     c(117L, 12L))
+                     c(121L, 12L))
     expect_identical(colnames(S4Vectors::metadata(se)$transcript_df),
                      colnames(transcript_data$tx_df))
     expect_true(all(S4Vectors::metadata(se)$transcript_df$fivethree_support_level == "FL"))
@@ -277,9 +277,9 @@ test_that("prepare_tcc_se works as expected", {
                         c("AP", "EC", "NC", "DN")))
     expect_true(grepl("GRangesList", class(S4Vectors::metadata(se)$transcript_exon_granges_list)))
     expect_identical(length(S4Vectors::metadata(se)$transcript_exon_granges_list),
-                     117L)
+                     121L)
     expect_identical(length(unlist(S4Vectors::metadata(se)$transcript_exon_granges_list)),
-                     996L)
+                     1035L)
     expect_identical(round(S4Vectors::metadata(se)$mean_read_length), 1028)
 
     # Testing if function returns the expected output (bulk RNA-Seq data, de_novo_full mode)
@@ -292,13 +292,13 @@ test_that("prepare_tcc_se works as expected", {
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")
-    expect_identical(dim(se), c(31L, 1L))
+    expect_identical(dim(se), c(43L, 1L))
     expect_identical(colnames(se), names(bam_files))
     expect_identical(dim(SummarizedExperiment::colData(se)), c(1L, 0L))
     expect_identical(colnames(SummarizedExperiment::rowData(se)),
                      c("ec_id", "gene_id", "gene_name"))
     expect_identical(length(unique(SummarizedExperiment::rowData(se)$gene_id)),
-                     1L)
+                     2L)
     expect_true(is.null(SummarizedExperiment::rowRanges(se)))
     expect_identical(SummarizedExperiment::assayNames(se),
                      c("counts", "tpm", "relative_expression"))
@@ -306,21 +306,21 @@ test_that("prepare_tcc_se works as expected", {
     expect_true(is.matrix(SummarizedExperiment::assay(se, "tpm")))
     expect_true(is.matrix(SummarizedExperiment::assay(se, "relative_expression")))
     expect_identical(round(colSums(SummarizedExperiment::assay(se, "counts"))),
-                     c(Sample = 224))
+                     c(Sample = 244))
     expect_identical(round(colSums(SummarizedExperiment::assay(se, "tpm"))),
                      c(Sample = 1e6))
     expect_identical(round(colSums(SummarizedExperiment::assay(se, "relative_expression"))),
-                     c(Sample = 1))
+                     c(Sample = 2))
     expect_true(is.list(S4Vectors::metadata(se)))
     expect_identical(names(S4Vectors::metadata(se)),
                      c("compatibility_matrix", "transcript_df",
                        "transcript_exon_granges_list", "mean_read_length"))
     expect_true(class(S4Vectors::metadata(se)$compatibility_matrix) == "dgCMatrix")
     expect_identical(dim(S4Vectors::metadata(se)$compatibility_matrix),
-                     c(31L, 17L))
+                     c(43L, 28L))
     expect_true(is.data.frame(S4Vectors::metadata(se)$transcript_df))
     expect_identical(dim(S4Vectors::metadata(se)$transcript_df),
-                     c(17L, 12L))
+                     c(28L, 12L))
     expect_identical(colnames(S4Vectors::metadata(se)$transcript_df),
                      colnames(transcript_data$tx_df))
     expect_true(all(S4Vectors::metadata(se)$transcript_df$fivethree_support_level == "FL"))
@@ -328,9 +328,9 @@ test_that("prepare_tcc_se works as expected", {
                         c("PC", "EC", "NC", "DN")))
     expect_true(grepl("GRangesList", class(S4Vectors::metadata(se)$transcript_exon_granges_list)))
     expect_identical(length(S4Vectors::metadata(se)$transcript_exon_granges_list),
-                     17L)
+                     28L)
     expect_identical(length(unlist(S4Vectors::metadata(se)$transcript_exon_granges_list)),
-                     217L)
+                     327L)
     expect_identical(round(S4Vectors::metadata(se)$mean_read_length), 1028)
 
     # Preparing test data (scRNA-Seq data)
