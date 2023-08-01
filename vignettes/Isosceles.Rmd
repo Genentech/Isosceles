@@ -32,7 +32,7 @@ knitr::opts_chunk$set(
 
 Isosceles (**Iso**form **S**ingle-**Ce**ll and **L**ong-read **E**xpression 
 **S**uite) is an R package dedicated to transcript detection and quantification 
-from long reads, supporting both bulk RNA-Seq and scRNA-Seq technologies.
+from long read RNA-seq data, supporting both bulk and single-cell technologies.
 
 Isosceles can be installed using the following commands:
 ```r
@@ -52,8 +52,8 @@ library(Isosceles)
 Isosceles requires the following input files:
 
   * BAM file(s) containing aligned long reads
-    * We recommend [minimap2](https://github.com/lh3/minimap2) for bulk RNA-Seq data and [Sicelore](https://github.com/ucagenomix/sicelore) for scRNA-Seq data
-    * Isosceles requires the BAM file for scRNA-Seq data to contain a tag storing the cell barcode. By default, the tag name for Sicelore ('BC') is assumed, but it can be changed using the *barcode_tag* argument of the `prepare_tcc_se` function
+    * We recommend [minimap2](https://github.com/lh3/minimap2) for all long-read alignments. 
+    * Isosceles requires the BAM file for single-cell data to contain a tag storing the cell barcode. Several pipelines are suitable for this purpose, including [Sicelore](https://github.com/ucagenomix/sicelore), which is the default tag name (`BC` tag) but it can be changed using the *barcode_tag* argument of the `prepare_tcc_se` function
   * FASTA file containing the genomic sequences
   * GTF file containing the genomic annotations
     * Isosceles requires the chromosome names to match between the FASTA file and the GTF file. No automatic conversion between alternative chromosome naming conventions (e.g. '1' and 'chr1') is performed
@@ -63,8 +63,8 @@ Isosceles requires the following input files:
 Isosceles can used in of the following run modes, specified when the `prepare_tcc_se` function is run:
 
   * **strict** - only annotated reference transcripts will be quantified
-  * **de_novo_strict** - de novo transcripts whose all splice sites are known (i.e. found in reference annotations or provided by the user) are also included
-  * **de_novo_loose** - de novo transcripts whose all splice sites are reproducibly passing filters in the aligned reads are included as well
+  * **de_novo_strict** - de novo transcripts enabled, but all splice sites must be known (i.e. found in reference annotations or provided by the user).
+  * **de_novo_loose** - de novo transcripts enabled, but all splice sites must be reproducibly passing filters in the aligned reads
 
 # Genome annotations
 
