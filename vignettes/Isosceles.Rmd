@@ -88,21 +88,24 @@ The Isosceles transcript ID (e.g. 'ISOT-2a9c-c3db-71b4-c3f2:s100628650:e10063685
   * The transcript end bin position, prefixed by the 'e' character. The default bin size is 50 bp, but it can be changed using the *bin_size* argument of the `prepare_transcripts` function. Unlike the start positions, the end of the bin is always used, ensuring that it's bigger or equal to the transcript end position
   * Splicing compatibility code of the transcript. The full list of these codes can be found in the Isosceles paper, but the following ones are actually used in at least one run mode:
     * AP (Annotated Paths) - reference transcripts
-    * EC (Edge Compatible) - de novo transcripts whose all introns are known (i.e. found in reference annotations or provided by the user)
-    * NC (Node Compatible) - de novo transcripts whose all splice sites are known
-    * DN (De-novo Node) - de novo transcripts whose all splice sites are known or reproducibly passing filters in the aligned reads
+    * EC (Edge Compatible) - de novo transcripts where all introns are known (i.e. found in reference annotations or provided by the user)
+    * NC (Node Compatible) - de novo transcripts where all splice sites are known
+    * DN (De-novo Node) - de novo transcripts where all splice sites are known or reproducibly passing filters in the aligned reads
   * Truncation status code of the transcript. The full list of these codes can be found in the Isosceles paper, but only the FL (Full-Length) transcripts are used by Isosceles for quantification
 
 The comma separated list of compatible reference transcripts is in `rowData(se)`
 
 # Output
 
-The main output of Isosceles are the SummarizedExperiment objects, which can be created at different resolution levels:
+The main output of Isosceles consists of SummarizedExperiment objects, created at various resolution levels:
 
-  * **TCC (Transcript Compatibility Counts)** - the most raw form of the data, created directly from the BAM files using the `prepare_tcc_se` function. These values potentially can be used for downstream analysis (e.g. dimensionality reduction for scRNA-Seq datasets), but gene or transcript expression data are used more often for that purpose. Additionally, both the `prepare_pseudobulk_se` function (for summarizing data at pseudo-bulk level) and the `merge_sc_neighbors` function (for merging counts from neighboring cells) use TCC SummarizedExperiment objects as input and produce them as output
-  * **transcript** - expression values at the transcript level are obtained using the `prepare_transcript_se` function, utilizing the EM (Expectation–Maximization) algorithm. Normalization using effective transcript lengths is used by default, but should be turned off by setting the *use_length_normalization* argument to FALSE for data generated using a UMI-based protocol (typically for scRNA-Seq datasets). Transcript annotations from the SummarizedExperiment object can be exported to a GTF file using the `export_gtf` function
-  * **gene** - expression values at the gene level are obtained using the `prepare_gene_se` function, which is typically very fast, as it doesn't require running the EM algorithm
-  * **PSI (Percent Spliced In)** - PSI values are calculated for non-redundant transcriptomic regions of each gene (e.g. transcription start sites or core exons) using the `prepare_psi_se` function, taking a transcript level SummarizedExperiment object as an input
+  * **TCC (Transcript Compatibility Counts)** - This is an intermediate quantification stage of the data, formed directly from the BAM files with the `prepare_tcc_se` function. The values here are used to derive transcript quantification estimates via the EM algorithm. Both the `prepare_pseudobulk_se` function (for summarizing data at the pseudo-bulk level) and the `merge_sc_neighbors` function (for combining counts from neighboring cells) utilize TCC SummarizedExperiment objects as both input and output.
+  * **transcript** - At the transcript level, expression values are computed using the `prepare_transcript_se` function, applying the EM (Expectation–Maximization) algorithm. By default, normalization is done using effective transcript lengths, but it can be turned off for UMI-based protocol data (commonly in scRNA-Seq datasets) by setting the *use_length_normalization* argument to FALSE. You can export transcript annotations from the SummarizedExperiment object to a GTF file using the `export_gtf` function.
+  * **gene** - Gene-level expression values are derived using the `prepare_gene_se` function. This process is typically very swift as it doesn't necessitate running the EM algorithm.
+  * **PSI (Percent Spliced In)** - PSI values are computed for unique transcriptomic regions of each gene (such as transcription start sites or core exons) using the `prepare_psi_se` function. This requires a transcript level SummarizedExperiment object as input.
+
+Each of these levels provides specific insights and functionalities within the Isosceles framework, catering to different analytical requirements.
+
 
 Data in the SummarizedExperiment objects can be accessed using the following commands:
 
