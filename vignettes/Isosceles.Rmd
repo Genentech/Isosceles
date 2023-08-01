@@ -53,10 +53,10 @@ Isosceles requires the following input files:
 
   * BAM file(s) containing aligned long reads
     * We recommend [minimap2](https://github.com/lh3/minimap2) for all long-read alignments. 
-    * Isosceles requires the BAM file for single-cell data to contain a tag storing the cell barcode. Several pipelines are suitable for this purpose, including [Sicelore](https://github.com/ucagenomix/sicelore), which is the default tag name (`BC` tag) but it can be changed using the *barcode_tag* argument of the `prepare_tcc_se` function
+    * Isosceles requires the BAM file for single-cell data to contain a tag storing the cell barcode. Several pipelines are suitable for this purpose, including [Sicelore](https://github.com/ucagenomix/sicelore), which is the default tag name (`BC` tag), but it can be changed using the *barcode_tag* argument of the `prepare_tcc_se` function.
   * FASTA file containing the genomic sequences
   * GTF file containing the genomic annotations
-    * Isosceles requires the chromosome names to match between the FASTA file and the GTF file. No automatic conversion between alternative chromosome naming conventions (e.g. '1' and 'chr1') is performed
+    * Isosceles requires the chromosome names to match between the FASTA file and the GTF file. No automatic conversion between alternative chromosome naming conventions (e.g. '1' and 'chr1') is performed.
 
 # Run modes
 
@@ -64,7 +64,7 @@ Isosceles can used in of the following run modes, specified when the `prepare_tc
 
   * **strict** - only annotated reference transcripts will be quantified
   * **de_novo_strict** - de novo transcripts enabled, but all splice sites must be known (i.e. found in reference annotations or provided by the user).
-  * **de_novo_loose** - de novo transcripts enabled, but all splice sites must be reproducibly passing filters in the aligned reads
+  * **de_novo_loose** - de novo transcripts enabled, but all splice sites must be known or reproducibly passing filters in the aligned reads
 
 # Genome annotations
 
@@ -73,27 +73,26 @@ Isosceles selects the appropriate set of transcripts to quantify, depending on t
 There are several important aspects of the `prepare_transcripts` function to consider:
 
   * Reference annotations from Ensembl or GENCODE are generally recommended. However, Isosceles can also work with merged GTF files that combine both reference and de novo detected transcripts from an external source. Examples of programs that produce these merged files include [StringTie](https://ccb.jhu.edu/software/stringtie/) and [IsoQaunt](https://github.com/ablab/IsoQuant). Utilizing merged annotations as reference can improve the sensitivity of discovering new transcripts without significantly increasing the false discovery rate. More details about the benchmarks can be found in the Isosceles paper and the [Isosceles_paper](https://github.com/timbitz/Isosceles_paper) repository.
-  * Isosceles assigns new IDs to all transcripts (whether they are reference or de novo detected) based on stable hash identifiers. This simplifies the process of matching de novo transcripts across different data sets from the same genome build, irrespective of other experimental variables.  The corresponding reference ids (ENSG and ENST) compatible with each transcript can be found in rowData data `rowData(se)$compatible_tx`
+  * Isosceles assigns new IDs to all transcripts (whether they are reference or de novo detected) based on stable hash identifiers. This simplifies the process of matching de novo transcripts across different data sets from the same genome build, irrespective of other experimental variables. The corresponding reference IDs compatible with each transcript can be found in transcript level SummarizedExperiment object's rowData (`rowData(se)$compatible_tx`).
   * Genes and transcripts are merged according to specific rules:
     * If annotated genes share introns, they are merged and assigned a new ID and symbol, comprising the original IDs and symbols separated by commas.
     * Annotated transcripts with identical intron structure and identical transcript start and end bins (default: 50 bp) are considered identical by Isosceles and also merged, and given a unique transcript ID. 
-
 
 # Isosceles transcript IDs
 
 The Isosceles transcript ID (e.g. 'ISOT-2a9c-c3db-71b4-c3f2:s100628650:e100636850:AP:FL') consists of several parts, separated by colons:
 
-  * Stable hash identifier, starting with the constant 'ISOT' prefix. For spliced transcripts, the identifier contains the first 16 characters of the MD5 hash of transcript's comma-separated intron positions, while for the unspliced transcripts it consists of 12 zeroes and the first 4 characters of the MD5 hash of transcript's chromosome and strand. For convenience, the hash identifier is separated into 4 character segments by dashes
-  * The transcript start bin position, prefixed by the 's' character. The default bin size is 50 bp, but it can be changed using the *bin_size* argument of the `prepare_transcripts` function. The start of the bin is always used, ensuring that it's smaller or equal to the transcript start position
-  * The transcript end bin position, prefixed by the 'e' character. The default bin size is 50 bp, but it can be changed using the *bin_size* argument of the `prepare_transcripts` function. Unlike the start positions, the end of the bin is always used, ensuring that it's bigger or equal to the transcript end position
+  * Stable hash identifier, starting with the constant 'ISOT' prefix. For spliced transcripts, the identifier contains the first 16 characters of the MD5 hash of transcript's comma-separated intron positions, while for the unspliced transcripts it consists of 12 zeroes and the first 4 characters of the MD5 hash of transcript's chromosome and strand. For convenience, the hash identifier is separated into 4 character segments by dashes.
+  * The transcript start bin position, prefixed by the 's' character. The default bin size is 50 bp, but it can be changed using the *bin_size* argument of the `prepare_transcripts` function. The start of the bin is always used, ensuring that it's smaller or equal to the transcript start position.
+  * The transcript end bin position, prefixed by the 'e' character. The default bin size is 50 bp, but it can be changed using the *bin_size* argument of the `prepare_transcripts` function. Unlike the start positions, the end of the bin is always used, ensuring that it's bigger or equal to the transcript end position.
   * Splicing compatibility code of the transcript. The full list of these codes can be found in the Isosceles paper, but the following ones are actually used in at least one run mode:
     * AP (Annotated Paths) - reference transcripts
     * EC (Edge Compatible) - de novo transcripts where all introns are known (i.e. found in reference annotations or provided by the user)
     * NC (Node Compatible) - de novo transcripts where all splice sites are known
     * DN (De-novo Node) - de novo transcripts where all splice sites are known or reproducibly passing filters in the aligned reads
-  * Truncation status code of the transcript. The full list of these codes can be found in the Isosceles paper, but only the FL (Full-Length) transcripts are used by Isosceles for quantification
+  * Truncation status code of the transcript. The full list of these codes can be found in the Isosceles paper, but only the FL (Full-Length) transcripts are used by Isosceles for quantification.
 
-The comma separated list of compatible reference transcripts is in `rowData(se)`
+The comma separated list of compatible reference transcript IDs can be found in transcript level SummarizedExperiment object's rowData (`rowData(se)$compatible_tx`).
 
 # Output
 
@@ -106,7 +105,6 @@ The main output of Isosceles consists of SummarizedExperiment objects, created a
 
 Each of these levels provides specific insights and functionalities within the Isosceles framework, catering to different analytical requirements.
 
-
 Data in the SummarizedExperiment objects can be accessed using the following commands:
 
 * **assayNames(se)** - assay names available at the given resolution level
@@ -114,7 +112,7 @@ Data in the SummarizedExperiment objects can be accessed using the following com
 * **assay(se, "tpm")** - TPM (Transcripts Per Million) normalized expression value matrix
 * **assay(se, "relative_expression")** - relative expression value matrix. All the values are in the 0 to 1 range, and represent the ratios of the TPM values of the analyzed features (e.g. transcripts) and the TPM values of genes they belong to
 * **assay(se, "psi")** - PSI (Percent Spliced In) value matrix
-* **rowData(se)** - additional data regarding the analyzed features (e.g. reference transcript ids or PSI regions)
+* **rowData(se)** - additional data regarding the analyzed features (e.g. reference transcript IDs for transcript level data)
 * **rowRanges(se)** - a GRangesList object (transcript level data) or a GRanges object (PSI level data) containing the genomic positions of the analyzed features
 
 # Bulk RNA-Seq analysis
@@ -436,30 +434,12 @@ PSI values are calculated for the following types of regions:
 
 PSI value heatmap for the CAV1 gene:
 ```{r, message = FALSE, warning = FALSE}
-# Prepare the PSI values matrix and remove cells with no CAV1 expression
-psi_matrix <- as.matrix(t(assay(se_psi, "psi")))
-psi_matrix <- psi_matrix[rowSums(psi_matrix) > 0,]
-# Prepare the heatmap column annotations data frame
-col_anno_df <- rowData(se_psi) %>%
-    as.data.frame %>%
-    dplyr::transmute(region = factor(
-        type, levels = c("TSS", "CE", "RI", "A5", "A3", "TES")
-    ))
-# Define region colors
 region_colors <- c(
     TSS = "#FF83FF", CE = "#FF9289", RI = "#82B7FF",
     A5 = "#00D65C", A3 = "#00DAE0", TES = "#D3BA00"
 )
-# Plot the PSI value heatmap
-pheatmap::pheatmap(
-    mat = psi_matrix,
-    annotation_col = col_anno_df,
-    color = viridis::cividis(100),
-    cluster_rows = TRUE, cluster_cols = FALSE,
-    show_rownames = FALSE, show_colnames = FALSE,
-    treeheight_row = 0, annotation_names_col = FALSE,
-    annotation_colors = list(region = region_colors)
-)
+plot_psi_heatmap(se_psi, gene_id = "ENSG00000105974",
+                 region_colors = region_colors)
 ```
 
 Plot the CAV1 transcript structures:
