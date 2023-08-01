@@ -60,11 +60,55 @@ Isosceles requires the following input files:
 
 # Run modes
 
-Isosceles can used in of the following run modes:
+Isosceles can used in of the following run modes, specified when the `prepare_tcc_se` function is run:
 
   * **strict** - only annotated reference transcripts will be quantified
   * **de_novo_strict** - de novo transcripts whose all splice sites are known (i.e. found in reference annotations or provided by the user) are also included
   * **de_novo_loose** - de novo transcripts whose all splice sites are reproducibly passing filters in the aligned reads are included as well
+
+# Genome annotations
+
+The appropriate set of transcripts to quantify for the given run mode is selected by Isosceles from the genomic annotations prepared using the `prepare_transcripts` function. The function requires a GTF file containing the reference annotations and (optionally) the transcript structures extracted from the BAM files using the `extract_read_structures` function (necessary for de novo transcript detection).  
+There are several important notes regarding the behavior of the `prepare_transcripts` function:
+
+  * While the reference annotations are typically obtained from projects such as Ensembl or GENCODE, Isosceles also accepts merged GTF files containing both reference and de novo detected transcripts from programs such [StringTie](https://ccb.jhu.edu/software/stringtie/) or [IsoQaunt](https://github.com/ablab/IsoQuant). Our benchmarks indicate that using these merged annotations as the reference leads to a much greater sensitivity at discovering new transcripts without a significant increase of the false discovery rate. You can find more details regarding the benchmarks in the Isosceles paper and the [Isosceles_paper](https://github.com/timbitz/Isosceles_paper) repository
+  * Isosceles gives all transcripts (reference or de novo detected) new IDs, based on stable hash identifiers, which facilitate ease of matching de novo transcripts across data from the same genome build, regardless of other experimental details
+  * Annotated genes and transcripts are merged based on specific criteria, namely:
+    * annotated genes sharing introns with each other are merged and given a new ID and symbol, consisting of comma-separated original IDs and symbols
+    * annotated transcripts sharing the same intron structure (or, for unspliced transcripts, overlapping on the same strand), as well as having the same transcript start and end bins (default: 50 bp) are merged together and assigned a unique transcript ID
+
+# Isosceles transcript IDs
+
+The Isosceles transcript ID (e.g. 'ISOT-2a9c-c3db-71b4-c3f2:s100628650:e100636850:AP:FL') consists of several parts, separated by colons:
+
+  * Stable hash identifier, starting with the constant 'ISOT' prefix. For spliced transcripts, the identifier contains the first 16 characters of the MD5 hash of transcript's comma-separated intron positions, while for the unspliced transcripts it consists of 12 zeroes and the first 4 characters of the MD5 hash of transcript's chromosome and strand. For convenience, the hash identifier is separated into 4 character segments by dashes
+  * The transcript start bin position, prefixed by the 's' character. The default bin size is 50 bp, but it can be changed using the *bin_size* argument of the `prepare_transcripts` function. The start of the bin is always used, ensuring that it's smaller or equal to the transcript start position
+  * The transcript end bin position, prefixed by the 'e' character. The default bin size is 50 bp, but it can be changed using the *bin_size* argument of the `prepare_transcripts` function. Unlike the start positions, the end of the bin is always used, ensuring that it's bigger or equal to the transcript end position
+  * Splicing compatibility code of the transcript. The full list of these codes can be found in the Isosceles paper, but the following ones are actually used in at least one run mode:
+    * AP (Annotated Paths) - reference transcripts
+    * EC (Edge Compatible) - de novo transcripts whose all introns are known (i.e. found in reference annotations or provided by the user)
+    * NC (Node Compatible) - de novo transcripts whose all splice sites are known
+    * DN (De-novo Node) - de novo transcripts whose all splice sites are known or reproducibly passing filters in the aligned reads
+  * Truncation status code of the transcript. The full list of these codes can be found in the Isosceles paper, but only the FL (Full-Length) transcripts are used by Isosceles for quantification
+
+# Output
+
+The main output of Isosceles are the SummarizedExperiment objects, which can be created at different resolution levels:
+
+  * **TCC (Transcript Compatibility Counts)** - the most raw form of the data, created directly from the BAM files using the `prepare_tcc_se` function. These values potentially can be used for downstream analysis (e.g. dimensionality reduction for scRNA-Seq datasets), but gene or transcript expression data are used more often for that purpose. Additionally, both the `prepare_pseudobulk_se` function (for summarizing data at pseudo-bulk level) and the `merge_sc_neighbors` function (for merging counts from neighboring cells) use TCC SummarizedExperiment objects as input and produce them as output
+  * **transcript** - expression values at the transcript level are obtained using the `prepare_transcript_se` function, utilizing the EM (Expectation–Maximization) algorithm. Normalization using effective transcript lengths is used by default, but should be turned off by setting the *use_length_normalization* argument to FALSE for data generated using a UMI-based protocol (typically for scRNA-Seq datasets). Transcript annotations from the SummarizedExperiment object can be exported to a GTF file using the `export_gtf` function
+  * **gene** - expression values at the gene level are obtained using the `prepare_gene_se` function, which is typically very fast, as it doesn't require running the EM algorithm
+  * **PSI (Percent Spliced In)** - PSI values are calculated for non-redundant transcriptomic regions of each gene (e.g. transcription start sites or core exons) using the `prepare_psi_se` function, taking a transcript level SummarizedExperiment object as an input
+
+Data in the SummarizedExperiment objects can be accessed using the following commands:
+
+* **assayNames(se)** - assay names available at the given resolution level
+* **assay(se, "counts")** - raw count data matrix
+* **assay(se, "tpm")** - TPM (Transcripts Per Million) normalized expression value matrix
+* **assay(se, "relative_expression")** - relative expression value matrix. All the values are in the 0 to 1 range, and represent the ratios of the TPM values of the analyzed features (e.g. transcripts) and the TPM values of genes they belong to
+* **assay(se, "psi")** - PSI (Percent Spliced In) value matrix
+* **rowData(se)** - additional data regarding the analyzed features (e.g. transcripts or PSI regions)
+* **rowRanges(se)** - a GRangesList object (transcript level data) or a GRanges object (PSI level data) containing the genomic positions of the analyzed features
 
 # Bulk RNA-Seq analysis
 
@@ -385,10 +429,10 @@ PSI values are calculated for the following types of regions:
 
 PSI value heatmap for the CAV1 gene:
 ```{r, message = FALSE, warning = FALSE}
-# Prepare a PSI values matrix and remove cells with no CAV1 expression
+# Prepare the PSI values matrix and remove cells with no CAV1 expression
 psi_matrix <- as.matrix(t(assay(se_psi, "psi")))
 psi_matrix <- psi_matrix[rowSums(psi_matrix) > 0,]
-# Prepare a heatmap column annotations data frame
+# Prepare the heatmap column annotations data frame
 col_anno_df <- rowData(se_psi) %>%
     as.data.frame %>%
     dplyr::transmute(region = factor(
