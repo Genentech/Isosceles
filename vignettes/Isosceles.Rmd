@@ -76,7 +76,7 @@ There are several important aspects of the `prepare_transcripts` function to con
   * Isosceles assigns new IDs to all transcripts (whether they are reference or de novo detected) based on stable hash identifiers. This simplifies the process of matching de novo transcripts across different data sets from the same genome build, irrespective of other experimental variables.  The corresponding reference ids (ENSG and ENST) compatible with each transcript can be found in rowData data `rowData(se)$compatible_tx`
   * Genes and transcripts are merged according to specific rules:
     * If annotated genes share introns, they are merged and assigned a new ID and symbol, comprising the original IDs and symbols separated by commas.
-    * Annotated transcripts that share the same intron structure (or overlap on the same strand for unspliced transcripts), and have identical transcript start and end bins (default: 50 bp) are also merged, and given a unique transcript ID.
+    * Annotated transcripts with identical intron structure and identical transcript start and end bins (default: 50 bp) are considered identical by Isosceles and also merged, and given a unique transcript ID. 
 
 
 # Isosceles transcript IDs
