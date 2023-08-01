@@ -68,14 +68,16 @@ Isosceles can used in of the following run modes, specified when the `prepare_tc
 
 # Genome annotations
 
-The appropriate set of transcripts to quantify for the given run mode is selected by Isosceles from the genomic annotations prepared using the `prepare_transcripts` function. The function requires a GTF file containing the reference annotations and (optionally) the transcript structures extracted from the BAM files using the `extract_read_structures` function (necessary for de novo transcript detection).  
-There are several important notes regarding the behavior of the `prepare_transcripts` function:
+Isosceles selects the appropriate set of transcripts to quantify, depending on the given run mode, using the genomic annotations that are prepared with the `prepare_transcripts` function. This function needs a GTF file with reference annotations, and, optionally, transcript structures extracted from BAM files using the `extract_read_structures` function (which is necessary for detecting de novo transcripts).
 
-  * While the reference annotations are typically obtained from projects such as Ensembl or GENCODE, Isosceles also accepts merged GTF files containing both reference and de novo detected transcripts from programs such [StringTie](https://ccb.jhu.edu/software/stringtie/) or [IsoQaunt](https://github.com/ablab/IsoQuant). Our benchmarks indicate that using these merged annotations as the reference leads to a much greater sensitivity at discovering new transcripts without a significant increase of the false discovery rate. You can find more details regarding the benchmarks in the Isosceles paper and the [Isosceles_paper](https://github.com/timbitz/Isosceles_paper) repository
-  * Isosceles gives all transcripts (reference or de novo detected) new IDs, based on stable hash identifiers, which facilitate ease of matching de novo transcripts across data from the same genome build, regardless of other experimental details
-  * Annotated genes and transcripts are merged based on specific criteria, namely:
-    * annotated genes sharing introns with each other are merged and given a new ID and symbol, consisting of comma-separated original IDs and symbols
-    * annotated transcripts sharing the same intron structure (or, for unspliced transcripts, overlapping on the same strand), as well as having the same transcript start and end bins (default: 50 bp) are merged together and assigned a unique transcript ID
+There are several important aspects of the `prepare_transcripts` function to consider:
+
+  * Reference annotations from Ensembl or GENCODE are generally recommended. However, Isosceles can also work with merged GTF files that combine both reference and de novo detected transcripts from an external source. Examples of programs that produce these merged files include [StringTie](https://ccb.jhu.edu/software/stringtie/) and [IsoQaunt](https://github.com/ablab/IsoQuant). Utilizing merged annotations as reference can improve the sensitivity of discovering new transcripts without significantly increasing the false discovery rate. More details about the benchmarks can be found in the Isosceles paper and the [Isosceles_paper](https://github.com/timbitz/Isosceles_paper) repository.
+  * Isosceles assigns new IDs to all transcripts (whether they are reference or de novo detected) based on stable hash identifiers. This simplifies the process of matching de novo transcripts across different data sets from the same genome build, irrespective of other experimental variables.  The corresponding reference ids (ENSG and ENST) compatible with each transcript can be found in rowData data `rowData(se)$compatible_tx`
+  * Genes and transcripts are merged according to specific rules:
+    * If annotated genes share introns, they are merged and assigned a new ID and symbol, comprising the original IDs and symbols separated by commas.
+    * Annotated transcripts that share the same intron structure (or overlap on the same strand for unspliced transcripts), and have identical transcript start and end bins (default: 50 bp) are also merged, and given a unique transcript ID.
+
 
 # Isosceles transcript IDs
 
@@ -90,6 +92,8 @@ The Isosceles transcript ID (e.g. 'ISOT-2a9c-c3db-71b4-c3f2:s100628650:e10063685
     * NC (Node Compatible) - de novo transcripts whose all splice sites are known
     * DN (De-novo Node) - de novo transcripts whose all splice sites are known or reproducibly passing filters in the aligned reads
   * Truncation status code of the transcript. The full list of these codes can be found in the Isosceles paper, but only the FL (Full-Length) transcripts are used by Isosceles for quantification
+
+The comma separated list of compatible reference transcripts is in `rowData(se)`
 
 # Output
 
@@ -107,7 +111,7 @@ Data in the SummarizedExperiment objects can be accessed using the following com
 * **assay(se, "tpm")** - TPM (Transcripts Per Million) normalized expression value matrix
 * **assay(se, "relative_expression")** - relative expression value matrix. All the values are in the 0 to 1 range, and represent the ratios of the TPM values of the analyzed features (e.g. transcripts) and the TPM values of genes they belong to
 * **assay(se, "psi")** - PSI (Percent Spliced In) value matrix
-* **rowData(se)** - additional data regarding the analyzed features (e.g. transcripts or PSI regions)
+* **rowData(se)** - additional data regarding the analyzed features (e.g. reference transcript ids or PSI regions)
 * **rowRanges(se)** - a GRangesList object (transcript level data) or a GRanges object (PSI level data) containing the genomic positions of the analyzed features
 
 # Bulk RNA-Seq analysis
