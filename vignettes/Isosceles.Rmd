@@ -444,122 +444,22 @@ plot_psi_heatmap(se_psi, gene_id = "ENSG00000105974",
 
 Plot the CAV1 transcript structures:
 ```{r, message = FALSE, warning = FALSE}
-# Calculate the relative expression of transcripts based on overall TPM values
-# across all cells
-tx_tpm_sums <- rowSums(assay(sce_transcript, "tpm"))
-tx_rel_exprs <- tx_tpm_sums / sum(tx_tpm_sums) * 100
-# Prepare the GenomicRangesList object for visualization
-tx_granges_list <- rowRanges(sce_transcript)
-tx_granges_list <- unlist(tx_granges_list)
-mcols(tx_granges_list)$plot_type <- "exon"
-mcols(tx_granges_list)$rel_expr <- tx_rel_exprs[names(tx_granges_list)]
-tx_granges_list <- split(tx_granges_list, names(tx_granges_list))
-# Prepare the PSI regions GenomicRanges objects for visualization
-region_granges <- rowRanges(se_psi)
-bin_region_types <- c("TSS", "TES")
-other_region_types <- c("CE", "RI", "A5", "A3")
-region_granges_bin <- region_granges[
-    mcols(region_granges)$type %in% bin_region_types
-]
-region_granges_other <- region_granges[
-    mcols(region_granges)$type %in% other_region_types
-]
-mcols(region_granges_bin)$plot_type <- "exon"
-mcols(region_granges_other)$plot_type <- "exon"
-# Plot the transcript structures and PSI regions
-ggbio::tracks(
-    `TSS/TES\nsites` = ggbio::autoplot(
-        GRanges(region_granges_bin),
-        ggplot2::aes(type = plot_type, col = type, fill = type)
-    ) +
-        ggplot2::scale_fill_manual(
-            values = region_colors[bin_region_types]
-        ) +
-        ggplot2::scale_colour_manual(
-            values = region_colors[bin_region_types]
-        ) +
-        ggplot2::theme(
-            legend.key.size = ggplot2::unit(0.4, 'cm'),
-            legend.title = ggplot2:::element_blank()
-        ),
-    ggbio::autoplot(
-        tx_granges_list,
-        ggplot2::aes(type = plot_type, col = rel_expr, fill = rel_expr) 
-    ),
-    `PSI\nregions` = ggbio::autoplot(
-        GRanges(region_granges_other),
-        ggplot2::aes(type = plot_type, col = type, fill = type)
-    ) +
-        ggplot2::scale_fill_manual(
-            values = region_colors[other_region_types]
-        ) +
-        ggplot2::scale_colour_manual(
-            values = region_colors[other_region_types]
-        ) +
-        ggplot2::theme(
-            legend.key.size = ggplot2::unit(0.3, 'cm'),
-            legend.title = ggplot2:::element_blank()
-        ),
-    heights = c(0.1, 0.8, 0.1),
-    label.text.cex = 0.7
+plot_psi_regions(
+    se_psi = se_psi,
+    se_transcript = sce_transcript,
+    gene_id = "ENSG00000105974",
+    region_colors = region_colors
 )
 ```
 
 Plot the CAV1 transcript structures with introns shrinked to max 1000 bp:
 ```{r, message = FALSE, warning = FALSE}
-# Prepare the shrinkage function
-region_granges_list <- GRangesList(PSI = rowRanges(se_psi))
-shrink_func <- biovizBase::shrinkageFun(
-    IRanges::gaps(unlist(c(tx_granges_list, region_granges_list))),
-    max.gap = 1000
-)
-# Prepare the shrinked GenomicRangesList object for visualization
-shrink_granges_list <- S4Vectors::endoapply(tx_granges_list, function(gr) {
-  gr <- shrink_func(gr)
-  mcols(gr)$.ori <- NULL
-  return(gr)
-})
-# Prepare the shrinked PSI regions GenomicRanges objects for visualization
-shrink_granges_bin <- GRanges(shrink_func(region_granges_bin))
-mcols(shrink_granges_bin)$.ori <- NULL
-shrink_granges_other <- GRanges(shrink_func(region_granges_other))
-mcols(shrink_granges_other)$.ori <- NULL
-# Plot the transcript structures and PSI regions
-ggbio::tracks(
-    `TSS/TES\nsites` = ggbio::autoplot(
-        GRanges(shrink_granges_bin),
-        ggplot2::aes(type = plot_type, col = type, fill = type)
-    ) +
-        ggplot2::scale_fill_manual(
-            values = region_colors[bin_region_types]
-        ) +
-        ggplot2::scale_colour_manual(
-            values = region_colors[bin_region_types]
-        ) +
-        ggplot2::theme(
-            legend.key.size = ggplot2::unit(0.4, 'cm'),
-            legend.title = ggplot2:::element_blank()
-        ),
-    ggbio::autoplot(
-        shrink_granges_list,
-        ggplot2::aes(type = plot_type, col = rel_expr, fill = rel_expr) 
-    ),
-    `PSI\nregions` = ggbio::autoplot(
-        GRanges(shrink_granges_other),
-        ggplot2::aes(type = plot_type, col = type, fill = type)
-    ) +
-        ggplot2::scale_fill_manual(
-            values = region_colors[other_region_types]
-        ) +
-        ggplot2::scale_colour_manual(
-            values = region_colors[other_region_types]
-        ) +
-        ggplot2::theme(
-            legend.key.size = ggplot2::unit(0.3, 'cm'),
-            legend.title = ggplot2:::element_blank()
-        ),
-    heights = c(0.1, 0.8, 0.1),
-    label.text.cex = 0.7
+plot_psi_regions(
+    se_psi = se_psi,
+    se_transcript = sce_transcript,
+    gene_id = "ENSG00000105974",
+    max_intron_length = 1000,
+    region_colors = region_colors
 )
 ```
 
