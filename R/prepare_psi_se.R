@@ -117,11 +117,11 @@ prepare_psi_se <- function(se,
                 type_end <- regions_df$type[i + 1]
                 if (type_start == "EX" && type_end == "IN" && strand == "+")
                     return("CE")
-                else if (type_start == "IN" && type_end == "EX" && strand == "-")
+                else if (type_start == "EX" && type_end == "IN" && strand == "-")
                     return("CE")
                 else if (type_start == "IN" && type_end == "EX" && strand == "+")
                     return("RI")
-                else if (type_start == "EX" && type_end == "IN" && strand == "-")
+                else if (type_start == "IN" && type_end == "EX" && strand == "-")
                     return("RI")
                 else if (type_start == "IN" && type_end == "IN" && strand == "+")
                     return("A5")

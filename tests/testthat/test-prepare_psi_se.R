@@ -76,7 +76,7 @@ test_that("prepare_psi_se works as expected", {
     expect_identical(names(table(SummarizedExperiment::rowData(se)$type)),
                      c("A3", "A5", "CE", "RI", "TES", "TSS"))
     expect_identical(as.numeric(table(SummarizedExperiment::rowData(se)$type)),
-                     c(5, 6, 20, 32, 14, 19))
+                     c(5, 6, 44, 8, 14, 19))
     expect_true(grepl("GRanges", class(SummarizedExperiment::rowRanges(se))))
     expect_identical(SummarizedExperiment::assayNames(se),
                      c("psi"))
