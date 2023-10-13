@@ -32,7 +32,6 @@ test_that("merge_sc_neighbors works as expected", {
     sce_tcc <- scater::runPCA(sce_tcc, ncomponents = 2)
     pca_mat <- SingleCellExperiment::reducedDim(sce_tcc, "PCA")
 
-
     # Testing if function throws the expected errors
     expect_error(merge_sc_neighbors(se_tcc = NULL),
                  regexp = "methods::is(object = se_tcc, class2 =",
