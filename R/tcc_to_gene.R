@@ -7,7 +7,7 @@
 #' @return A SummarizedExperiment object containing gene annotation and
 #' quantification data.
 #' @export
-prepare_gene_se <- function(se_tcc) {
+tcc_to_gene <- function(se_tcc) {
 
     # Check arguments
     assertthat::assert_that(methods::is(se_tcc, "SummarizedExperiment"))

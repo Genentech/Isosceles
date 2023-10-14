@@ -1,4 +1,4 @@
-test_that("prepare_gene_se works as expected", {
+test_that("tcc_to_gene works as expected", {
 
     # Preparing test data (bulk RNA-Seq data)
     bam_file <- system.file(
@@ -26,38 +26,38 @@ test_that("prepare_gene_se works as expected", {
     )
 
     # Testing if function throws the expected errors
-    expect_error(prepare_gene_se(se_tcc = NULL),
+    expect_error(tcc_to_gene(se_tcc = NULL),
                  regexp = "methods::is(object = se_tcc, class2 =",
                  fixed = TRUE)
     se_copy <- se_tcc
     SummarizedExperiment::assay(se_copy, "counts") <- NULL
-    expect_error(prepare_gene_se(se_tcc = se_copy),
+    expect_error(tcc_to_gene(se_tcc = se_copy),
                  regexp = 'is.element(el = "counts",',
                  fixed = TRUE)
     se_copy <- se_tcc
     SummarizedExperiment::assay(se_copy, "tpm") <- NULL
-    expect_error(prepare_gene_se(se_tcc = se_copy),
+    expect_error(tcc_to_gene(se_tcc = se_copy),
                  regexp = 'is.element(el = "tpm",',
                  fixed = TRUE)
     se_copy <- se_tcc
     SummarizedExperiment::assay(se_copy, "relative_expression") <- NULL
-    expect_error(prepare_gene_se(se_tcc = se_copy),
+    expect_error(tcc_to_gene(se_tcc = se_copy),
                  regexp = 'is.element(el = "relative_expression",',
                  fixed = TRUE)
     se_copy <- se_tcc
     SummarizedExperiment::rowData(se_copy)$gene_id <- NULL
-    expect_error(prepare_gene_se(se_tcc = se_copy),
+    expect_error(tcc_to_gene(se_tcc = se_copy),
                  regexp = 'is.element(el = "gene_id",',
                  fixed = TRUE)
     se_copy <- se_tcc
     SummarizedExperiment::rowData(se_copy)$gene_name <- NULL
-    expect_error(prepare_gene_se(se_tcc = se_copy),
+    expect_error(tcc_to_gene(se_tcc = se_copy),
                  regexp = 'is.element(el = "gene_name",',
                  fixed = TRUE)
 
     # Testing if function returns the expected output (bulk RNA-Seq data)
     expect_silent(
-        se <- prepare_gene_se(se_tcc = se_tcc)
+        se <- tcc_to_gene(se_tcc = se_tcc)
     )
     expect_true(class(se) == "SummarizedExperiment")
     expect_identical(
@@ -117,7 +117,7 @@ test_that("prepare_gene_se works as expected", {
 
     # Testing if function returns the expected output (scRNA-Seq data)
     expect_silent(
-        se <- prepare_gene_se(se_tcc = se_tcc)
+        se <- tcc_to_gene(se_tcc = se_tcc)
     )
     expect_true(class(se) == "SummarizedExperiment")
     expect_identical(
