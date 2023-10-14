@@ -2,20 +2,20 @@
 % Please edit documentation in R/merge_annotated_genes.R
 \name{merge_annotated_genes}
 \alias{merge_annotated_genes}
-\title{Merging genes by shared introns}
+\title{Merge genes by shared introns}
 \usage{
 merge_annotated_genes(gene_df, intron_df)
 }
 \arguments{
-\item{gene_df}{A data frame containing gene IDs and gene names}
+\item{gene_df}{A data frame containing gene IDs and gene names.}
 
-\item{intron_df}{A data frame containing gene IDs and intron positions}
+\item{intron_df}{A data frame containing gene IDs and intron positions.}
 }
 \value{
 A copy of the gene_df data frame with merged gene IDs and gene names
-added to it
+added to it.
 }
 \description{
-Merge IDs and names of genes sharing annotated introns
+Merges IDs and names of genes sharing annotated introns.
 }
 \keyword{internal}

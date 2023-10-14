@@ -1,14 +1,14 @@
-#' Read structure extraction from BAM files
+#' Extract read structures from BAM files
 #'
-#' Extract non-redundant read structures from one or multiple BAM files
+#' Extracts non-redundant read structures from one or multiple BAM files.
 #'
-#' @param bam_files A character vector containing BAM file paths
+#' @param bam_files A character vector containing BAM file paths.
 #' @param chunk_size An integer scalar specifying the chunk size for reading
-#' the BAM files
+#' the BAM files.
 #' @param ncpu An integer scalar specifying the number of cores to use for
-#' multicore parallelization
+#' multicore parallelization.
 #' @return A data frame containing non-redundant read structure data obtained
-#' from the BAM files
+#' from the BAM files.
 #' @export
 extract_read_structures <- function(bam_files,
                                     chunk_size = 1000000,

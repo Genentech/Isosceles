@@ -8,14 +8,14 @@ calculate_tpm(se)
 }
 \arguments{
 \item{se}{A SummarizedExperiment or SingleCellExperiment object containing
-a 'counts' assay}
+a 'counts' assay.}
 }
 \value{
 A matrix (regular or sparse, depending on the input data) containing
-the calculated TPM values
+the calculated TPM values.
 }
 \description{
 Calculates TPM values from counts stored in a SummarizedExperiment
-or SingleCellExperiment object
+or SingleCellExperiment object.
 }
 \keyword{internal}

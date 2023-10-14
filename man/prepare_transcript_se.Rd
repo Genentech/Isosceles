@@ -14,24 +14,24 @@ prepare_transcript_se(
 }
 \arguments{
 \item{se_tcc}{A TCC SummarizedExperiment object returned by a function from
-the \code{\link{Isosceles-package}}}
+the \code{\link{Isosceles-package}}.}
 
 \item{em.maxiter}{An integer scalar specifying the maximum number of EM
-iterations}
+iterations.}
 
-\item{em.conv}{A numeric scalar specifying the EM convergence threshold}
+\item{em.conv}{A numeric scalar specifying the EM convergence threshold.}
 
 \item{use_length_normalization}{A logical scalar specifying if normalization
-using effective transcript lengths should be used during EM}
+using effective transcript lengths should be used during EM.}
 
 \item{ncpu}{An integer scalar specifying the number of cores to use for
-multicore parallelization}
+multicore parallelization.}
 }
 \value{
 A SummarizedExperiment object containing transcript annotation and
-quantification data
+quantification data.
 }
 \description{
 Prepares a transcript-level SummarizedExperiment from TCC data using the EM
-algorithm
+algorithm.
 }

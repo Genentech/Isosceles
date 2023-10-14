@@ -4,16 +4,16 @@ using namespace Rcpp;
 
 //' EM algorithm
 //'
-//' Run EM using RcppArmadillo
+//' Runs EM using RcppArmadillo.
 //'
-//' @param counts A diagonal matrix of TCC read counts
-//' @param compatiblity_matrix A compatibility matrix between TCCs and transcripts
+//' @param counts A diagonal matrix of TCC read counts.
+//' @param compatiblity_matrix A compatibility matrix between TCCs and transcripts.
 //' @param use_length_normalization A logical scalar specifying if normalization
-//' using effective transcript lengths should be used during EM
-//' @param tx_effective_lengths A numeric vector of effective transcript lengths
-//' @param maxiter An integer scalar specifying the maximum number of EM iterations
-//' @param conv A numeric scalar specifying the EM convergence threshold
-//' @return A numeric vector of transcript read counts estimated using EM
+//' using effective transcript lengths should be used during EM.
+//' @param tx_effective_lengths A numeric vector of effective transcript lengths.
+//' @param maxiter An integer scalar specifying the maximum number of EM iterations.
+//' @param conv A numeric scalar specifying the EM convergence threshold.
+//' @return A numeric vector of transcript read counts estimated using EM.
 //' @keywords internal
 // [[Rcpp::export]]
 arma::rowvec EM(const arma::mat counts,

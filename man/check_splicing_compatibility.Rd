@@ -2,22 +2,22 @@
 % Please edit documentation in R/check_splicing_compatibility.R
 \name{check_splicing_compatibility}
 \alias{check_splicing_compatibility}
-\title{Splicing compatibility check}
+\title{Check splicing compatibility}
 \usage{
 check_splicing_compatibility(subject, target)
 }
 \arguments{
 \item{subject}{A list of vectors storing intron indices for subject
-transcripts}
+transcripts.}
 
 \item{target}{A list of vectors storing intron indices for target
-transcripts}
+transcripts.}
 }
 \value{
 A data frame storing indices of compatible subject and target
-transcripts
+transcripts.
 }
 \description{
-Check splicing compatibility between subject and target transcripts
+Checks splicing compatibility between subject and target transcripts.
 }
 \keyword{internal}

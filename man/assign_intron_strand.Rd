@@ -2,7 +2,7 @@
 % Please edit documentation in R/assign_intron_strand.R
 \name{assign_intron_strand}
 \alias{assign_intron_strand}
-\title{Assigning strand to introns}
+\title{Assign strand to introns}
 \usage{
 assign_intron_strand(
   intron_granges,
@@ -14,28 +14,28 @@ assign_intron_strand(
 )
 }
 \arguments{
-\item{intron_granges}{A GRanges object storing intron positions}
+\item{intron_granges}{A GRanges object storing intron positions.}
 
 \item{anno_data}{A list containing genome annotation data returned by
-the \code{\link{prepare_reference_annotations}} function}
+the \code{\link{prepare_reference_annotations}} function.}
 
-\item{genome_fasta_file}{A string containing a genome FASTA file path}
+\item{genome_fasta_file}{A string containing a genome FASTA file path.}
 
 \item{min_intron_length}{An integer scalar specifying the minimal length
-of introns to assign strand to}
+of introns to assign strand to.}
 
 \item{known_intron_motifs}{A character vector specifying the known intron
-motifs}
+motifs.}
 
 \item{rescue_annotated_introns}{A logical scalar specifying if introns
 found in genome annotations should be kept even if they don't have known
-intron motifs}
+intron motifs.}
 }
 \value{
 A copy of the intron_granges GRanges object with intron strands
-assigned
+assigned.
 }
 \description{
-Assign strand to the intron GRanges object based on known intron motifs
+Assigns strand to the intron GRanges object based on known intron motifs.
 }
 \keyword{internal}

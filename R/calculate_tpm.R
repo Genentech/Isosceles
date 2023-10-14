@@ -1,12 +1,12 @@
 #' Calculate TPM values
 #'
 #' Calculates TPM values from counts stored in a SummarizedExperiment
-#' or SingleCellExperiment object
+#' or SingleCellExperiment object.
 #'
 #' @param se A SummarizedExperiment or SingleCellExperiment object containing
-#' a 'counts' assay
+#' a 'counts' assay.
 #' @return A matrix (regular or sparse, depending on the input data) containing
-#' the calculated TPM values
+#' the calculated TPM values.
 #' @keywords internal
 calculate_tpm <- function(se) {
 

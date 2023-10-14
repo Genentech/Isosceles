@@ -2,23 +2,23 @@
 % Please edit documentation in R/extract_read_structures.R
 \name{extract_read_structures}
 \alias{extract_read_structures}
-\title{Read structure extraction from BAM files}
+\title{Extract read structures from BAM files}
 \usage{
 extract_read_structures(bam_files, chunk_size = 1e+06, ncpu = 1)
 }
 \arguments{
-\item{bam_files}{A character vector containing BAM file paths}
+\item{bam_files}{A character vector containing BAM file paths.}
 
 \item{chunk_size}{An integer scalar specifying the chunk size for reading
-the BAM files}
+the BAM files.}
 
 \item{ncpu}{An integer scalar specifying the number of cores to use for
-multicore parallelization}
+multicore parallelization.}
 }
 \value{
 A data frame containing non-redundant read structure data obtained
-from the BAM files
+from the BAM files.
 }
 \description{
-Extract non-redundant read structures from one or multiple BAM files
+Extracts non-redundant read structures from one or multiple BAM files.
 }

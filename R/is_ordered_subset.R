@@ -1,10 +1,10 @@
 #' Vector subset check
 #'
-#' Check if a vector is an ordered subset of another vector
+#' Checks if a vector is an ordered subset of another vector.
 #'
-#' @param x A vector
-#' @param y A vector
-#' @return A logical scalar indicating if x is an ordered subset of y
+#' @param x A vector.
+#' @param y A vector.
+#' @return A logical scalar indicating if x is an ordered subset of y.
 #' @keywords internal
 is_ordered_subset <- function(x, y) {
     if (identical(x, y)) return(TRUE)

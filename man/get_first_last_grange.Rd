@@ -2,12 +2,12 @@
 % Please edit documentation in R/get_first_last_grange.R
 \name{get_first_last_grange}
 \alias{get_first_last_grange}
-\title{First and last feature extraction from a GRangesList}
+\title{Extract the first and last features from a GRangesList}
 \usage{
 get_first_last_grange(feature_grangeslist)
 }
 \arguments{
-\item{feature_grangeslist}{A GRangesList object}
+\item{feature_grangeslist}{A GRangesList object.}
 }
 \value{
 A data frame containing following columns:
@@ -18,6 +18,7 @@ A data frame containing following columns:
 }
 }
 \description{
-Obtain the first and last features from a GRangesList object
+Extracts the first and last feature from each element of a GRangesList
+object.
 }
 \keyword{internal}

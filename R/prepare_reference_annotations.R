@@ -1,8 +1,8 @@
-#' GTF reference annotation data processing
+#' Process GTF reference annotation data
 #'
-#' Extract required reference annotation from a GTF file
+#' Extracts required reference annotation from a GTF file.
 #'
-#' @param gtf_file A string containing a GTF file path
+#' @param gtf_file A string containing a GTF file path.
 #' @return A named list containing following elements:
 #' \describe{
 #'   \item{gene_df}{a data frame storing annotated gene data}

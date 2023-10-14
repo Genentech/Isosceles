@@ -3,16 +3,16 @@
 
 #' EM algorithm
 #'
-#' Run EM using RcppArmadillo
+#' Runs EM using RcppArmadillo.
 #'
-#' @param counts A diagonal matrix of TCC read counts
-#' @param compatiblity_matrix A compatibility matrix between TCCs and transcripts
+#' @param counts A diagonal matrix of TCC read counts.
+#' @param compatiblity_matrix A compatibility matrix between TCCs and transcripts.
 #' @param use_length_normalization A logical scalar specifying if normalization
-#' using effective transcript lengths should be used during EM
-#' @param tx_effective_lengths A numeric vector of effective transcript lengths
-#' @param maxiter An integer scalar specifying the maximum number of EM iterations
-#' @param conv A numeric scalar specifying the EM convergence threshold
-#' @return A numeric vector of transcript read counts estimated using EM
+#' using effective transcript lengths should be used during EM.
+#' @param tx_effective_lengths A numeric vector of effective transcript lengths.
+#' @param maxiter An integer scalar specifying the maximum number of EM iterations.
+#' @param conv A numeric scalar specifying the EM convergence threshold.
+#' @return A numeric vector of transcript read counts estimated using EM.
 #' @keywords internal
 EM <- function(counts, compatibility_matrix, use_length_normalization, tx_effective_lengths, maxiter, conv) {
     .Call(`_Isosceles_EM`, counts, compatibility_matrix, use_length_normalization, tx_effective_lengths, maxiter, conv)

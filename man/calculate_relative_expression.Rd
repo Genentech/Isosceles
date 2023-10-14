@@ -8,14 +8,14 @@ calculate_relative_expression(se)
 }
 \arguments{
 \item{se}{A SummarizedExperiment or SingleCellExperiment object containing
-a 'tpm' assay and a 'gene_id' column in its row metadata}
+a 'tpm' assay and a 'gene_id' column in its row metadata.}
 }
 \value{
 A matrix (regular or sparse, depending on the input data) containing
-the calculated relative expression values
+the calculated relative expression values.
 }
 \description{
 Calculates relative expression from TPM values stored in a SummarizedExperiment
-or SingleCellExperiment object
+or SingleCellExperiment object.
 }
 \keyword{internal}

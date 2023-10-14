@@ -1,12 +1,12 @@
 #' Calculate relative expression
 #'
 #' Calculates relative expression from TPM values stored in a SummarizedExperiment
-#' or SingleCellExperiment object
+#' or SingleCellExperiment object.
 #'
 #' @param se A SummarizedExperiment or SingleCellExperiment object containing
-#' a 'tpm' assay and a 'gene_id' column in its row metadata
+#' a 'tpm' assay and a 'gene_id' column in its row metadata.
 #' @return A matrix (regular or sparse, depending on the input data) containing
-#' the calculated relative expression values
+#' the calculated relative expression values.
 #' @keywords internal
 calculate_relative_expression <- function(se) {
 
