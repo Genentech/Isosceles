@@ -1,24 +1,24 @@
-#' Merging neighboring cell TCC values in scRNA-Seq data
+#' Merge the neighboring cell TCC values in scRNA-Seq data
 #'
 #' Prepares a TCC SummarizedExperiment object where count values from the
-#' nearest k neighbors are added to the count values of each cell
+#' nearest k neighbors are added to the count values of each cell.
 #'
 #' @param se_tcc A TCC SummarizedExperiment object returned by the
-#' \code{\link{prepare_tcc_se}} function
-#' @param pca_mat A matrix containing PCA coordinates of each cell
-#' @param k An integer scalar specifying the number of nearest neighbors to use
+#' \code{\link{prepare_tcc_se}} function.
+#' @param pca_mat A matrix containing PCA coordinates of each cell.
+#' @param k An integer scalar specifying the number of nearest neighbors to use.
 #' @param use_annoy A logical scalar indicating whether to use the Annoy
 #' algorithm for approximate nearest neighbor identification (recommended for
-#' big datasets)
+#' big datasets).
 #' @param ncpu An integer scalar specifying the number of cores to use for
-#' multicore parallelization
-#' @return A SummarizedExperiment object containing merged TCC data
+#' multicore parallelization.
+#' @return A SummarizedExperiment object containing merged TCC data.
 #' @export
-merge_sc_neighbors <- function(se_tcc,
-                               pca_mat,
-                               k = 10,
-                               use_annoy = FALSE,
-                               ncpu = 1) {
+neighborhood_tcc <- function(se_tcc,
+                             pca_mat,
+                             k = 10,
+                             use_annoy = FALSE,
+                             ncpu = 1) {
 
     # Check arguments
     assertthat::assert_that(methods::is(se_tcc, "SummarizedExperiment"))

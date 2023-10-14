@@ -3,7 +3,7 @@
 export("%>%")
 export(export_gtf)
 export(extract_read_structures)
-export(merge_sc_neighbors)
+export(neighborhood_tcc)
 export(plot_psi_heatmap)
 export(plot_psi_regions)
 export(prepare_gene_se)
