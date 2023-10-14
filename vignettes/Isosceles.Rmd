@@ -101,7 +101,7 @@ The main output of Isosceles consists of SummarizedExperiment objects, created a
   * **TCC (Transcript Compatibility Counts)** - This is an intermediate quantification stage of the data, formed directly from the BAM files with the `prepare_tcc_se` function. The values here are used to derive transcript quantification estimates via the EM algorithm. Both the `prepare_pseudobulk_se` function (for summarizing data at the pseudo-bulk level) and the `merge_sc_neighbors` function (for combining counts from neighboring cells) utilize TCC SummarizedExperiment objects as both input and output.
   * **transcript** - At the transcript level, expression values are computed using the `prepare_transcript_se` function, applying the EM (Expectation–Maximization) algorithm. By default, normalization is done using effective transcript lengths, but it can be turned off for UMI-based protocol data (commonly in scRNA-Seq datasets) by setting the *use_length_normalization* argument to FALSE. You can export transcript annotations from the SummarizedExperiment object to a GTF file using the `export_gtf` function.
   * **gene** - Gene-level expression values are derived using the `prepare_gene_se` function. This process is typically very swift as it doesn't necessitate running the EM algorithm.
-  * **PSI (Percent Spliced In)** - PSI values are computed for unique transcriptomic regions of each gene (such as transcription start sites or core exons) using the `prepare_psi_se` function. This requires a transcript level SummarizedExperiment object as input.
+  * **PSI (Percent Spliced In)** - PSI values are computed for unique transcriptomic regions of each gene (such as transcription start sites or core exons) using the `transcript_to_psi` function. This requires a transcript level SummarizedExperiment object as input.
 
 Each of these levels provides specific insights and functionalities within the Isosceles framework, catering to different analytical requirements.
 
@@ -417,7 +417,7 @@ sce_transcript
 
 Create a PSI (Percent Spliced In) SummarizedExperiment object:
 ```{r, message = FALSE, warning = FALSE}
-se_psi <- prepare_psi_se(sce_transcript)
+se_psi <- transcript_to_psi(sce_transcript)
 se_psi
 ```
 

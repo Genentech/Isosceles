@@ -3,7 +3,7 @@ test_that("plot_psi_regions works as expected", {
     # Preparing test data
     sce_transcript <- readRDS(system.file("extdata", "sce_transcript_cav1.rds",
                                           package = "Isosceles"))
-    se_psi <- prepare_psi_se(sce_transcript)
+    se_psi <- transcript_to_psi(sce_transcript)
 
     # Testing if function throws the expected errors
     expect_error(plot_psi_regions(se_psi = NULL),
