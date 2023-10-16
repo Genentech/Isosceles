@@ -8,7 +8,7 @@ neighborhood_tcc(se_tcc, pca_mat, k = 10, use_annoy = FALSE, ncpu = 1)
 }
 \arguments{
 \item{se_tcc}{A TCC SummarizedExperiment object returned by the
-\code{\link{prepare_tcc_se}} function.}
+\code{\link{bam_to_tcc}} function.}
 
 \item{pca_mat}{A matrix containing PCA coordinates of each cell.}
 

@@ -26,16 +26,16 @@
 #' @return A SummarizedExperiment object containing TCC annotation and
 #' quantification data.
 #' @export
-prepare_tcc_se <- function(bam_files,
-                           transcript_data,
-                           run_mode = "strict",
-                           min_read_count = 1,
-                           min_relative_expression = 0.1,
-                           extend_spliced_transcripts = 100,
-                           is_single_cell = FALSE,
-                           barcode_tag = "BC",
-                           chunk_size = 1000000,
-                           ncpu = 1) {
+bam_to_tcc <- function(bam_files,
+                       transcript_data,
+                       run_mode = "strict",
+                       min_read_count = 1,
+                       min_relative_expression = 0.1,
+                       extend_spliced_transcripts = 100,
+                       is_single_cell = FALSE,
+                       barcode_tag = "BC",
+                       chunk_size = 1000000,
+                       ncpu = 1) {
 
     # Check arguments
     assertthat::assert_that(is.character(bam_files))

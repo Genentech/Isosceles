@@ -4,7 +4,7 @@
 #' pseudotime values.
 #'
 #' @param se_tcc A TCC SummarizedExperiment object returned by the
-#' \code{\link{prepare_tcc_se}} function.
+#' \code{\link{bam_to_tcc}} function.
 #' @param pseudotime A numeric vector containing the pseudotime values for
 #' each cell. Cells not belonging to the analyzed trajectory should be denoted
 #' using NA values.

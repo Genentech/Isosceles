@@ -18,7 +18,7 @@ test_that("calculate_tpm works as expected", {
         gtf_file = gtf_file, genome_fasta_file = genome_fasta_file,
         bam_parsed = NULL
     )
-    se <- prepare_tcc_se(
+    se <- bam_to_tcc(
         bam_files = bam_files, transcript_data = transcript_data
     )
 
@@ -61,7 +61,7 @@ test_that("calculate_tpm works as expected", {
         gtf_file = gtf_file, genome_fasta_file = genome_fasta_file,
         bam_parsed = NULL
     )
-    se <- prepare_tcc_se(
+    se <- bam_to_tcc(
         bam_files = bam_files, transcript_data = transcript_data,
         is_single_cell = TRUE, barcode_tag = "BC"
     )

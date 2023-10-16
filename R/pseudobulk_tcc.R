@@ -4,7 +4,7 @@
 #' labels.
 #'
 #' @param se_tcc A TCC SummarizedExperiment object returned by the
-#' \code{\link{prepare_tcc_se}} function.
+#' \code{\link{bam_to_tcc}} function.
 #' @param cell_labels A vector or a factor containing cell labels acting as a
 #' grouping variable.
 #' @return A pseudobulk SummarizedExperiment object containing TCC annotation

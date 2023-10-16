@@ -20,7 +20,7 @@ test_that("tcc_to_transcript works as expected", {
         bam_parsed = bam_parsed, min_bam_splice_read_count = 2,
         min_bam_splice_fraction = 0.01
     )
-    se_tcc <- prepare_tcc_se(
+    se_tcc <- bam_to_tcc(
         bam_files = bam_files, transcript_data = transcript_data,
         run_mode = "de_novo_loose", min_relative_expression = 0
     )
@@ -160,7 +160,7 @@ test_that("tcc_to_transcript works as expected", {
         bam_parsed = bam_parsed, min_bam_splice_read_count = 1,
         min_bam_splice_fraction = 0.01
     )
-    se_tcc <- prepare_tcc_se(
+    se_tcc <- bam_to_tcc(
         bam_files = bam_files, transcript_data = transcript_data,
         is_single_cell = TRUE, barcode_tag = "BC",
         run_mode = "de_novo_loose", min_relative_expression = 0

@@ -1,4 +1,4 @@
-test_that("prepare_tcc_se works as expected", {
+test_that("bam_to_tcc works as expected", {
 
     # Preparing test data (bulk RNA-Seq data)
     bam_file <- system.file(
@@ -22,117 +22,116 @@ test_that("prepare_tcc_se works as expected", {
     )
 
     # Testing if function throws the expected errors
-    expect_error(prepare_tcc_se(bam_files = NULL),
+    expect_error(bam_to_tcc(bam_files = NULL),
                  regexp = "bam_files is not a character vector",
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = character(0)),
+    expect_error(bam_to_tcc(bam_files = character(0)),
                  regexp = "length(bam_files) not greater than 0",
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = "jabberwocky"),
+    expect_error(bam_to_tcc(bam_files = "jabberwocky"),
                  regexp = "!is.null(names(bam_files)) is not TRUE",
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = c(Sample = "jabberwocky")),
+    expect_error(bam_to_tcc(bam_files = c(Sample = "jabberwocky")),
                  regexp = "Elements 1 of file.exists(bam_files) are not true",
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = NULL),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = NULL),
                  regexp = "transcript_data is not a list",
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = list()),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = list()),
                  regexp = "names(transcript_data) not identical to",
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = list(
-                                    tx_df = 42,
-                                    tx_granges = transcript_data$tx_granges,
-                                    tx_exon_granges_list = transcript_data$tx_exon_granges_list,
-                                    tx_intron_granges_list = transcript_data$tx_intron_granges_list
-                                )),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = list(
+                                tx_df = 42,
+                                tx_granges = transcript_data$tx_granges,
+                                tx_exon_granges_list = transcript_data$tx_exon_granges_list,
+                                tx_intron_granges_list = transcript_data$tx_intron_granges_list
+                            )),
                  regexp = "transcript_data$tx_df is not a data frame",
                  fixed = TRUE)
-
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = list(
-                                    tx_df = transcript_data$tx_df,
-                                    tx_granges = 42,
-                                    tx_exon_granges_list = transcript_data$tx_exon_granges_list,
-                                    tx_intron_granges_list = transcript_data$tx_intron_granges_list
-                                )),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = list(
+                                tx_df = transcript_data$tx_df,
+                                tx_granges = 42,
+                                tx_exon_granges_list = transcript_data$tx_exon_granges_list,
+                                tx_intron_granges_list = transcript_data$tx_intron_granges_list
+                            )),
                  regexp = 'class(transcript_data$tx_granges) not equal to "GRanges"',
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = list(
-                                    tx_df = transcript_data$tx_df,
-                                    tx_granges = transcript_data$tx_granges,
-                                    tx_exon_granges_list = 42,
-                                    tx_intron_granges_list = transcript_data$tx_intron_granges_list
-                                )),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = list(
+                                tx_df = transcript_data$tx_df,
+                                tx_granges = transcript_data$tx_granges,
+                                tx_exon_granges_list = 42,
+                                tx_intron_granges_list = transcript_data$tx_intron_granges_list
+                            )),
                  regexp = 'grepl(pattern = "GRangesList", x = class',
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = list(
-                                    tx_df = transcript_data$tx_df,
-                                    tx_granges = transcript_data$tx_granges,
-                                    tx_exon_granges_list = transcript_data$tx_exon_granges_list,
-                                    tx_intron_granges_list = 42
-                                )),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = list(
+                                tx_df = transcript_data$tx_df,
+                                tx_granges = transcript_data$tx_granges,
+                                tx_exon_granges_list = transcript_data$tx_exon_granges_list,
+                                tx_intron_granges_list = 42
+                            )),
                  regexp = 'grepl(pattern = "GRangesList", x = class',
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = transcript_data,
-                                run_mode = NULL),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = transcript_data,
+                            run_mode = NULL),
                  regexp = "run_mode is not a string",
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = transcript_data,
-                                run_mode = "jabberwocky"),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = transcript_data,
+                            run_mode = "jabberwocky"),
                  regexp = "`%in%`(x = run_mode, table = c(",
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = transcript_data,
-                                min_read_count = NULL),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = transcript_data,
+                            min_read_count = NULL),
                  regexp = "min_read_count is not a count",
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = transcript_data,
-                                min_relative_expression = NULL),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = transcript_data,
+                            min_relative_expression = NULL),
                  regexp = "min_relative_expression is not a numeric or integer vector",
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = transcript_data,
-                                min_relative_expression = -42),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = transcript_data,
+                            min_relative_expression = -42),
                  regexp = "min_relative_expression not greater than or equal to 0",
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = transcript_data,
-                                extend_spliced_transcripts = -1),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = transcript_data,
+                            extend_spliced_transcripts = -1),
                  regexp = "extend_spliced_transcripts not equal to 0 or extend_spliced_transcripts is not a count",
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = transcript_data,
-                                is_single_cell = NULL),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = transcript_data,
+                            is_single_cell = NULL),
                  regexp = "is_single_cell is not a flag",
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = transcript_data,
-                                barcode_tag = NULL),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = transcript_data,
+                            barcode_tag = NULL),
                  regexp = "barcode_tag is not a string",
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = transcript_data,
-                                chunk_size = NULL),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = transcript_data,
+                            chunk_size = NULL),
                  regexp = "chunk_size is not a count",
                  fixed = TRUE)
-    expect_error(prepare_tcc_se(bam_files = bam_files,
-                                transcript_data = transcript_data,
-                                ncpu = NULL),
+    expect_error(bam_to_tcc(bam_files = bam_files,
+                            transcript_data = transcript_data,
+                            ncpu = NULL),
                  regexp = "ncpu is not a count",
                  fixed = TRUE)
 
     # Testing if function returns the expected output (bulk RNA-Seq data, strict mode)
     expect_message(
-        se <- prepare_tcc_se(
+        se <- bam_to_tcc(
             bam_files = bam_files, transcript_data = transcript_data,
             run_mode = "strict"
         ),
@@ -182,7 +181,7 @@ test_that("prepare_tcc_se works as expected", {
 
     # Testing if function returns the expected output (bulk RNA-Seq data, de_novo_strict mode)
     expect_message(
-        se <- prepare_tcc_se(
+        se <- bam_to_tcc(
             bam_files = bam_files, transcript_data = transcript_data,
             run_mode = "de_novo_strict", min_relative_expression = 0
         ),
@@ -233,7 +232,7 @@ test_that("prepare_tcc_se works as expected", {
 
     # Testing if function returns the expected output (bulk RNA-Seq data, de_novo_loose mode)
     expect_message(
-        se <- prepare_tcc_se(
+        se <- bam_to_tcc(
             bam_files = bam_files, transcript_data = transcript_data,
             run_mode = "de_novo_loose", min_relative_expression = 0
         ),
@@ -284,7 +283,7 @@ test_that("prepare_tcc_se works as expected", {
 
     # Testing if function returns the expected output (bulk RNA-Seq data, de_novo_full mode)
     expect_message(
-        se <- prepare_tcc_se(
+        se <- bam_to_tcc(
             bam_files = bam_files, transcript_data = transcript_data,
             run_mode = "de_novo_full", min_relative_expression = 0
         ),
@@ -356,7 +355,7 @@ test_that("prepare_tcc_se works as expected", {
 
     # Testing if function returns the expected output (scRNA-Seq data, strict mode)
     expect_message(
-        se <- prepare_tcc_se(
+        se <- bam_to_tcc(
             bam_files = bam_files, transcript_data = transcript_data,
             is_single_cell = TRUE, barcode_tag = "BC",
             run_mode = "strict"
@@ -405,7 +404,7 @@ test_that("prepare_tcc_se works as expected", {
 
     # Testing if function returns the expected output (scRNA-Seq data, de_novo_strict mode)
     expect_message(
-        se <- prepare_tcc_se(
+        se <- bam_to_tcc(
             bam_files = bam_files, transcript_data = transcript_data,
             is_single_cell = TRUE, barcode_tag = "BC",
             run_mode = "de_novo_strict", min_relative_expression = 0
@@ -455,7 +454,7 @@ test_that("prepare_tcc_se works as expected", {
 
     # Testing if function returns the expected output (scRNA-Seq data, de_novo_loose mode)
     expect_message(
-        se <- prepare_tcc_se(
+        se <- bam_to_tcc(
             bam_files = bam_files, transcript_data = transcript_data,
             is_single_cell = TRUE, barcode_tag = "BC",
             run_mode = "de_novo_loose", min_relative_expression = 0
@@ -505,7 +504,7 @@ test_that("prepare_tcc_se works as expected", {
 
     # Testing if function returns the expected output (scRNA-Seq data, de_novo_full mode)
     expect_message(
-        se <- prepare_tcc_se(
+        se <- bam_to_tcc(
             bam_files = bam_files, transcript_data = transcript_data,
             is_single_cell = TRUE, barcode_tag = "BC",
             run_mode = "de_novo_full", min_relative_expression = 0

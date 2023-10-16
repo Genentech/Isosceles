@@ -8,7 +8,7 @@ pseudobulk_tcc(se_tcc, cell_labels)
 }
 \arguments{
 \item{se_tcc}{A TCC SummarizedExperiment object returned by the
-\code{\link{prepare_tcc_se}} function.}
+\code{\link{bam_to_tcc}} function.}
 
 \item{cell_labels}{A vector or a factor containing cell labels acting as a
 grouping variable.}

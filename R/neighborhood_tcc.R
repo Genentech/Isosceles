@@ -4,7 +4,7 @@
 #' nearest k neighbors are added to the count values of each cell.
 #'
 #' @param se_tcc A TCC SummarizedExperiment object returned by the
-#' \code{\link{prepare_tcc_se}} function.
+#' \code{\link{bam_to_tcc}} function.
 #' @param pca_mat A matrix containing PCA coordinates of each cell.
 #' @param k An integer scalar specifying the number of nearest neighbors to use.
 #' @param use_annoy A logical scalar indicating whether to use the Annoy

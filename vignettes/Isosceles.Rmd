@@ -53,14 +53,14 @@ Isosceles requires the following input files:
 
   * BAM file(s) containing aligned long reads
     * We recommend [minimap2](https://github.com/lh3/minimap2) for all long-read alignments. 
-    * Isosceles requires the BAM file for single-cell data to contain a tag storing the cell barcode. Several pipelines are suitable for this purpose, including [Sicelore](https://github.com/ucagenomix/sicelore), which is the default tag name (`BC` tag), but it can be changed using the *barcode_tag* argument of the `prepare_tcc_se` function.
+    * Isosceles requires the BAM file for single-cell data to contain a tag storing the cell barcode. Several pipelines are suitable for this purpose, including [Sicelore](https://github.com/ucagenomix/sicelore), which is the default tag name (`BC` tag), but it can be changed using the *barcode_tag* argument of the `bam_to_tcc` function.
   * FASTA file containing the genomic sequences
   * GTF file containing the genomic annotations
     * Isosceles requires the chromosome names to match between the FASTA file and the GTF file. No automatic conversion between alternative chromosome naming conventions (e.g. '1' and 'chr1') is performed.
 
 # Run modes
 
-Isosceles can used in of the following run modes, specified when the `prepare_tcc_se` function is run:
+Isosceles can used in of the following run modes, specified when the `bam_to_tcc` function is run:
 
   * **strict** - only annotated reference transcripts will be quantified
   * **de_novo_strict** - de novo transcripts enabled, but all splice sites must be known (i.e. found in reference annotations or provided by the user).
@@ -98,7 +98,7 @@ The comma separated list of compatible reference transcript IDs can be found in 
 
 The main output of Isosceles consists of SummarizedExperiment objects, created at various resolution levels:
 
-  * **TCC (Transcript Compatibility Counts)** - This is an intermediate quantification stage of the data, formed directly from the BAM files with the `prepare_tcc_se` function. The values here are used to derive transcript quantification estimates via the EM algorithm. Both the `pseudobulk_tcc` function (for summarizing data at the pseudo-bulk level) and the `neighborhood_tcc` function (for combining counts from neighboring cells) utilize TCC SummarizedExperiment objects as both input and output.
+  * **TCC (Transcript Compatibility Counts)** - This is an intermediate quantification stage of the data, formed directly from the BAM files with the `bam_to_tcc` function. The values here are used to derive transcript quantification estimates via the EM algorithm. Both the `pseudobulk_tcc` function (for summarizing data at the pseudo-bulk level) and the `neighborhood_tcc` function (for combining counts from neighboring cells) utilize TCC SummarizedExperiment objects as both input and output.
   * **transcript** - At the transcript level, expression values are computed using the `tcc_to_transcript` function, applying the EM (Expectation–Maximization) algorithm. By default, normalization is done using effective transcript lengths, but it can be turned off for UMI-based protocol data (commonly in scRNA-Seq datasets) by setting the *use_length_normalization* argument to FALSE. You can export transcript annotations from the SummarizedExperiment object to a GTF file using the `export_gtf` function.
   * **gene** - Gene-level expression values are derived using the `tcc_to_gene` function. This process is typically very swift as it doesn't necessitate running the EM algorithm.
   * **PSI (Percent Spliced In)** - PSI values are computed for unique transcriptomic regions of each gene (such as transcription start sites or core exons) using the `transcript_to_psi` function. This requires a transcript level SummarizedExperiment object as input.
@@ -158,7 +158,7 @@ transcript_data <- prepare_transcripts(
 
 Create a TCC (Transcript Compatibility Counts) SummarizedExperiment object:
 ```{r, message = FALSE, warning = FALSE}
-se_tcc <- prepare_tcc_se(
+se_tcc <- bam_to_tcc(
     bam_files = bam_files,
     transcript_data = transcript_data,
     run_mode = "de_novo_loose",
@@ -228,7 +228,7 @@ transcript_data <- prepare_transcripts(
 
 Create a TCC (Transcript Compatibility Counts) SummarizedExperiment object:
 ```{r, message = FALSE, warning = FALSE}
-se_tcc <- prepare_tcc_se(
+se_tcc <- bam_to_tcc(
     bam_files = bam_files,
     transcript_data = transcript_data,
     run_mode = "de_novo_loose",
