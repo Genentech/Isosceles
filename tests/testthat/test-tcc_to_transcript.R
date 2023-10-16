@@ -1,4 +1,4 @@
-test_that("prepare_transcript_se works as expected", {
+test_that("tcc_to_transcript works as expected", {
 
     # Preparing test data (bulk RNA-Seq data)
     bam_file <- system.file(
@@ -26,39 +26,39 @@ test_that("prepare_transcript_se works as expected", {
     )
 
     # Testing if function throws the expected errors
-    expect_error(prepare_transcript_se(se_tcc = NULL),
+    expect_error(tcc_to_transcript(se_tcc = NULL),
                  regexp = "methods::is(object = se_tcc, class2 =",
                  fixed = TRUE)
     se_copy <- se_tcc
     SummarizedExperiment::assay(se_copy, "counts") <- NULL
-    expect_error(prepare_transcript_se(se_tcc = se_copy),
+    expect_error(tcc_to_transcript(se_tcc = se_copy),
                  regexp = 'is.element(el = "counts",',
                  fixed = TRUE)
     se_copy <- se_tcc
     SummarizedExperiment::rowData(se_copy)$gene_id <- NULL
-    expect_error(prepare_transcript_se(se_tcc = se_copy),
+    expect_error(tcc_to_transcript(se_tcc = se_copy),
                  regexp = 'is.element(el = "gene_id",',
                  fixed = TRUE)
-    expect_error(prepare_transcript_se(se_tcc = se_tcc,
-                                       em.maxiter = NULL),
+    expect_error(tcc_to_transcript(se_tcc = se_tcc,
+                                   em.maxiter = NULL),
                  regexp = "em.maxiter is not a count",
                  fixed = TRUE)
-    expect_error(prepare_transcript_se(se_tcc = se_tcc,
-                                       em.conv = NULL),
+    expect_error(tcc_to_transcript(se_tcc = se_tcc,
+                                   em.conv = NULL),
                  regexp = "em.conv is not a number",
                  fixed = TRUE)
-    expect_error(prepare_transcript_se(se_tcc = se_tcc,
-                                       ncpu = NULL),
+    expect_error(tcc_to_transcript(se_tcc = se_tcc,
+                                   ncpu = NULL),
                  regexp = "ncpu is not a count",
                  fixed = TRUE)
-    expect_error(prepare_transcript_se(se_tcc = se_tcc,
-                                       use_length_normalization = NULL),
+    expect_error(tcc_to_transcript(se_tcc = se_tcc,
+                                   use_length_normalization = NULL),
                  regexp = "use_length_normalization is not a flag",
                  fixed = TRUE)
 
     # Testing if function returns the expected output (bulk RNA-Seq data, length normalization)
     expect_silent(
-        se <- prepare_transcript_se(
+        se <- tcc_to_transcript(
             se_tcc = se_tcc, use_length_normalization = TRUE
         )
     )
@@ -100,7 +100,7 @@ test_that("prepare_transcript_se works as expected", {
 
     # Testing if function returns the expected output (bulk RNA-Seq data, no length normalization)
     expect_silent(
-        se <- prepare_transcript_se(
+        se <- tcc_to_transcript(
             se_tcc = se_tcc, use_length_normalization = FALSE
         )
     )
@@ -169,7 +169,7 @@ test_that("prepare_transcript_se works as expected", {
 
     # Testing if function returns the expected output (scRNA-Seq, length normalization)
     expect_silent(
-        se <- prepare_transcript_se(
+        se <- tcc_to_transcript(
             se_tcc = se_tcc, use_length_normalization = TRUE
         )
     )
@@ -211,7 +211,7 @@ test_that("prepare_transcript_se works as expected", {
 
     # Testing if function returns the expected output (scRNA-Seq, no length normalization)
     expect_silent(
-        se <- prepare_transcript_se(
+        se <- tcc_to_transcript(
             se_tcc = se_tcc, use_length_normalization = FALSE
         )
     )

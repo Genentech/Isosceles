@@ -15,7 +15,7 @@
 #' end coordinates extracted from their identifiers.
 #'
 #' @param se A transcript-level SummarizedExperiment object returned by the
-#' \code{\link{prepare_transcript_se}} function.
+#' \code{\link{tcc_to_transcript}} function.
 #' @param ncpu An integer scalar specifying the number of cores to use for
 #' multicore parallelization.
 #' @return A SummarizedExperiment object containing PSI annotation and

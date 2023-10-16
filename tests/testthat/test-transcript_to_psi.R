@@ -24,7 +24,7 @@ test_that("transcript_to_psi works as expected", {
         bam_files = bam_files, transcript_data = transcript_data,
         run_mode = "de_novo_loose", min_relative_expression = 0
     )
-    se_transcript <- prepare_transcript_se(
+    se_transcript <- tcc_to_transcript(
         se_tcc = se_tcc, use_length_normalization = TRUE
     )
 
@@ -114,7 +114,7 @@ test_that("transcript_to_psi works as expected", {
         run_mode = "de_novo_loose", min_relative_expression = 0
     )
     se_tcc <- se_tcc[, 1:5]
-    se_transcript <- prepare_transcript_se(
+    se_transcript <- tcc_to_transcript(
         se_tcc = se_tcc, use_length_normalization = FALSE
     )
     se_transcript <- se_transcript[

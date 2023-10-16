@@ -15,11 +15,11 @@
 #' @return A SummarizedExperiment object containing transcript annotation and
 #' quantification data.
 #' @export
-prepare_transcript_se <- function(se_tcc,
-                                  em.maxiter = 250,
-                                  em.conv = 0.01,
-                                  use_length_normalization = TRUE,
-                                  ncpu = 1) {
+tcc_to_transcript <- function(se_tcc,
+                              em.maxiter = 250,
+                              em.conv = 0.01,
+                              use_length_normalization = TRUE,
+                              ncpu = 1) {
 
     # Check arguments
     assertthat::assert_that(methods::is(se_tcc, "SummarizedExperiment"))

@@ -18,7 +18,7 @@ plot_psi_regions(
 \code{\link{transcript_to_psi}} function.}
 
 \item{se_transcript}{A transcript-level SummarizedExperiment object returned
-by the \code{\link{prepare_transcript_se}} function.}
+by the \code{\link{tcc_to_transcript}} function.}
 
 \item{gene_id}{A string containing the identifier of the gene to plot.}
 

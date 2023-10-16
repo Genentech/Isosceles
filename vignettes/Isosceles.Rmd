@@ -99,7 +99,7 @@ The comma separated list of compatible reference transcript IDs can be found in 
 The main output of Isosceles consists of SummarizedExperiment objects, created at various resolution levels:
 
   * **TCC (Transcript Compatibility Counts)** - This is an intermediate quantification stage of the data, formed directly from the BAM files with the `prepare_tcc_se` function. The values here are used to derive transcript quantification estimates via the EM algorithm. Both the `pseudobulk_tcc` function (for summarizing data at the pseudo-bulk level) and the `neighborhood_tcc` function (for combining counts from neighboring cells) utilize TCC SummarizedExperiment objects as both input and output.
-  * **transcript** - At the transcript level, expression values are computed using the `prepare_transcript_se` function, applying the EM (Expectation–Maximization) algorithm. By default, normalization is done using effective transcript lengths, but it can be turned off for UMI-based protocol data (commonly in scRNA-Seq datasets) by setting the *use_length_normalization* argument to FALSE. You can export transcript annotations from the SummarizedExperiment object to a GTF file using the `export_gtf` function.
+  * **transcript** - At the transcript level, expression values are computed using the `tcc_to_transcript` function, applying the EM (Expectation–Maximization) algorithm. By default, normalization is done using effective transcript lengths, but it can be turned off for UMI-based protocol data (commonly in scRNA-Seq datasets) by setting the *use_length_normalization* argument to FALSE. You can export transcript annotations from the SummarizedExperiment object to a GTF file using the `export_gtf` function.
   * **gene** - Gene-level expression values are derived using the `tcc_to_gene` function. This process is typically very swift as it doesn't necessitate running the EM algorithm.
   * **PSI (Percent Spliced In)** - PSI values are computed for unique transcriptomic regions of each gene (such as transcription start sites or core exons) using the `transcript_to_psi` function. This requires a transcript level SummarizedExperiment object as input.
 
@@ -170,7 +170,7 @@ se_tcc
 
 Create a transcript-level SummarizedExperiment object using the EM algorithm:
 ```{r, message = FALSE, warning = FALSE}
-se_transcript <- prepare_transcript_se(
+se_transcript <- tcc_to_transcript(
     se_tcc = se_tcc,
     use_length_normalization = TRUE
 )
@@ -242,7 +242,7 @@ se_tcc
 
 Create a transcript-level SummarizedExperiment object using the EM algorithm:
 ```{r, message = FALSE, warning = FALSE}
-se_transcript <- prepare_transcript_se(
+se_transcript <- tcc_to_transcript(
     se_tcc = se_tcc,
     use_length_normalization = FALSE
 )
@@ -274,7 +274,7 @@ se_pseudobulk_tcc
 
 Create a pseudobulk transcript-level SummarizedExperiment object using the EM algorithm:
 ```{r, message = FALSE, warning = FALSE}
-se_pseudobulk_transcript <- prepare_transcript_se(
+se_pseudobulk_transcript <- tcc_to_transcript(
     se_tcc = se_pseudobulk_tcc,
     use_length_normalization = FALSE
 )
@@ -312,7 +312,7 @@ se_merged_tcc
 
 Recalculate transcript expression values from merged data using the EM algorithm:
 ```{r, message = FALSE, warning = FALSE}
-se_merged_transcript <- prepare_transcript_se(
+se_merged_transcript <- tcc_to_transcript(
     se_tcc = se_merged_tcc,
     use_length_normalization = FALSE
 )

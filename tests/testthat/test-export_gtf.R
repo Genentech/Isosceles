@@ -24,7 +24,7 @@ test_that("export_gtf works as expected", {
         bam_files = bam_files, transcript_data = transcript_data,
         run_mode = "de_novo_loose", min_relative_expression = 0
     )
-    se <- prepare_transcript_se(
+    se <- tcc_to_transcript(
         se_tcc = se_tcc, use_length_normalization = TRUE
     )
     ref_gtf_file <- system.file(

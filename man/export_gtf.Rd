@@ -8,7 +8,7 @@ export_gtf(se, file)
 }
 \arguments{
 \item{se}{A transcript-level SummarizedExperiment object returned by the
-\code{\link{prepare_transcript_se}} function.}
+\code{\link{tcc_to_transcript}} function.}
 
 \item{file}{A string specifying the output file path.}
 }
