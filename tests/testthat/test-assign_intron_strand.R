@@ -14,7 +14,7 @@ test_that("assign_intron_strand works as expected", {
         package = "Isosceles"
     )
     anno_data <- prepare_reference_annotations(gtf_file)
-    bam_data <- extract_read_structures(bam_file)
+    bam_data <- bam_to_read_structures(bam_file)
     intron_granges <- bam_data$intron_positions %>%
         strsplit(",") %>%
         unlist() %>%

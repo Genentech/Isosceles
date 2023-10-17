@@ -13,7 +13,7 @@ test_that("prepare_transcripts works as expected", {
         "extdata", "Homo_sapiens.GRCh38.dna_sm.primary_assembly_chr9_1_1000000.fa",
         package = "Isosceles"
     )
-    bam_parsed <- extract_read_structures(bam_file)
+    bam_parsed <- bam_to_read_structures(bam_file)
 
     # Testing if function throws the expected errors
     expect_error(prepare_transcripts(gtf_file = NULL),

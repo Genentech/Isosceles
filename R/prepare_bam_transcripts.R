@@ -3,7 +3,7 @@
 #' Prepares transcript data extracted from BAM file(s) for further processing.
 #'
 #' @param bam_parsed A data frame containing non-redundant read structure data
-#' returned by the \code{\link{extract_read_structures}} function.
+#' returned by the \code{\link{bam_to_read_structures}} function.
 #' @param anno_data A list containing genome annotation data returned by
 #' the \code{\link{prepare_reference_annotations}} function.
 #' @param genome_fasta_file A string containing a genome FASTA file path.

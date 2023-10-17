@@ -14,7 +14,7 @@ test_that("neighborhood_tcc works as expected", {
         "extdata", "chr4.fa.gz",
         package = "Isosceles"
     )
-    bam_parsed <- extract_read_structures(bam_files)
+    bam_parsed <- bam_to_read_structures(bam_files)
     transcript_data <- prepare_transcripts(
         gtf_file = gtf_file, genome_fasta_file = genome_fasta_file,
         bam_parsed = bam_parsed, min_bam_splice_read_count = 1,

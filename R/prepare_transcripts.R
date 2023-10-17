@@ -6,7 +6,7 @@
 #' @param gtf_file A string containing a GTF file path.
 #' @param genome_fasta_file A string containing a genome FASTA file path.
 #' @param bam_parsed A data frame containing non-redundant read structure data
-#' returned by the \code{\link{extract_read_structures}} function. If NULL,
+#' returned by the \code{\link{bam_to_read_structures}} function. If NULL,
 #' only reference transcripts are used.
 #' @param min_intron_length An integer scalar specifying the minimal length
 #' of introns to assign strand to.

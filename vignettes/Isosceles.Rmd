@@ -68,7 +68,7 @@ Isosceles can used in of the following run modes, specified when the `bam_to_tcc
 
 # Genome annotations
 
-Isosceles selects the appropriate set of transcripts to quantify, depending on the given run mode, using the genomic annotations that are prepared with the `prepare_transcripts` function. This function needs a GTF file with reference annotations, and, optionally, transcript structures extracted from BAM files using the `extract_read_structures` function (which is necessary for detecting de novo transcripts).
+Isosceles selects the appropriate set of transcripts to quantify, depending on the given run mode, using the genomic annotations that are prepared with the `prepare_transcripts` function. This function needs a GTF file with reference annotations, and, optionally, transcript structures extracted from BAM files using the `bam_to_read_structures` function (which is necessary for detecting de novo transcripts).
 
 There are several important aspects of the `prepare_transcripts` function to consider:
 
@@ -140,7 +140,7 @@ genome_fasta_file <- system.file(
 Extract read data from the BAM files:
 ```{r, message = FALSE, warning = FALSE}
 bam_files <- c(Sample = bam_file)
-bam_parsed <- extract_read_structures(
+bam_parsed <- bam_to_read_structures(
     bam_files = bam_files
 )
 ```
@@ -210,7 +210,7 @@ genome_fasta_file <- system.file(
 Extract read data from the BAM files:
 ```{r, message = FALSE, warning = FALSE}
 bam_files <- c(Sample = bam_file)
-bam_parsed <- extract_read_structures(
+bam_parsed <- bam_to_read_structures(
     bam_files = bam_files
 )
 ```

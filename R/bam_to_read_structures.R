@@ -10,9 +10,9 @@
 #' @return A data frame containing non-redundant read structure data obtained
 #' from the BAM files.
 #' @export
-extract_read_structures <- function(bam_files,
-                                    chunk_size = 1000000,
-                                    ncpu = 1) {
+bam_to_read_structures <- function(bam_files,
+                                   chunk_size = 1000000,
+                                   ncpu = 1) {
 
     # Check arguments
     assertthat::assert_that(is.character(bam_files))
