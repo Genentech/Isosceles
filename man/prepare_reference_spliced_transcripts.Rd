@@ -8,10 +8,10 @@ prepare_reference_spliced_transcripts(anno_data, bin_size = 50)
 }
 \arguments{
 \item{anno_data}{A list containing genome annotation data returned by
-the \code{\link{prepare_reference_annotations}} function}
+the \code{\link{prepare_reference_annotations}} function.}
 
 \item{bin_size}{An integer scalar specifying the bin size for transcript
-start and end position binning}
+start and end position binning.}
 }
 \value{
 A named list containing following elements:
@@ -23,6 +23,6 @@ A named list containing following elements:
 }
 }
 \description{
-Prepares reference spliced transcript data for further processing
+Prepares reference spliced transcript data for further processing.
 }
 \keyword{internal}

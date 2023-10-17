@@ -1,11 +1,11 @@
 #' Prepare reference unspliced transcript data
 #'
-#' Prepares reference unspliced transcript data for further processing
+#' Prepares reference unspliced transcript data for further processing.
 #'
 #' @param anno_data A list containing genome annotation data returned by
-#' the \code{\link{prepare_reference_annotations}} function
+#' the \code{\link{prepare_reference_annotations}} function.
 #' @param bin_size An integer scalar specifying the bin size for transcript
-#' start and end position binning
+#' start and end position binning.
 #' @return A named list containing following elements:
 #' \describe{
 #'   \item{tx_df}{a data frame storing reference unspliced transcript data}

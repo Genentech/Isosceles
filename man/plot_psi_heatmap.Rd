@@ -14,23 +14,23 @@ plot_psi_heatmap(
 }
 \arguments{
 \item{se_psi}{A PSI SummarizedExperiment object returned by the
-\code{\link{prepare_psi_se}} function}
+\code{\link{transcript_to_psi}} function.}
 
-\item{gene_id}{A string containing the identifier of the gene to plot}
+\item{gene_id}{A string containing the identifier of the gene to plot.}
 
 \item{heatmap_colors}{A character vector containing the color palette used
-in the heatmap}
+in the heatmap.}
 
 \item{region_colors}{A named character vector of colors for the region type
-annotations}
+annotations.}
 
 \item{\dots}{Additional parameters for the plot, passed to the
-\code{\link{pheatmap}} function}
+\code{\link{pheatmap}} function.}
 }
 \value{
-A plot object
+A plot object.
 }
 \description{
 Creates a heatmap of PSI (Percent Spliced In) values for the regions of a
-given gene across samples or cells
+given gene across samples or cells.
 }

@@ -1,30 +1,30 @@
-#' Transcript data preparation
+#' Prepare transcript data for the analysis
 #'
-#' Prepare transcript data (reference and extracted from the BAM files) for
-#' further analysis
+#' Prepares transcript data (reference and extracted from the BAM files) for
+#' further analysis.
 #'
-#' @param gtf_file A string containing a GTF file path
-#' @param genome_fasta_file A string containing a genome FASTA file path
+#' @param gtf_file A string containing a GTF file path.
+#' @param genome_fasta_file A string containing a genome FASTA file path.
 #' @param bam_parsed A data frame containing non-redundant read structure data
-#' returned by the \code{\link{extract_read_structures}} function. If NULL,
-#' only reference transcripts are used
+#' returned by the \code{\link{bam_to_read_structures}} function. If NULL,
+#' only reference transcripts are used.
 #' @param min_intron_length An integer scalar specifying the minimal length
-#' of introns to assign strand to
+#' of introns to assign strand to.
 #' @param known_intron_motifs A character vector specifying the known intron
-#' motifs
+#' motifs.
 #' @param rescue_annotated_introns A logical scalar specifying if introns
 #' found in genome annotations should be kept even if they don't have known
-#' intron motifs
+#' intron motifs.
 #' @param known_intron_granges A GRanges object storing known intron positions
 #' (e.g. from short read data) used for transcript classification. If set to
-#' NULL, only introns from reference annotations are used
+#' NULL, only introns from reference annotations are used.
 #' @param min_bam_splice_read_count An integer scalar specifying the read count
-#' threshold for splice sites confirmed by aligned reads
+#' threshold for splice sites confirmed by aligned reads.
 #' @param min_bam_splice_fraction A numeric scalar specifying the minimum
 #' connectivity fraction to a known splice site for splice sites confirmed by
-#' aligned reads
+#' aligned reads.
 #' @param bin_size An integer scalar specifying the bin size for transcript
-#' start and end position binning
+#' start and end position binning.
 #' @return A named list containing following elements:
 #' \describe{
 #'   \item{tx_df}{a data frame storing extracted transcript data}

@@ -1,11 +1,11 @@
-#' Merging genes by shared introns
+#' Merge genes by shared introns
 #'
-#' Merge IDs and names of genes sharing annotated introns
+#' Merges IDs and names of genes sharing annotated introns.
 #'
-#' @param gene_df A data frame containing gene IDs and gene names
-#' @param intron_df A data frame containing gene IDs and intron positions
+#' @param gene_df A data frame containing gene IDs and gene names.
+#' @param intron_df A data frame containing gene IDs and intron positions.
 #' @return A copy of the gene_df data frame with merged gene IDs and gene names
-#' added to it
+#' added to it.
 #' @keywords internal
 merge_annotated_genes <- function(gene_df, intron_df) {
 

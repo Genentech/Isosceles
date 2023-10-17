@@ -1,20 +1,20 @@
-#' Assigning strand to introns
+#' Assign strand to introns
 #'
-#' Assign strand to the intron GRanges object based on known intron motifs
+#' Assigns strand to the intron GRanges object based on known intron motifs.
 #'
-#' @param intron_granges A GRanges object storing intron positions
+#' @param intron_granges A GRanges object storing intron positions.
 #' @param anno_data A list containing genome annotation data returned by
-#' the \code{\link{prepare_reference_annotations}} function
-#' @param genome_fasta_file A string containing a genome FASTA file path
+#' the \code{\link{prepare_reference_annotations}} function.
+#' @param genome_fasta_file A string containing a genome FASTA file path.
 #' @param min_intron_length An integer scalar specifying the minimal length
-#' of introns to assign strand to
+#' of introns to assign strand to.
 #' @param known_intron_motifs A character vector specifying the known intron
-#' motifs
+#' motifs.
 #' @param rescue_annotated_introns A logical scalar specifying if introns
 #' found in genome annotations should be kept even if they don't have known
-#' intron motifs
+#' intron motifs.
 #' @return A copy of the intron_granges GRanges object with intron strands
-#' assigned
+#' assigned.
 #' @keywords internal
 assign_intron_strand <- function(intron_granges,
                                  anno_data,

@@ -1,11 +1,11 @@
-#' Data export to a GTF file
+#' Export data to a GTF file
 #'
-#' Export transcripts from a SummarizedExperiment to a GTF file
+#' Exports transcripts from a SummarizedExperiment to a GTF file.
 #'
 #' @param se A transcript-level SummarizedExperiment object returned by the
-#' \code{\link{prepare_transcript_se}} function
-#' @param file A string specifying the output file path
-#' @return Nothing is returned
+#' \code{\link{tcc_to_transcript}} function.
+#' @param file A string specifying the output file path.
+#' @return Nothing is returned.
 #' @export
 export_gtf <- function(se,
                        file) {

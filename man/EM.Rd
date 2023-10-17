@@ -14,23 +14,23 @@ EM(
 )
 }
 \arguments{
-\item{counts}{A diagonal matrix of TCC read counts}
+\item{counts}{A diagonal matrix of TCC read counts.}
 
 \item{use_length_normalization}{A logical scalar specifying if normalization
-using effective transcript lengths should be used during EM}
+using effective transcript lengths should be used during EM.}
 
-\item{tx_effective_lengths}{A numeric vector of effective transcript lengths}
+\item{tx_effective_lengths}{A numeric vector of effective transcript lengths.}
 
-\item{maxiter}{An integer scalar specifying the maximum number of EM iterations}
+\item{maxiter}{An integer scalar specifying the maximum number of EM iterations.}
 
-\item{conv}{A numeric scalar specifying the EM convergence threshold}
+\item{conv}{A numeric scalar specifying the EM convergence threshold.}
 
-\item{compatiblity_matrix}{A compatibility matrix between TCCs and transcripts}
+\item{compatiblity_matrix}{A compatibility matrix between TCCs and transcripts.}
 }
 \value{
-A numeric vector of transcript read counts estimated using EM
+A numeric vector of transcript read counts estimated using EM.
 }
 \description{
-Run EM using RcppArmadillo
+Runs EM using RcppArmadillo.
 }
 \keyword{internal}

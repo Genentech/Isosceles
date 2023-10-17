@@ -2,12 +2,12 @@
 % Please edit documentation in R/prepare_reference_annotations.R
 \name{prepare_reference_annotations}
 \alias{prepare_reference_annotations}
-\title{GTF reference annotation data processing}
+\title{Process GTF reference annotation data}
 \usage{
 prepare_reference_annotations(gtf_file)
 }
 \arguments{
-\item{gtf_file}{A string containing a GTF file path}
+\item{gtf_file}{A string containing a GTF file path.}
 }
 \value{
 A named list containing following elements:
@@ -20,6 +20,6 @@ A named list containing following elements:
 }
 }
 \description{
-Extract required reference annotation from a GTF file
+Extracts required reference annotation from a GTF file.
 }
 \keyword{internal}

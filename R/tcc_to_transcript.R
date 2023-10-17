@@ -1,25 +1,25 @@
 #' Prepare a transcript-level SummarizedExperiment object
 #'
 #' Prepares a transcript-level SummarizedExperiment from TCC data using the EM
-#' algorithm
+#' algorithm.
 #'
 #' @param se_tcc A TCC SummarizedExperiment object returned by a function from
-#' the \code{\link{Isosceles-package}}
+#' the \code{\link{Isosceles-package}}.
 #' @param em.maxiter An integer scalar specifying the maximum number of EM
-#' iterations
-#' @param em.conv A numeric scalar specifying the EM convergence threshold
+#' iterations.
+#' @param em.conv A numeric scalar specifying the EM convergence threshold.
 #' @param use_length_normalization A logical scalar specifying if normalization
-#' using effective transcript lengths should be used during EM
+#' using effective transcript lengths should be used during EM.
 #' @param ncpu An integer scalar specifying the number of cores to use for
-#' multicore parallelization
+#' multicore parallelization.
 #' @return A SummarizedExperiment object containing transcript annotation and
-#' quantification data
+#' quantification data.
 #' @export
-prepare_transcript_se <- function(se_tcc,
-                                  em.maxiter = 250,
-                                  em.conv = 0.01,
-                                  use_length_normalization = TRUE,
-                                  ncpu = 1) {
+tcc_to_transcript <- function(se_tcc,
+                              em.maxiter = 250,
+                              em.conv = 0.01,
+                              use_length_normalization = TRUE,
+                              ncpu = 1) {
 
     # Check arguments
     assertthat::assert_that(methods::is(se_tcc, "SummarizedExperiment"))

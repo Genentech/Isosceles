@@ -1,4 +1,4 @@
-test_that("prepare_psi_se works as expected", {
+test_that("transcript_to_psi works as expected", {
 
     # Preparing test data (bulk RNA-Seq data)
     bam_file <- system.file(
@@ -14,57 +14,57 @@ test_that("prepare_psi_se works as expected", {
         "extdata", "Homo_sapiens.GRCh38.dna_sm.primary_assembly_chr9_1_1000000.fa",
         package = "Isosceles"
     )
-    bam_parsed <- extract_read_structures(bam_files)
+    bam_parsed <- bam_to_read_structures(bam_files)
     transcript_data <- prepare_transcripts(
         gtf_file = gtf_file, genome_fasta_file = genome_fasta_file,
         bam_parsed = bam_parsed, min_bam_splice_read_count = 2,
         min_bam_splice_fraction = 0.01
     )
-    se_tcc <- prepare_tcc_se(
+    se_tcc <- bam_to_tcc(
         bam_files = bam_files, transcript_data = transcript_data,
         run_mode = "de_novo_loose", min_relative_expression = 0
     )
-    se_transcript <- prepare_transcript_se(
+    se_transcript <- tcc_to_transcript(
         se_tcc = se_tcc, use_length_normalization = TRUE
     )
 
     # Testing if function throws the expected errors
-    expect_error(prepare_psi_se(se = NULL),
+    expect_error(transcript_to_psi(se = NULL),
                  regexp = "methods::is(object = se, class2 =",
                  fixed = TRUE)
     se_copy <- se_transcript
     SummarizedExperiment::assay(se_copy, "relative_expression") <- NULL
-    expect_error(prepare_psi_se(se = se_copy),
+    expect_error(transcript_to_psi(se = se_copy),
                  regexp = 'is.element(el = "relative_expression",',
                  fixed = TRUE)
     se_copy <- se_transcript
     SummarizedExperiment::rowData(se_copy)$gene_id <- NULL
-    expect_error(prepare_psi_se(se = se_copy),
+    expect_error(transcript_to_psi(se = se_copy),
                  regexp = 'is.element(el = "gene_id",',
                  fixed = TRUE)
     se_copy <- se_transcript
     SummarizedExperiment::rowData(se_copy)$transcript_id <- NULL
-    expect_error(prepare_psi_se(se = se_copy),
+    expect_error(transcript_to_psi(se = se_copy),
                  regexp = 'is.element(el = "transcript_id",',
                  fixed = TRUE)
     se_copy <- se_transcript
     SummarizedExperiment::rowData(se_copy)$position <- NULL
-    expect_error(prepare_psi_se(se = se_copy),
+    expect_error(transcript_to_psi(se = se_copy),
                  regexp = 'is.element(el = "position",',
                  fixed = TRUE)
     se_copy <- se_transcript
     SummarizedExperiment::rowRanges(se_copy) <- NULL
-    expect_error(prepare_psi_se(se = se_copy),
+    expect_error(transcript_to_psi(se = se_copy),
                  regexp = "rowRanges(se))) is not TRUE",
                  fixed = TRUE)
-    expect_error(prepare_psi_se(se = se_transcript,
-                                ncpu = NULL),
+    expect_error(transcript_to_psi(se = se_transcript,
+                                   ncpu = NULL),
                  regexp = "ncpu is not a count",
                  fixed = TRUE)
 
     # Testing if function returns the expected output (bulk RNA-Seq data)
     expect_silent(
-        se <- prepare_psi_se(se = se_transcript)
+        se <- transcript_to_psi(se = se_transcript)
     )
     expect_true(class(se) == "RangedSummarizedExperiment")
     expect_identical(dim(se), c(96L, 1L))
@@ -102,19 +102,19 @@ test_that("prepare_psi_se works as expected", {
         "extdata", "chr4.fa.gz",
         package = "Isosceles"
     )
-    bam_parsed <- extract_read_structures(bam_files)
+    bam_parsed <- bam_to_read_structures(bam_files)
     transcript_data <- prepare_transcripts(
         gtf_file = gtf_file, genome_fasta_file = genome_fasta_file,
         bam_parsed = bam_parsed, min_bam_splice_read_count = 1,
         min_bam_splice_fraction = 0.01
     )
-    se_tcc <- prepare_tcc_se(
+    se_tcc <- bam_to_tcc(
         bam_files = bam_files, transcript_data = transcript_data,
         is_single_cell = TRUE, barcode_tag = "BC",
         run_mode = "de_novo_loose", min_relative_expression = 0
     )
     se_tcc <- se_tcc[, 1:5]
-    se_transcript <- prepare_transcript_se(
+    se_transcript <- tcc_to_transcript(
         se_tcc = se_tcc, use_length_normalization = FALSE
     )
     se_transcript <- se_transcript[
@@ -123,7 +123,7 @@ test_that("prepare_psi_se works as expected", {
 
     # Testing if function returns the expected output (scRNA-Seq data)
     expect_silent(
-        se <- prepare_psi_se(se = se_transcript)
+        se <- transcript_to_psi(se = se_transcript)
     )
     expect_true(class(se) == "RangedSummarizedExperiment")
     expect_identical(dim(se), c(11L, 5L))

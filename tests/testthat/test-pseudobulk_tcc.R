@@ -1,4 +1,4 @@
-test_that("prepare_pseudobulk_se works as expected", {
+test_that("pseudobulk_tcc works as expected", {
 
     # Preparing test data
     bam_file <- system.file(
@@ -14,13 +14,13 @@ test_that("prepare_pseudobulk_se works as expected", {
         "extdata", "chr4.fa.gz",
         package = "Isosceles"
     )
-    bam_parsed <- extract_read_structures(bam_files)
+    bam_parsed <- bam_to_read_structures(bam_files)
     transcript_data <- prepare_transcripts(
         gtf_file = gtf_file, genome_fasta_file = genome_fasta_file,
         bam_parsed = bam_parsed, min_bam_splice_read_count = 1,
         min_bam_splice_fraction = 0.01
     )
-    se_tcc <- prepare_tcc_se(
+    se_tcc <- bam_to_tcc(
         bam_files = bam_files, transcript_data = transcript_data,
         is_single_cell = TRUE, barcode_tag = "BC",
         run_mode = "de_novo_loose", min_relative_expression = 0
@@ -29,22 +29,22 @@ test_that("prepare_pseudobulk_se works as expected", {
     cell_labels <- sample(1:2, ncol(se_tcc), replace = TRUE)
 
     # Testing if function throws the expected errors
-    expect_error(prepare_pseudobulk_se(se_tcc = NULL),
+    expect_error(pseudobulk_tcc(se_tcc = NULL),
                  regexp = "methods::is(object = se_tcc, class2 =",
                  fixed = TRUE)
     se_copy <- se_tcc
     SummarizedExperiment::assay(se_copy, "counts") <- NULL
-    expect_error(prepare_pseudobulk_se(se_tcc = se_copy),
+    expect_error(pseudobulk_tcc(se_tcc = se_copy),
                  regexp = 'is.element(el = "counts",',
                  fixed = TRUE)
-    expect_error(prepare_pseudobulk_se(se_tcc = se_tcc,
-                                       cell_labels = NULL),
+    expect_error(pseudobulk_tcc(se_tcc = se_tcc,
+                                cell_labels = NULL),
                  regexp = "length(cell_labels) not equal to ncol(se_tcc)",
                  fixed = TRUE)
 
     # Testing if function returns the expected output
     expect_silent(
-        se <- prepare_pseudobulk_se(
+        se <- pseudobulk_tcc(
             se_tcc = se_tcc, cell_labels = cell_labels
         )
     )

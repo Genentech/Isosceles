@@ -14,17 +14,17 @@ test_that("export_gtf works as expected", {
         "extdata", "Homo_sapiens.GRCh38.dna_sm.primary_assembly_chr9_1_1000000.fa",
         package = "Isosceles"
     )
-    bam_parsed <- extract_read_structures(bam_files)
+    bam_parsed <- bam_to_read_structures(bam_files)
     transcript_data <- prepare_transcripts(
         gtf_file = gtf_file, genome_fasta_file = genome_fasta_file,
         bam_parsed = bam_parsed, min_bam_splice_read_count = 2,
         min_bam_splice_fraction = 0.01
     )
-    se_tcc <- prepare_tcc_se(
+    se_tcc <- bam_to_tcc(
         bam_files = bam_files, transcript_data = transcript_data,
         run_mode = "de_novo_loose", min_relative_expression = 0
     )
-    se <- prepare_transcript_se(
+    se <- tcc_to_transcript(
         se_tcc = se_tcc, use_length_normalization = TRUE
     )
     ref_gtf_file <- system.file(

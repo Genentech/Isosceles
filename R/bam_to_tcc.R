@@ -1,41 +1,41 @@
 #' Prepare a TCC SummarizedExperiment object
 #'
 #' Prepares a TCC (Transcript Compatibility Counts) SummarizedExperiment object
-#' for the given BAM files and transcript set
+#' for the given BAM files and transcript set.
 #'
-#' @param bam_files A named character vector containing BAM file paths
+#' @param bam_files A named character vector containing BAM file paths.
 #' @param transcript_data A named list containing transcript data returned by
-#' the \code{\link{prepare_transcripts}} function
+#' the \code{\link{prepare_transcripts}} function.
 #' @param run_mode A string specifying the mode for choosing the transcript set
-#' ('strict', 'de_novo_strict', 'de_novo_loose' or 'de_novo_full')
+#' ('strict', 'de_novo_strict', 'de_novo_loose' or 'de_novo_full').
 #' @param min_read_count An integer scalar specifying the read count threshold
-#' for transcripts extracted from the BAM files
+#' for transcripts extracted from the BAM files.
 #' @param min_relative_expression A numeric scalar specifying the relative
-#' expression threshold for transcripts extracted from the BAM files
+#' expression threshold for transcripts extracted from the BAM files.
 #' @param extend_spliced_transcripts An integer scalar specifying the number of
 #' base pairs by which transcript starts and ends are extended for spliced read
-#' compatibility search
+#' compatibility search.
 #' @param is_single_cell A logical scalar specifying if the BAM files contain
-#' single cell data
+#' single cell data.
 #' @param barcode_tag A string specifying the name of the BAM file tag
-#' containing cell barcodes
+#' containing cell barcodes.
 #' @param chunk_size An integer scalar specifying the chunk size for reading
-#' the BAM files
+#' the BAM files.
 #' @param ncpu An integer scalar specifying the number of cores to use for
-#' multicore parallelization
+#' multicore parallelization.
 #' @return A SummarizedExperiment object containing TCC annotation and
-#' quantification data
+#' quantification data.
 #' @export
-prepare_tcc_se <- function(bam_files,
-                           transcript_data,
-                           run_mode = "strict",
-                           min_read_count = 1,
-                           min_relative_expression = 0.1,
-                           extend_spliced_transcripts = 100,
-                           is_single_cell = FALSE,
-                           barcode_tag = "BC",
-                           chunk_size = 1000000,
-                           ncpu = 1) {
+bam_to_tcc <- function(bam_files,
+                       transcript_data,
+                       run_mode = "strict",
+                       min_read_count = 1,
+                       min_relative_expression = 0.1,
+                       extend_spliced_transcripts = 100,
+                       is_single_cell = FALSE,
+                       barcode_tag = "BC",
+                       chunk_size = 1000000,
+                       ncpu = 1) {
 
     # Check arguments
     assertthat::assert_that(is.character(bam_files))

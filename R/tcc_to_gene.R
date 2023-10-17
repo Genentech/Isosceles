@@ -1,13 +1,13 @@
 #' Prepare a gene-level SummarizedExperiment object
 #'
-#' Prepares a gene-level SummarizedExperiment from TCC data
+#' Prepares a gene-level SummarizedExperiment from TCC data.
 #'
 #' @param se_tcc A TCC SummarizedExperiment object returned by a function from
-#' the \code{\link{Isosceles-package}}
+#' the \code{\link{Isosceles-package}}.
 #' @return A SummarizedExperiment object containing gene annotation and
-#' quantification data
+#' quantification data.
 #' @export
-prepare_gene_se <- function(se_tcc) {
+tcc_to_gene <- function(se_tcc) {
 
     # Check arguments
     assertthat::assert_that(methods::is(se_tcc, "SummarizedExperiment"))

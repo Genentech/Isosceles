@@ -1,18 +1,18 @@
 #' Plot a PSI heatmap
 #'
 #' Creates a heatmap of PSI (Percent Spliced In) values for the regions of a
-#' given gene across samples or cells
+#' given gene across samples or cells.
 #'
 #' @param se_psi A PSI SummarizedExperiment object returned by the
-#' \code{\link{prepare_psi_se}} function
-#' @param gene_id A string containing the identifier of the gene to plot
+#' \code{\link{transcript_to_psi}} function.
+#' @param gene_id A string containing the identifier of the gene to plot.
 #' @param heatmap_colors A character vector containing the color palette used
-#' in the heatmap
+#' in the heatmap.
 #' @param region_colors A named character vector of colors for the region type
-#' annotations
+#' annotations.
 #' @param \dots Additional parameters for the plot, passed to the
-#' \code{\link{pheatmap}} function
-#' @return A plot object
+#' \code{\link{pheatmap}} function.
+#' @return A plot object.
 #' @export
 plot_psi_heatmap <- function(se_psi,
                              gene_id,

@@ -1,13 +1,13 @@
-#' Splicing compatibility check
+#' Check splicing compatibility
 #'
-#' Check splicing compatibility between subject and target transcripts
+#' Checks splicing compatibility between subject and target transcripts.
 #'
 #' @param subject A list of vectors storing intron indices for subject
-#' transcripts
+#' transcripts.
 #' @param target A list of vectors storing intron indices for target
-#' transcripts
+#' transcripts.
 #' @return A data frame storing indices of compatible subject and target
-#' transcripts
+#' transcripts.
 #' @keywords internal
 check_splicing_compatibility <- function(subject, target) {
 

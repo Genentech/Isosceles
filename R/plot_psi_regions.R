@@ -4,20 +4,20 @@
 #' gene. Individual transcript structures are colored by their relative
 #' expression, calculated from the overall TPM values and expressed in
 #' percentages. For better visualization, introns can be shrinked using the
-#' max_intron_length argument
+#' max_intron_length argument.
 #'
 #' @param se_psi A PSI SummarizedExperiment object returned by the
-#' \code{\link{prepare_psi_se}} function
+#' \code{\link{transcript_to_psi}} function.
 #' @param se_transcript A transcript-level SummarizedExperiment object returned
-#' by the \code{\link{prepare_transcript_se}} function
-#' @param gene_id A string containing the identifier of the gene to plot
+#' by the \code{\link{tcc_to_transcript}} function.
+#' @param gene_id A string containing the identifier of the gene to plot.
 #' @param max_transcripts An integer scalar specifying the maximum number of
-#' transcripts with the highest relative expression to plot
+#' transcripts with the highest relative expression to plot.
 #' @param max_intron_length An integer scalar specifying the maximum intron
-#' length after shrinking. If set to NULL, no shrinking is performed
+#' length after shrinking. If set to NULL, no shrinking is performed.
 #' @param region_colors A named character vector of colors for the PSI region
-#' types
-#' @return A plot object
+#' types.
+#' @return A plot object.
 #' @export
 plot_psi_regions <- function(se_psi,
                              se_transcript,

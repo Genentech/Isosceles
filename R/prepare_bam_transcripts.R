@@ -1,27 +1,27 @@
 #' Prepare transcript data extracted from BAM file(s)
 #'
-#' Prepares transcript data extracted from BAM file(s) for further processing
+#' Prepares transcript data extracted from BAM file(s) for further processing.
 #'
 #' @param bam_parsed A data frame containing non-redundant read structure data
-#' returned by the \code{\link{extract_read_structures}} function
+#' returned by the \code{\link{bam_to_read_structures}} function.
 #' @param anno_data A list containing genome annotation data returned by
-#' the \code{\link{prepare_reference_annotations}} function
-#' @param genome_fasta_file A string containing a genome FASTA file path
+#' the \code{\link{prepare_reference_annotations}} function.
+#' @param genome_fasta_file A string containing a genome FASTA file path.
 #' @param min_intron_length An integer scalar specifying the minimal length
-#' of introns to assign strand to
+#' of introns to assign strand to.
 #' @param known_intron_motifs A character vector specifying the known intron
-#' motifs
+#' motifs.
 #' @param rescue_annotated_introns A logical scalar specifying if introns
 #' found in genome annotations should be kept even if they don't have known
-#' intron motifs
+#' intron motifs.
 #' @param known_intron_granges A GRanges object storing known intron positions
 #' (e.g. from short read data) used for transcript classification. If set to
-#' NULL, only introns from reference annotations are used
+#' NULL, only introns from reference annotations are used.
 #' @param min_bam_splice_read_count An integer scalar specifying the read count
-#' threshold for splice sites confirmed by aligned reads
+#' threshold for splice sites confirmed by aligned reads.
 #' @param min_bam_splice_fraction A numeric scalar specifying the minimum
 #' connectivity fraction to a known splice site for splice sites confirmed by
-#' aligned reads
+#' aligned reads.
 #' @return A named list containing following elements:
 #' \describe{
 #'   \item{tx_df}{a data frame storing extracted transcript data}

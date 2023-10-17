@@ -12,17 +12,17 @@
 #'   \item{**A3** - 3' alternative exonic regions}
 #' }
 #' TSS and TES positions are calculated based on transcripts' binned start and
-#' end coordinates extracted from their identifiers
+#' end coordinates extracted from their identifiers.
 #'
 #' @param se A transcript-level SummarizedExperiment object returned by the
-#' \code{\link{prepare_transcript_se}} function
+#' \code{\link{tcc_to_transcript}} function.
 #' @param ncpu An integer scalar specifying the number of cores to use for
-#' multicore parallelization
+#' multicore parallelization.
 #' @return A SummarizedExperiment object containing PSI annotation and
-#' quantification data
+#' quantification data.
 #' @export
-prepare_psi_se <- function(se,
-                           ncpu = 1) {
+transcript_to_psi <- function(se,
+                              ncpu = 1) {
 
     # Check arguments
     assertthat::assert_that(methods::is(se, "SummarizedExperiment"))

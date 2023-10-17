@@ -1,4 +1,4 @@
-test_that("prepare_gene_se works as expected", {
+test_that("tcc_to_gene works as expected", {
 
     # Preparing test data (bulk RNA-Seq data)
     bam_file <- system.file(
@@ -14,50 +14,50 @@ test_that("prepare_gene_se works as expected", {
         "extdata", "Homo_sapiens.GRCh38.dna_sm.primary_assembly_chr9_1_1000000.fa",
         package = "Isosceles"
     )
-    bam_parsed <- extract_read_structures(bam_files)
+    bam_parsed <- bam_to_read_structures(bam_files)
     transcript_data <- prepare_transcripts(
         gtf_file = gtf_file, genome_fasta_file = genome_fasta_file,
         bam_parsed = bam_parsed, min_bam_splice_read_count = 2,
         min_bam_splice_fraction = 0.01
     )
-    se_tcc <- prepare_tcc_se(
+    se_tcc <- bam_to_tcc(
         bam_files = bam_files, transcript_data = transcript_data,
         run_mode = "de_novo_loose", min_relative_expression = 0
     )
 
     # Testing if function throws the expected errors
-    expect_error(prepare_gene_se(se_tcc = NULL),
+    expect_error(tcc_to_gene(se_tcc = NULL),
                  regexp = "methods::is(object = se_tcc, class2 =",
                  fixed = TRUE)
     se_copy <- se_tcc
     SummarizedExperiment::assay(se_copy, "counts") <- NULL
-    expect_error(prepare_gene_se(se_tcc = se_copy),
+    expect_error(tcc_to_gene(se_tcc = se_copy),
                  regexp = 'is.element(el = "counts",',
                  fixed = TRUE)
     se_copy <- se_tcc
     SummarizedExperiment::assay(se_copy, "tpm") <- NULL
-    expect_error(prepare_gene_se(se_tcc = se_copy),
+    expect_error(tcc_to_gene(se_tcc = se_copy),
                  regexp = 'is.element(el = "tpm",',
                  fixed = TRUE)
     se_copy <- se_tcc
     SummarizedExperiment::assay(se_copy, "relative_expression") <- NULL
-    expect_error(prepare_gene_se(se_tcc = se_copy),
+    expect_error(tcc_to_gene(se_tcc = se_copy),
                  regexp = 'is.element(el = "relative_expression",',
                  fixed = TRUE)
     se_copy <- se_tcc
     SummarizedExperiment::rowData(se_copy)$gene_id <- NULL
-    expect_error(prepare_gene_se(se_tcc = se_copy),
+    expect_error(tcc_to_gene(se_tcc = se_copy),
                  regexp = 'is.element(el = "gene_id",',
                  fixed = TRUE)
     se_copy <- se_tcc
     SummarizedExperiment::rowData(se_copy)$gene_name <- NULL
-    expect_error(prepare_gene_se(se_tcc = se_copy),
+    expect_error(tcc_to_gene(se_tcc = se_copy),
                  regexp = 'is.element(el = "gene_name",',
                  fixed = TRUE)
 
     # Testing if function returns the expected output (bulk RNA-Seq data)
     expect_silent(
-        se <- prepare_gene_se(se_tcc = se_tcc)
+        se <- tcc_to_gene(se_tcc = se_tcc)
     )
     expect_true(class(se) == "SummarizedExperiment")
     expect_identical(
@@ -103,13 +103,13 @@ test_that("prepare_gene_se works as expected", {
         "extdata", "chr4.fa.gz",
         package = "Isosceles"
     )
-    bam_parsed <- extract_read_structures(bam_files)
+    bam_parsed <- bam_to_read_structures(bam_files)
     transcript_data <- prepare_transcripts(
         gtf_file = gtf_file, genome_fasta_file = genome_fasta_file,
         bam_parsed = bam_parsed, min_bam_splice_read_count = 1,
         min_bam_splice_fraction = 0.01
     )
-    se_tcc <- prepare_tcc_se(
+    se_tcc <- bam_to_tcc(
         bam_files = bam_files, transcript_data = transcript_data,
         is_single_cell = TRUE, barcode_tag = "BC",
         run_mode = "de_novo_loose", min_relative_expression = 0
@@ -117,7 +117,7 @@ test_that("prepare_gene_se works as expected", {
 
     # Testing if function returns the expected output (scRNA-Seq data)
     expect_silent(
-        se <- prepare_gene_se(se_tcc = se_tcc)
+        se <- tcc_to_gene(se_tcc = se_tcc)
     )
     expect_true(class(se) == "SummarizedExperiment")
     expect_identical(

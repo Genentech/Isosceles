@@ -1,4 +1,4 @@
-test_that("merge_sc_neighbors works as expected", {
+test_that("neighborhood_tcc works as expected", {
 
     # Preparing test data
     bam_file <- system.file(
@@ -14,13 +14,13 @@ test_that("merge_sc_neighbors works as expected", {
         "extdata", "chr4.fa.gz",
         package = "Isosceles"
     )
-    bam_parsed <- extract_read_structures(bam_files)
+    bam_parsed <- bam_to_read_structures(bam_files)
     transcript_data <- prepare_transcripts(
         gtf_file = gtf_file, genome_fasta_file = genome_fasta_file,
         bam_parsed = bam_parsed, min_bam_splice_read_count = 1,
         min_bam_splice_fraction = 0.01
     )
-    se_tcc <- prepare_tcc_se(
+    se_tcc <- bam_to_tcc(
         bam_files = bam_files, transcript_data = transcript_data,
         is_single_cell = TRUE, barcode_tag = "BC",
         run_mode = "de_novo_loose", min_relative_expression = 0
@@ -33,41 +33,41 @@ test_that("merge_sc_neighbors works as expected", {
     pca_mat <- SingleCellExperiment::reducedDim(sce_tcc, "PCA")
 
     # Testing if function throws the expected errors
-    expect_error(merge_sc_neighbors(se_tcc = NULL),
+    expect_error(neighborhood_tcc(se_tcc = NULL),
                  regexp = "methods::is(object = se_tcc, class2 =",
                  fixed = TRUE)
     se_copy <- se_tcc
     SummarizedExperiment::assay(se_copy, "counts") <- NULL
-    expect_error(merge_sc_neighbors(se_tcc = se_copy),
+    expect_error(neighborhood_tcc(se_tcc = se_copy),
                  regexp = 'is.element(el = "counts",',
                  fixed = TRUE)
-    expect_error(merge_sc_neighbors(se_tcc = se_tcc,
-                                    pca_mat = NULL),
+    expect_error(neighborhood_tcc(se_tcc = se_tcc,
+                                  pca_mat = NULL),
                  regexp = "pca_mat is not a matrix",
                  fixed = TRUE)
-    expect_error(merge_sc_neighbors(se_tcc = se_tcc,
-                                    pca_mat = pca_mat[1:10,]),
+    expect_error(neighborhood_tcc(se_tcc = se_tcc,
+                                  pca_mat = pca_mat[1:10,]),
                  regexp = "colnames(se_tcc) not identical to rownames(pca_mat)",
                  fixed = TRUE)
-    expect_error(merge_sc_neighbors(se_tcc = se_tcc,
-                                    pca_mat = pca_mat,
-                                    k = NULL),
+    expect_error(neighborhood_tcc(se_tcc = se_tcc,
+                                  pca_mat = pca_mat,
+                                  k = NULL),
                  regexp = "k is not a count",
                  fixed = TRUE)
-    expect_error(merge_sc_neighbors(se_tcc = se_tcc,
-                                    pca_mat = pca_mat,
-                                    use_annoy = NULL),
+    expect_error(neighborhood_tcc(se_tcc = se_tcc,
+                                  pca_mat = pca_mat,
+                                  use_annoy = NULL),
                  regexp = "use_annoy is not a flag",
                  fixed = TRUE)
-    expect_error(merge_sc_neighbors(se_tcc = se_tcc,
-                                    pca_mat = pca_mat,
-                                    ncpu = NULL),
+    expect_error(neighborhood_tcc(se_tcc = se_tcc,
+                                  pca_mat = pca_mat,
+                                  ncpu = NULL),
                  regexp = "ncpu is not a count",
                  fixed = TRUE)
 
     # Testing if function returns the expected output
     expect_warning(
-        se <- merge_sc_neighbors(
+        se <- neighborhood_tcc(
             se_tcc = se_tcc, pca_mat = pca_mat, k = 2,
             use_annoy = FALSE, ncpu = 1
         ),

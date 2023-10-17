@@ -7,14 +7,14 @@
 is_ordered_subset(x, y)
 }
 \arguments{
-\item{x}{A vector}
+\item{x}{A vector.}
 
-\item{y}{A vector}
+\item{y}{A vector.}
 }
 \value{
-A logical scalar indicating if x is an ordered subset of y
+A logical scalar indicating if x is an ordered subset of y.
 }
 \description{
-Check if a vector is an ordered subset of another vector
+Checks if a vector is an ordered subset of another vector.
 }
 \keyword{internal}

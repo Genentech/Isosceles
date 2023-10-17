@@ -18,33 +18,33 @@ prepare_bam_transcripts(
 }
 \arguments{
 \item{bam_parsed}{A data frame containing non-redundant read structure data
-returned by the \code{\link{extract_read_structures}} function}
+returned by the \code{\link{bam_to_read_structures}} function.}
 
 \item{anno_data}{A list containing genome annotation data returned by
-the \code{\link{prepare_reference_annotations}} function}
+the \code{\link{prepare_reference_annotations}} function.}
 
-\item{genome_fasta_file}{A string containing a genome FASTA file path}
+\item{genome_fasta_file}{A string containing a genome FASTA file path.}
 
 \item{min_intron_length}{An integer scalar specifying the minimal length
-of introns to assign strand to}
+of introns to assign strand to.}
 
 \item{known_intron_motifs}{A character vector specifying the known intron
-motifs}
+motifs.}
 
 \item{rescue_annotated_introns}{A logical scalar specifying if introns
 found in genome annotations should be kept even if they don't have known
-intron motifs}
+intron motifs.}
 
 \item{known_intron_granges}{A GRanges object storing known intron positions
 (e.g. from short read data) used for transcript classification. If set to
-NULL, only introns from reference annotations are used}
+NULL, only introns from reference annotations are used.}
 
 \item{min_bam_splice_read_count}{An integer scalar specifying the read count
-threshold for splice sites confirmed by aligned reads}
+threshold for splice sites confirmed by aligned reads.}
 
 \item{min_bam_splice_fraction}{A numeric scalar specifying the minimum
 connectivity fraction to a known splice site for splice sites confirmed by
-aligned reads}
+aligned reads.}
 }
 \value{
 A named list containing following elements:
@@ -56,6 +56,6 @@ A named list containing following elements:
 }
 }
 \description{
-Prepares transcript data extracted from BAM file(s) for further processing
+Prepares transcript data extracted from BAM file(s) for further processing.
 }
 \keyword{internal}

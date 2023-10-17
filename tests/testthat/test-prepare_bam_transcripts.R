@@ -14,7 +14,7 @@ test_that("prepare_bam_transcripts works as expected", {
         package = "Isosceles"
     )
     anno_data <- prepare_reference_annotations(gtf_file)
-    bam_parsed <- extract_read_structures(bam_file)
+    bam_parsed <- bam_to_read_structures(bam_file)
 
     # Testing if function throws the expected errors
     expect_error(prepare_bam_transcripts(bam_parsed = NULL),

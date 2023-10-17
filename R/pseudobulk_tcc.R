@@ -1,17 +1,17 @@
 #' Prepare a pseudobulk TCC SummarizedExperiment object
 #'
 #' Prepares a pseudobulk TCC SummarizedExperiment from TCC data and given cell
-#' labels
+#' labels.
 #'
 #' @param se_tcc A TCC SummarizedExperiment object returned by the
-#' \code{\link{prepare_tcc_se}} function
+#' \code{\link{bam_to_tcc}} function.
 #' @param cell_labels A vector or a factor containing cell labels acting as a
-#' grouping variable
+#' grouping variable.
 #' @return A pseudobulk SummarizedExperiment object containing TCC annotation
-#' and quantification data
+#' and quantification data.
 #' @export
-prepare_pseudobulk_se <- function(se_tcc,
-                                  cell_labels) {
+pseudobulk_tcc <- function(se_tcc,
+                           cell_labels) {
 
     # Check arguments
     assertthat::assert_that(methods::is(se_tcc, "SummarizedExperiment"))

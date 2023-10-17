@@ -1,8 +1,9 @@
-#' First and last feature extraction from a GRangesList
+#' Extract the first and last features from a GRangesList
 #'
-#' Obtain the first and last features from a GRangesList object
+#' Extracts the first and last feature from each element of a GRangesList
+#' object.
 #'
-#' @param feature_grangeslist A GRangesList object
+#' @param feature_grangeslist A GRangesList object.
 #' @return A data frame containing following columns:
 #' \describe{
 #'   \item{feature_id}{character vector of GRangesList names}

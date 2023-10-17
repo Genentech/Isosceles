@@ -2,7 +2,7 @@
 % Please edit documentation in R/prepare_transcripts.R
 \name{prepare_transcripts}
 \alias{prepare_transcripts}
-\title{Transcript data preparation}
+\title{Prepare transcript data for the analysis}
 \usage{
 prepare_transcripts(
   gtf_file,
@@ -18,37 +18,37 @@ prepare_transcripts(
 )
 }
 \arguments{
-\item{gtf_file}{A string containing a GTF file path}
+\item{gtf_file}{A string containing a GTF file path.}
 
-\item{genome_fasta_file}{A string containing a genome FASTA file path}
+\item{genome_fasta_file}{A string containing a genome FASTA file path.}
 
 \item{bam_parsed}{A data frame containing non-redundant read structure data
-returned by the \code{\link{extract_read_structures}} function. If NULL,
-only reference transcripts are used}
+returned by the \code{\link{bam_to_read_structures}} function. If NULL,
+only reference transcripts are used.}
 
 \item{min_intron_length}{An integer scalar specifying the minimal length
-of introns to assign strand to}
+of introns to assign strand to.}
 
 \item{known_intron_motifs}{A character vector specifying the known intron
-motifs}
+motifs.}
 
 \item{rescue_annotated_introns}{A logical scalar specifying if introns
 found in genome annotations should be kept even if they don't have known
-intron motifs}
+intron motifs.}
 
 \item{known_intron_granges}{A GRanges object storing known intron positions
 (e.g. from short read data) used for transcript classification. If set to
-NULL, only introns from reference annotations are used}
+NULL, only introns from reference annotations are used.}
 
 \item{min_bam_splice_read_count}{An integer scalar specifying the read count
-threshold for splice sites confirmed by aligned reads}
+threshold for splice sites confirmed by aligned reads.}
 
 \item{min_bam_splice_fraction}{A numeric scalar specifying the minimum
 connectivity fraction to a known splice site for splice sites confirmed by
-aligned reads}
+aligned reads.}
 
 \item{bin_size}{An integer scalar specifying the bin size for transcript
-start and end position binning}
+start and end position binning.}
 }
 \value{
 A named list containing following elements:
@@ -60,6 +60,6 @@ A named list containing following elements:
 }
 }
 \description{
-Prepare transcript data (reference and extracted from the BAM files) for
-further analysis
+Prepares transcript data (reference and extracted from the BAM files) for
+further analysis.
 }
