@@ -3,6 +3,7 @@
 export("%>%")
 export(bam_to_read_structures)
 export(bam_to_tcc)
+export(dexseq_psi)
 export(export_gtf)
 export(find_iso_switch)
 export(neighborhood_tcc)

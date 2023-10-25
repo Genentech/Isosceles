@@ -37,6 +37,7 @@ Imports:
     rtracklayer (>= 1.56.1),
     GenomicFeatures (>= 1.48.3),
     SummarizedExperiment (>= 1.26.1),
+    DEXSeq (>= 1.42.0),
     igraph (>= 1.3.4),
     scuttle (>= 1.6.2),
     scran (>= 1.24.0),
