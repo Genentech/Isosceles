@@ -1,7 +1,7 @@
 test_that("find_iso_switch works as expected", {
 
     # Preparing test data
-    sce_transcript <- readRDS(system.file("extdata", "sce_transcript_isoswitch.rds",
+    sce_transcript <- readRDS(system.file("extdata", "sce_transcript_mouse_e18.rds",
                                           package = "Isosceles"))
 
     # Testing if function throws the expected errors
