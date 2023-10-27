@@ -29,10 +29,10 @@
 #'   \item{contrast}{label of the compared cell group pair}
 #' }
 #' @export
-find_iso_switch <- function(se,
-                            cell_labels,
-                            min_fdr = 0.05,
-                            ncpu = 1) {
+find_isoswitch <- function(se,
+                           cell_labels,
+                           min_fdr = 0.05,
+                           ncpu = 1) {
 
     # Check arguments
     assertthat::assert_that(methods::is(se, "SummarizedExperiment"))
