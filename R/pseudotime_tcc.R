@@ -32,7 +32,9 @@ pseudotime_tcc <- function(se_tcc,
     assertthat::assert_that(trim >= 0)
     assertthat::assert_that(trim < 0.5)
     assertthat::assert_that(assertthat::is.count(window_size))
+    assertthat::assert_that(window_size <= ncol(se_tcc))
     assertthat::assert_that(assertthat::is.count(window_step))
+    assertthat::assert_that(window_step <= window_size)
 
     # Remove cells with smallest & highest pseudotime values
     quantile_low <- stats::quantile(pseudotime, trim, na.rm = TRUE)

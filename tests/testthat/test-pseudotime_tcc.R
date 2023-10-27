@@ -66,8 +66,19 @@ test_that("pseudotime_tcc works as expected", {
                  fixed = TRUE)
     expect_error(pseudotime_tcc(se_tcc = se_tcc,
                                 pseudotime = pseudotime,
+                                window_size = ncol(se_tcc) + 10),
+                 regexp = "window_size not less than or equal to ncol(se_tcc)",
+                 fixed = TRUE)
+    expect_error(pseudotime_tcc(se_tcc = se_tcc,
+                                pseudotime = pseudotime,
                                 window_step = NULL),
                  regexp = "window_step is not a count",
+                 fixed = TRUE)
+    expect_error(pseudotime_tcc(se_tcc = se_tcc,
+                                pseudotime = pseudotime,
+                                window_size = 3,
+                                window_step = 6),
+                 regexp = "window_step not less than or equal to window_size",
                  fixed = TRUE)
 
     # Testing if function returns the expected output
