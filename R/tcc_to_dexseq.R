@@ -24,15 +24,15 @@
 #' @return A DEXSeqDataSet object containing PSI count data for pseudotime
 #' windows, suitabe for further analysis using the DEXSeq package.
 #' @export
-dexseq_psi <- function(se_tcc,
-                       pseudotime,
-                       psi_events = NULL,
-                       trim = 0,
-                       window_size = 30,
-                       window_step = 15,
-                       remove_redundant_psi = TRUE,
-                       scale_pseudotime = TRUE,
-                       ncpu = 1) {
+tcc_to_dexseq <- function(se_tcc,
+                          pseudotime,
+                          psi_events = NULL,
+                          trim = 0,
+                          window_size = 30,
+                          window_step = 15,
+                          remove_redundant_psi = TRUE,
+                          scale_pseudotime = TRUE,
+                          ncpu = 1) {
 
     # Check arguments
     assertthat::assert_that(methods::is(se_tcc, "SummarizedExperiment"))
