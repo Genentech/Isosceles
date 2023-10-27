@@ -98,7 +98,7 @@ The comma separated list of compatible reference transcript IDs can be found in 
 
 The main output of Isosceles consists of SummarizedExperiment objects, created at various resolution levels:
 
-  * **TCC (Transcript Compatibility Counts)** - This is an intermediate quantification stage of the data, formed directly from the BAM files with the `bam_to_tcc` function. The values here are used to derive transcript quantification estimates via the EM algorithm. Both the `pseudobulk_tcc` function (for summarizing data at the pseudo-bulk level) and the `neighborhood_tcc` function (for combining counts from neighboring cells) utilize TCC SummarizedExperiment objects as both input and output.
+  * **TCC (Transcript Compatibility Counts)** - This is an intermediate quantification stage of the data, formed directly from the BAM files with the `bam_to_tcc` function. The values here are used to derive transcript quantification estimates via the EM algorithm. The `pseudobulk_tcc` function (for summarizing data at the pseudo-bulk level), the `pseudotime_tcc` function (for summarizing data at the pseudo-time window level) and the `neighborhood_tcc` function (for combining counts from neighboring cells) utilize TCC SummarizedExperiment objects as both input and output.
   * **transcript** - At the transcript level, expression values are computed using the `tcc_to_transcript` function, applying the EM (Expectation–Maximization) algorithm. By default, normalization is done using effective transcript lengths, but it can be turned off for UMI-based protocol data (commonly in scRNA-Seq datasets) by setting the *use_length_normalization* argument to FALSE. You can export transcript annotations from the SummarizedExperiment object to a GTF file using the `export_gtf` function.
   * **gene** - Gene-level expression values are derived using the `tcc_to_gene` function. This process is typically very swift as it doesn't necessitate running the EM algorithm.
   * **PSI (Percent Spliced In)** - PSI values are computed for unique transcriptomic regions of each gene (such as transcription start sites or core exons) using the `transcript_to_psi` function. This requires a transcript level SummarizedExperiment object as input.
@@ -302,21 +302,21 @@ set.seed(42)
 sce_transcript <- scater::runPCA(sce_transcript, ncomponents = 2)
 pca_mat <- SingleCellExperiment::reducedDim(sce_transcript, "PCA")
 # Add TCC values from two nearest cells to each cell
-se_merged_tcc <- neighborhood_tcc(
+se_neighbor_tcc <- neighborhood_tcc(
     se_tcc = se_tcc,
     pca_mat = pca_mat,
     k = 2
 )
-se_merged_tcc
+se_neighbor_tcc
 ```
 
 Recalculate transcript expression values from merged data using the EM algorithm:
 ```{r, message = FALSE, warning = FALSE}
-se_merged_transcript <- tcc_to_transcript(
-    se_tcc = se_merged_tcc,
+se_neighbor_transcript <- tcc_to_transcript(
+    se_tcc = se_neighbor_tcc,
     use_length_normalization = FALSE
 )
-se_merged_transcript
+se_neighbor_transcript
 ```
 
 # Downstream analysis
