@@ -176,7 +176,7 @@ test_that("dexseq_psi works as expected", {
         fixed = TRUE
     )
     expect_true(class(dxd) == "DEXSeqDataSet")
-    expect_identical(dim(dxd), c(29L, 42L))
+    expect_identical(dim(dxd), c(30L, 42L))
     expect_true(all(grepl("^ENSMUSG", rownames(dxd))))
     expect_identical(
         colnames(SummarizedExperiment::rowData(dxd)),
@@ -190,7 +190,7 @@ test_that("dexseq_psi works as expected", {
         SummarizedExperiment::assayNames(dxd), "counts"
     )
     expect_identical(
-        sum(SummarizedExperiment::assay(dxd, "counts")), 43839L
+        sum(SummarizedExperiment::assay(dxd, "counts")), 44758L
     )
 
     # Testing if function returns the expected output

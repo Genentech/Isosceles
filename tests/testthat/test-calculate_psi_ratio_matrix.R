@@ -9,6 +9,7 @@ test_that("calculate_psi_ratio_matrix works as expected", {
     psi_events <- c(
         "ENSMUSG00000002107:chr2:6664115-6664197:-:CE",
         "ENSMUSG00000002107:chr2:6560659-6560670:-:A5",
+        "ENSMUSG00000002107:chr2:6553965-6553982:-:A3",
         "ENSMUSG00000002107:chr2:6549832-6549975:-:CE",
         "ENSMUSG00000002107:chr2:6546780-6547041:-:RI",
         "ENSMUSG00000002107:chr2:6545676-6546779:-:A3"
@@ -134,7 +135,7 @@ test_that("calculate_psi_ratio_matrix works as expected", {
     )
     expect_true(is.matrix(psi_mat))
     expect_true(is.numeric(psi_mat))
-    expect_identical(dim(psi_mat), c(5L, 191L))
+    expect_identical(dim(psi_mat), c(6L, 191L))
     expect_identical(rownames(psi_mat), psi_events)
     expect_identical(
         unique(sapply(strsplit(colnames(psi_mat), "\\."), "[", 1)),
