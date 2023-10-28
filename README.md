@@ -10,7 +10,8 @@ from long reads, supporting both bulk RNA-Seq and scRNA-Seq technologies.
 
 Isosceles can be installed using the following commands:
 ```r
-BiocManager::install(c("scater", "uwot", "dittoSeq", "Nebulosa", "ggbio", "BiocStyle"))
+BiocManager::install(c("DEXSeq", "scran", "scater", "uwot", "dittoSeq",
+                       "Nebulosa", "ggbio", "BiocStyle"))
 devtools::install_github("timbitz/Isosceles", dependencies = TRUE, upgrade = TRUE)
 ```
 
