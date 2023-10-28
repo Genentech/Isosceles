@@ -36,7 +36,7 @@ from long read RNA-seq data, supporting both bulk and single-cell technologies.
 
 Isosceles can be installed using the following commands:
 ```r
-BiocManager::install(c("scran", "scater", "uwot", "dittoSeq", "ggbio",
+BiocManager::install(c("scater", "uwot", "dittoSeq", "Nebulosa", "ggbio",
                        "BiocStyle"))
 devtools::install_github("timbitz/Isosceles", dependencies = TRUE,
                          upgrade = TRUE)
