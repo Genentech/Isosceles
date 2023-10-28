@@ -1,0 +1,446 @@
+---
+title: "Mouse E18 brain data analysis"
+author:
+- name: Michal Kabza
+  affiliation:
+    - Roche Informatics, F. Hoffmann-La Roche Ltd., Poznań, Poland
+  email: michal.kabza@contractors.roche.com
+- name: Tim Sterne-Weiler
+  affiliation:
+    - Department of Oncology Bioinformatics, Genentech Inc., South San Francisco, USA
+    - Department of Discovery Oncology, Genentech Inc., South San Francisco, USA
+  email: sternewt@gene.com
+output:
+  BiocStyle::html_document:
+    toc_depth: 1
+    toc_float: true
+    df_print: paged
+    code_folding: show
+package: Isosceles
+vignette: >
+  %\VignetteIndexEntry{Mouse E18 brain data analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "##"
+)
+```
+
+# Introduction 
+
+This vignette demonstrates how Isosceles can be used to identify isoforms and 
+PSI events showing differences in expression along or between different cell 
+lineages or trajectories. The analysis is based on mouse E18 brain scRNA-Seq 
+data from the Lebrigand et al. 2020 paper - all the details regarding how the 
+data was processed can be found in the `mouse_E18_analysis` directory of the 
+[Isosceles_paper](https://github.com/timbitz/Isosceles_Paper) repository.
+
+Load the required packages:
+```{r, message = FALSE}
+library(Isosceles)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(ggplot2)
+library(scuttle)
+library(DEXSeq)
+library(RColorBrewer)
+library(pheatmap)
+library(dittoSeq)
+library(Nebulosa)
+```
+
+# Data exploration
+
+Load the Isosceles TCC SummarizedExperiment object:
+```{r, message = FALSE, warning = FALSE}
+se_tcc <- readRDS(system.file(
+    "extdata", "se_tcc_mouse_e18.rds",
+    package = "Isosceles"
+))
+```
+
+Load the processed SingleCellExperiment objects (containing normalized data, UMAP coordinates etc.):
+```{r, message = FALSE, warning = FALSE}
+sce_gene <- readRDS(system.file(
+    "extdata", "sce_gene_mouse_e18.rds",
+    package = "Isosceles"
+))
+sce_transcript <- readRDS(system.file(
+    "extdata", "sce_transcript_mouse_e18.rds",
+    package = "Isosceles"
+))
+sce_psi <- readRDS(system.file(
+    "extdata", "sce_psi_mouse_e18.rds",
+    package = "Isosceles"
+))
+```
+
+Load the matrix pf pseudotime values for individual trajectories calculated using the Slingshot package:
+```{r, message = FALSE, warning = FALSE}
+pseudotime_matrix <- readRDS(system.file(
+    "extdata", "pseudotime_matrix_mouse_e18.rds", package = "Isosceles"
+))
+head(pseudotime_matrix)
+```
+
+This dataset contains the following cell types and trajectories, shown on the UMAP plot below:
+
+  * Glutamatergic neuron lineage with two trajectories starting from the same progenitor cells:
+    * Trajectory 1 (glut_1, clusters glut.4, glut.8, glut.5 and glut.7) 
+    * Trajectory 2 (glut_2, clusters glut.4, glut.11 and glut.9)
+  * GABAergic neuron trajectory (gaba, clusters gaba.2 and gaba.3)
+  * Radial glia (rad_glia, cluster rad_glia.6)
+  * Cycling radial glia (cyc_rad_glia, cluster cyc_rad_glia.1)
+  * Cajal-Retzius cells (cr, cluster cr.10)
+
+```{r, message = FALSE, warning = FALSE, class.source = 'fold-hide', fig.dim = c(7, 5)}
+cluster_colors <- c(
+    glut.4 = brewer.pal(n = 7, name = "YlGnBu")[3],
+    glut.8 = brewer.pal(n = 7, name = "YlGnBu")[4],
+    glut.5 = brewer.pal(n = 7, name = "YlGnBu")[5],
+    glut.7 = brewer.pal(n = 7, name = "YlGnBu")[6],
+    glut.11 = brewer.pal(n = 7, name = "YlGn")[5],
+    glut.9 = brewer.pal(n = 7, name = "YlGn")[6],
+    gaba.2 = brewer.pal(n = 7, name = "Reds")[4],
+    gaba.3 = brewer.pal(n = 7, name = "Reds")[6],
+    rad_glia.6 = colorRampPalette(c("white", "deeppink"))(7)[6],
+    cyc_rad_glia.1 = colorRampPalette(c("white", "purple"))(7)[6],
+    cr.10 = colorRampPalette(c("white", "gold"))(7)[6]
+)
+umap_df <- as.data.frame(reducedDim(sce_gene, "UMAP"))
+colnames(umap_df) <- c("UMAP_1", "UMAP_2")
+cluster_umap_df <- umap_df %>%
+    mutate(cluster = sce_gene$cluster) %>%
+    group_by(cluster) %>%
+    summarise(
+        UMAP_1 = mean(UMAP_1),
+        UMAP_2 = mean(UMAP_2)
+    )
+umap_lineages <- list(
+    glut_1 = c("glut.4", "glut.8", "glut.5", "glut.7"),
+    glut_2 = c("glut.4", "glut.11", "glut.9"),
+    gaba = c("gaba.2", "gaba.3")
+)
+lineage_umap_df <- umap_lineages %>%
+    enframe() %>%
+    unchop(value) %>%
+    dplyr::rename(lineage = name, cluster = value) %>%
+    left_join(cluster_umap_df)
+set.seed(103)
+dittoDimPlot(sce_gene, "cluster",
+             reduction.use = "UMAP", main = "",
+             size = 2, do.label = TRUE, labels.size = 4,
+             labels.highlight = TRUE, legend.show = FALSE) +
+    scale_colour_manual(values = cluster_colors) +
+    geom_path(
+        data = lineage_umap_df,
+        size = 0.8,
+        mapping = aes(x = UMAP_1, y = UMAP_2, group = lineage),
+        arrow = arrow(ends = "last", type = "closed",
+                      length = unit(0.1, "inches"))
+    )
+```
+
+Cluster cell type identities have been established using the marker gene 
+expression signatures from the Lebrigand et al. 2020 paper:
+```{r, message = FALSE, warning = FALSE, class.source = 'fold-hide', fig.dim = c(10, 7)}
+marker_sets <- list(
+    Progenitors = c("Neurog2", "Eomes"), # intermediate progenitors
+    Glut = c("Neurod6", "Neurod2"), # glutamatergic
+    Mat_Glut = c("Camk2b", "Opcml", "Crym"), # mature glutamatergic
+    GABA = c("Gad2", "Gad1", "Dlx2"), # GABAergic
+    Mat_GABA = c("Maf", "Mafb", "Arx"), # mature GABAergic
+    Rad_glia = c("Fabp7", "Vim", "Dbi"), #radial glia
+    Cyc_rad_glia = c("Cenpf", "Top2a", "Mki67"), # cycling radial glia
+    CR_cells = c("Snhg11", "Lhx5", "Reln") # Cajal-Retzius cells
+)
+sce_gene_marker <- sce_gene
+rownames(sce_gene_marker) <- make.unique(
+    rowData(sce_gene_marker)$gene_name, sep = "@"
+)
+cell_marker_scores <- sumCountsAcrossFeatures(
+    sce_gene_marker, marker_sets,
+    exprs_values = "logcounts", average = TRUE
+)
+sce_gene_set <- SingleCellExperiment(
+    assays = list(logcounts = cell_marker_scores),
+    colData =  colData(sce_gene_marker)
+)
+reducedDim(sce_gene_set, "UMAP") <- reducedDim(sce_gene_marker, "UMAP")
+plot_density(
+    sce_gene_set,
+    c("Progenitors", "Glut", "Mat_Glut", "GABA", "Mat_GABA",
+      "Rad_glia", "Cyc_rad_glia", "CR_cells"),
+    slot = "logcounts", size = 1
+)
+```
+
+# Isoform switching
+
+Isosceles allows for easy detection of isoform switching events by comparing 
+every pair of cell groups (e.g. clusters) and identifying transcripts of the 
+same gene showing statistically significant differences in opposite directions:
+```{r, message = FALSE, warning = FALSE}
+isoswitch_df <- find_isoswitch(
+    se = sce_transcript,
+    cell_labels = sce_transcript$cluster,
+    min_fdr = 0.01
+)
+```
+
+Print the isoform switching results:
+```{r, message = FALSE, warning = FALSE}
+isoswitch_df
+```
+
+Plot the expression density the Clta gene and its transcripts involved in isoform switching:
+```{r, message = FALSE, warning = FALSE, class.source = 'fold-hide', fig.dim = c(8, 5)}
+p1 <- plot_density(
+        sce_gene, "ENSMUSG00000028478",
+        size = 1.5
+    ) +
+    labs(title = "Clta (ENSMUSG00000028478)") +
+    theme(legend.position = "right",
+          plot.title = element_text(size = 12),
+          legend.title = element_text(size = 11))
+p2 <- plot_density(
+        sce_transcript,
+        "ISOT-6683-8d1f-209c-002d:s44012650:e44032850:AP:FL",
+        size = 1.5
+    ) +
+    scale_color_gradientn(colours = brewer.pal(n = 7, name = "Reds")) +
+    labs(title = "Clta-204 (ENSMUST00000107849)") +
+    theme(legend.position = "right",
+          plot.title = element_text(size = 12),
+          legend.title = element_text(size = 11))
+p3 <- plot_density(
+        sce_transcript,
+        "ISOT-eeca-a52b-651e-905d:s44012600:e44032850:AP:FL",
+        size = 1.5
+    ) +
+    scale_color_gradientn(colours = brewer.pal(n = 7, name = "Blues")) +
+    labs(title = "Clta-206 (ENSMUST00000170241)") +
+    theme(legend.position = "right",
+          plot.title = element_text(size = 12),
+          legend.title = element_text(size = 11))
+p4 <- plot_density(
+        sce_transcript,
+        "ISOT-8a93-5996-c87a-8c5f:s44004450:e44032850:AP:FL",
+        size = 1.5
+    ) +
+    scale_color_gradientn(colours = brewer.pal(n = 7, name = "Greens")) +
+    labs(title = "Clta-202 (ENSMUST00000107846)") +
+    theme(legend.position = "right",
+          plot.title = element_text(size = 12),
+          legend.title = element_text(size = 11))
+(p1 + p2) / (p3 + p4)
+```
+
+# DEXSeq analysis
+
+Isosceles can also be used to aggregate PSI event counts at the pseudotime 
+window level and create a DEXSeqDataSet object suitable for the analysis of 
+their changes along a pseudotime trajectory. Given the number of PSI events 
+found in annotations, we recommend filtering them (e.g. by the number of cells
+showing signs of the event's inclusion) - in this vignette we'll restrict the 
+analysis to the row names of the (already pre-filtered) `sce_psi` object. We 
+can prepare a DEXSeqDataSet object for the glutamatergic trajectory 1 using the
+following command:
+```{r, message = FALSE, warning = FALSE}
+dxd <- tcc_to_dexseq(
+    se_tcc = se_tcc,
+    pseudotime = pseudotime_matrix[, "glut_1"],
+    psi_events = rownames(sce_psi),
+    window_size = 30,
+    window_step = 15
+)
+```
+
+Print the DEXSeqDataSet object:
+```{r, message = FALSE, warning = FALSE}
+dxd
+```
+
+The object's design allows for an easy analysis of changes along pseudotime:
+```{r, message = FALSE, warning = FALSE}
+design(dxd)
+```
+
+Standard DEXSeq workflow can be used for further analysis:
+```{r, message = FALSE, warning = FALSE}
+dxd <- estimateSizeFactors(dxd)
+dxd <- estimateDispersions(dxd)
+dxd <- testForDEU(dxd)
+dxd <- estimateExonFoldChanges(dxd, fitExpToVar = "pseudotime")
+```
+
+Process the DEXSeq output to make it more readable:
+```{r, message = FALSE, warning = FALSE}
+# Process the results of the DEXSeqResults function
+dexseq_results_df <- DEXSeqResults(dxd) %>%
+    as.data.frame() %>%
+    dplyr::select(featureID, pvalue, padj) %>%
+    transmute(
+        psi_event = featureID,
+        gene_id = sapply(strsplit(featureID, ":"), "[", 1),
+        gene_name = rowData(sce_gene[gene_id,])$gene_name,
+        pvalue = pvalue,
+        fdr = padj
+    )
+rownames(dexseq_results_df) <- NULL
+# Calculate the maximum absolute value of logFC across 
+# different pseudotime points
+logFC_values <- as.data.frame(DEXSeqResults(dxd))
+logFC_values <- logFC_values[, grepl("^log2fold_", colnames(logFC_values))]
+logFC_values <- as.matrix(logFC_values)
+max_abs_logFC <- apply(logFC_values, 1, function(x) {max(abs(x))})
+max_abs_logFC[is.na(max_abs_logFC)] <- 0
+names(max_abs_logFC) <- NULL
+dexseq_results_df$max_abs_logFC <- max_abs_logFC
+# Filter the DEXSeq results
+dexseq_results_df <- filter(
+    dexseq_results_df, fdr <= 0.05, max_abs_logFC >= 1
+)
+```
+
+Print the DEXSeq results:
+```{r, message = FALSE, warning = FALSE}
+dexseq_results_df
+```
+
+Plot the expression density the Celf2 gene and the density of PSI values for 
+its three selected PSI events significantly changing in the glutamatergic 
+trajectory 1:
+```{r, message = FALSE, warning = FALSE, class.source = 'fold-hide', fig.dim = c(8, 5)}
+p1 <- plot_density(
+        sce_gene, "ENSMUSG00000002107",
+        size = 1.5
+    ) +
+    labs(title = "Celf2 (ENSMUSG00000002107)") +
+    theme(legend.position = "right",
+          plot.title = element_text(size = 12),
+          legend.title = element_text(size = 11))
+p2 <- plot_density(
+        sce_psi,
+        "ENSMUSG00000002107:chr2:6560659-6560670:-:A5",
+        slot = "psi",
+        size = 1.5
+    ) +
+    scale_color_gradientn(colours = brewer.pal(n = 7, name = "Reds")) +
+    labs(title = "chr2:6560659-6560670:-:A5") +
+    theme(legend.position = "right",
+          plot.title = element_text(size = 12),
+          legend.title = element_text(size = 11))
+p3 <- plot_density(
+        sce_psi,
+        "ENSMUSG00000002107:chr2:6553965-6553982:-:A3",
+        slot = "psi",
+        size = 1.5
+    ) +
+    scale_color_gradientn(colours = brewer.pal(n = 7, name = "Blues")) +
+    labs(title = "chr2:6553965-6553982:-:A3") +
+    theme(legend.position = "right",
+          plot.title = element_text(size = 12),
+          legend.title = element_text(size = 11))
+p4 <- plot_density(
+        sce_psi,
+        "ENSMUSG00000002107:chr2:6546780-6547041:-:RI",
+        slot = "psi",
+        size = 1.5
+    ) +
+    scale_color_gradientn(colours = brewer.pal(n = 7, name = "Greens")) +
+    labs(title = "chr2:6546780-6547041:-:RI") +
+    theme(legend.position = "right",
+          plot.title = element_text(size = 12),
+          legend.title = element_text(size = 11))
+(p1 + p2) / (p3 + p4)
+```
+
+In order to visualize the detected PSI events as a heatmap, Isosceles can
+calculate the PSI count to mean  permuted PSI count ratios for pseudotime 
+windows with smaller, trajectory-dependent window and step sizes (**warning**: 
+the process will take ~30 min):
+```{r, message = FALSE, warning = FALSE, eval = FALSE}
+set.seed(100)
+psi_ratio_matrix <- calculate_psi_ratio_matrix(
+    se_tcc = se_tcc,
+    pseudotime_matrix = pseudotime_matrix,
+    psi_events = dexseq_results_df$psi_event,
+    window_sizes = c(
+        glut_1 = 100, glut_2 = 100, gaba = 100,
+        rad_glia = 50, cyc_rad_glia = 50, cr = 50
+    ),
+    window_steps = c(
+        glut_1 = 3, glut_2 = 3, gaba = 3,
+        rad_glia = 3, cyc_rad_glia = 3, cr = 3
+    ),
+    n_perm = 10
+)
+```
+
+```{r, include = FALSE}
+psi_ratio_matrix <- readRDS("psi_ratio_matrix.rds")
+```
+
+Plot the PSI count ratio heatmap (trajectories are denoted using the same 
+colors as in the trajectory UMAP plot in the *Data exploration* section): 
+```{r, message = FALSE, warning = FALSE, class.source = 'fold-hide', fig.dim = c(7, 3.5)}
+# Prepare the heatmap values
+heatmap_values <- log2(psi_ratio_matrix + 0.1)
+heatmap_values[is.nan(heatmap_values)] <- 0
+# Prepare heatmap annotations
+heatmap_trajectory <- sapply(
+    strsplit(colnames(heatmap_values), "\\."), "[", 1
+)
+heatmap_gap_positions <- cumsum(rle(heatmap_trajectory)$lengths)
+col_ann_df <- data.frame(
+    trajectory = heatmap_trajectory
+)
+rownames(col_ann_df) <- colnames(heatmap_values)
+col_ann_colors <- list(
+    trajectory = c(
+        glut_1 = brewer.pal(n = 7, name = "YlGnBu")[5],
+        glut_2 = brewer.pal(n = 7, name = "YlGn")[5],
+        gaba = brewer.pal(n = 7, name = "Reds")[5],
+        rad_glia = colorRampPalette(c("white", "deeppink"))(7)[6],
+        cyc_rad_glia = colorRampPalette(c("white", "purple"))(7)[6],
+        cr = colorRampPalette(c("white", "gold"))(7)[6]
+    )
+)
+# Replace PSI events IDs with more readable labels 
+gene_id_to_name <- setNames(
+    rowData(sce_gene)$gene_name, rowData(sce_gene)$gene_id
+)
+psi_labels <- sapply(
+    strsplit(rownames(heatmap_values), "\\:"), function(x) {
+        paste0(c(gene_id_to_name[x[1]], x[3], x[5]),
+               collapse = ":")
+    }
+)
+rownames(heatmap_values) <- psi_labels
+# Plot the heatmap
+pheatmap(
+    heatmap_values,
+    breaks = seq(-3, 3, length.out = 101),
+    cluster_rows = TRUE, cluster_cols = FALSE,
+    show_rownames = TRUE, show_colnames = FALSE,
+    annotation_col = col_ann_df,
+    annotation_colors = col_ann_colors,
+    gaps_col = heatmap_gap_positions,
+    legend = TRUE, annotation_legend = FALSE,
+    annotation_names_col = FALSE,
+    fontsize_row = 5, treeheight_row = 0,
+    scale = "row"
+)
+```
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
