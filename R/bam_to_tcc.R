@@ -98,6 +98,9 @@ bam_to_tcc <- function(bam_files,
         tx_selector <- tx_fl_selector & (tx_fa_selector | tx_denovo_selector)
     }
     if (run_mode == "de_novo_full") {
+        warning("The de_novo_full run mode is an experimental feature that ",
+                "only uses transcripts discovered by Isosceles - use it at ",
+                "your own risk!")
         tx_denovo_selector <-
             transcript_data$tx_df$splicing_support_level %in% c("PC", "EC", "NC", "DN") &
             !is.na(transcript_data$tx_df$gene_id) &

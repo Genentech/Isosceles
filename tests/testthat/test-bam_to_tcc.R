@@ -282,12 +282,12 @@ test_that("bam_to_tcc works as expected", {
     expect_identical(round(S4Vectors::metadata(se)$mean_read_length), 1028)
 
     # Testing if function returns the expected output (bulk RNA-Seq data, de_novo_full mode)
-    expect_message(
+    expect_warning(
         se <- bam_to_tcc(
             bam_files = bam_files, transcript_data = transcript_data,
             run_mode = "de_novo_full", min_relative_expression = 0
         ),
-        regexp = "read_id",
+        regexp = "experimental feature",
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")
@@ -503,13 +503,13 @@ test_that("bam_to_tcc works as expected", {
     expect_identical(round(S4Vectors::metadata(se)$mean_read_length), 1014)
 
     # Testing if function returns the expected output (scRNA-Seq data, de_novo_full mode)
-    expect_message(
+    expect_warning(
         se <- bam_to_tcc(
             bam_files = bam_files, transcript_data = transcript_data,
             is_single_cell = TRUE, barcode_tag = "BC",
             run_mode = "de_novo_full", min_relative_expression = 0
         ),
-        regexp = "read_id",
+        regexp = "experimental feature",
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")
