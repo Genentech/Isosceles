@@ -119,20 +119,18 @@ plot_psi_regions <- function(se_psi,
         })
 
         # Shrink the PSI regions GenomicRanges objects
-        region_granges_bin <- GenomicRanges::GRanges(
-            shrink_func(region_granges_bin)
-        )
+        region_granges_bin <- shrink_func(region_granges_bin)
         S4Vectors::mcols(region_granges_bin)$.ori <- NULL
-        region_granges_other <- GenomicRanges::GRanges(
-            shrink_func(region_granges_other)
-        )
+        S4Vectors::metadata(region_granges_bin) <- list()
+        region_granges_other <- shrink_func(region_granges_other)
         S4Vectors::mcols(region_granges_other)$.ori <- NULL
+        S4Vectors::metadata(region_granges_other) <- list()
     }
 
     # Create the plot
     ## TSS / TES sites
     bin_region_plot <- ggbio::autoplot(
-        GenomicRanges::GRanges(region_granges_bin),
+        region_granges_bin,
         ggplot2::aes(type = .data$plot_type,
                      col = .data$type,
                      fill = .data$type)
@@ -153,7 +151,7 @@ plot_psi_regions <- function(se_psi,
         )
     ## Other PSI regions
     other_region_plot <- ggbio::autoplot(
-        GenomicRanges::GRanges(region_granges_other),
+        region_granges_other,
         ggplot2::aes(type = .data$plot_type,
                      col = .data$type,
                      fill = .data$type)

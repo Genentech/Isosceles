@@ -88,4 +88,17 @@ test_that("plot_psi_regions works as expected", {
         fixed = TRUE
     ))
     expect_true(methods::is(plot_data, "Tracks"))
+    
+    # Testing if function returns the expected output (intron shrinking)
+    suppressWarnings(expect_warning(
+      plot_data <- plot_psi_regions(
+        se_psi = se_psi,
+        se_transcript = sce_transcript,
+        gene_id = "ENSG00000105974",
+        max_intron_length = 1000
+      ),
+      regexp = "Ignoring unknown aesthetics",
+      fixed = TRUE
+    ))
+    expect_true(methods::is(plot_data, "Tracks"))
 })
