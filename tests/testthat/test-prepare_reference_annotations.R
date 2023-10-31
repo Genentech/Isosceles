@@ -1,8 +1,10 @@
 test_that("prepare_reference_annotations works as expected", {
 
     # Preparing test data
-    gtf_file <- system.file("extdata", "Homo_sapiens.GRCh38.91_chr9_1_1000000.gtf",
-                            package = "Isosceles")
+    gtf_file <- system.file(
+        "extdata", "bulk_rnaseq.gtf",
+        package = "Isosceles"
+    )
 
     # Testing if function throws the expected errors
     expect_error(prepare_reference_annotations(gtf_file = NULL),

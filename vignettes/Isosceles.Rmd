@@ -122,15 +122,15 @@ Data in the SummarizedExperiment objects can be accessed using the following com
 Get the input file paths for a small bulk RNA-Seq dataset: 
 ```{r, message = FALSE, warning = FALSE}
 bam_file <- system.file(
-  "extdata", "SGNex_A549_directRNA_replicate5_run1_chr9_1_1000000.bam",
+  "extdata", "bulk_rnaseq.bam",
   package = "Isosceles"
 )
 gtf_file <- system.file(
-  "extdata", "Homo_sapiens.GRCh38.91_chr9_1_1000000.gtf",
+  "extdata", "bulk_rnaseq.gtf",
   package = "Isosceles"
 )
 genome_fasta_file <- system.file(
-  "extdata", "Homo_sapiens.GRCh38.dna_sm.primary_assembly_chr9_1_1000000.fa",
+  "extdata", "bulk_rnaseq.fa",
   package = "Isosceles"
 )
 ```
@@ -192,15 +192,15 @@ se_gene
 Get the input file paths for a small scRNA-Seq dataset: 
 ```{r, message = FALSE, warning = FALSE}
 bam_file <- system.file(
-    "extdata", "molecule.tags.GE.bam",
+    "extdata", "scrnaseq.bam",
     package = "Isosceles"
 )
 gtf_file <- system.file(
-    "extdata", "chr4.gtf.gz",
+    "extdata", "scrnaseq.gtf.gz",
     package = "Isosceles"
 )
 genome_fasta_file <- system.file(
-    "extdata", "chr4.fa.gz",
+    "extdata", "scrnaseq.fa.gz",
     package = "Isosceles"
 )
 ```

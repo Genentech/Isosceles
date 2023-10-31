@@ -2,7 +2,7 @@ test_that("bam_to_read_structures works as expected", {
 
     # Preparing test data
     bam_file <- system.file(
-        "extdata", "SGNex_A549_directRNA_replicate5_run1_chr9_1_1000000.bam",
+        "extdata", "bulk_rnaseq.bam",
         package = "Isosceles"
     )
 

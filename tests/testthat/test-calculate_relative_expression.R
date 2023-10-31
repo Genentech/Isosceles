@@ -2,16 +2,16 @@ test_that("calculate_relative_expression works as expected", {
 
     # Preparing test data (bulk RNA-Seq data)
     bam_file <- system.file(
-        "extdata", "SGNex_A549_directRNA_replicate5_run1_chr9_1_1000000.bam",
+        "extdata", "bulk_rnaseq.bam",
         package = "Isosceles"
     )
     bam_files <- c(Sample_1 = bam_file, Sample_2 = bam_file)
     gtf_file <- system.file(
-        "extdata", "Homo_sapiens.GRCh38.91_chr9_1_1000000.gtf",
+        "extdata", "bulk_rnaseq.gtf",
         package = "Isosceles"
     )
     genome_fasta_file <- system.file(
-        "extdata", "Homo_sapiens.GRCh38.dna_sm.primary_assembly_chr9_1_1000000.fa",
+        "extdata", "bulk_rnaseq.fa",
         package = "Isosceles"
     )
     transcript_data <- prepare_transcripts(
@@ -51,16 +51,16 @@ test_that("calculate_relative_expression works as expected", {
 
     # Preparing test data (scRNA-Seq data)
     bam_file <- system.file(
-        "extdata", "molecule.tags.GE.bam",
+        "extdata", "scrnaseq.bam",
         package = "Isosceles"
     )
     bam_files <- c(Sample = bam_file)
     gtf_file <- system.file(
-        "extdata", "chr4.gtf.gz",
+        "extdata", "scrnaseq.gtf.gz",
         package = "Isosceles"
     )
     genome_fasta_file <- system.file(
-        "extdata", "chr4.fa.gz",
+        "extdata", "scrnaseq.fa.gz",
         package = "Isosceles"
     )
     transcript_data <- prepare_transcripts(

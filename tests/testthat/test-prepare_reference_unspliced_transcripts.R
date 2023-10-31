@@ -2,7 +2,7 @@ test_that("prepare_reference_unspliced_transcripts works as expected", {
 
     # Preparing test data
     gtf_file <- system.file(
-        "extdata", "Homo_sapiens.GRCh38.91_chr9_1_1000000.gtf",
+        "extdata", "bulk_rnaseq.gtf",
         package = "Isosceles"
     )
     anno_data <- prepare_reference_annotations(gtf_file)

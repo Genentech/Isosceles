@@ -2,15 +2,15 @@ test_that("prepare_transcripts works as expected", {
 
     # Preparing test data
     bam_file <- system.file(
-        "extdata", "SGNex_A549_directRNA_replicate5_run1_chr9_1_1000000.bam",
+        "extdata", "bulk_rnaseq.bam",
         package = "Isosceles"
     )
     gtf_file <- system.file(
-        "extdata", "Homo_sapiens.GRCh38.91_chr9_1_1000000.gtf",
+        "extdata", "bulk_rnaseq.gtf",
         package = "Isosceles"
     )
     genome_fasta_file <- system.file(
-        "extdata", "Homo_sapiens.GRCh38.dna_sm.primary_assembly_chr9_1_1000000.fa",
+        "extdata", "bulk_rnaseq.fa",
         package = "Isosceles"
     )
     bam_parsed <- bam_to_read_structures(bam_file)

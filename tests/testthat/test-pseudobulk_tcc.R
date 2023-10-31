@@ -2,16 +2,16 @@ test_that("pseudobulk_tcc works as expected", {
 
     # Preparing test data
     bam_file <- system.file(
-        "extdata", "molecule.tags.GE.bam",
+        "extdata", "scrnaseq.bam",
         package = "Isosceles"
     )
     bam_files <- c(Sample = bam_file)
     gtf_file <- system.file(
-        "extdata", "chr4.gtf.gz",
+        "extdata", "scrnaseq.gtf.gz",
         package = "Isosceles"
     )
     genome_fasta_file <- system.file(
-        "extdata", "chr4.fa.gz",
+        "extdata", "scrnaseq.fa.gz",
         package = "Isosceles"
     )
     bam_parsed <- bam_to_read_structures(bam_files)
