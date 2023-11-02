@@ -22,7 +22,7 @@
 #' @param ncpu An integer scalar specifying the number of cores to use for
 #' multicore parallelization.
 #' @return A DEXSeqDataSet object containing PSI count data for pseudotime
-#' windows, suitabe for further analysis using the DEXSeq package.
+#' windows, suitable for further analysis using the DEXSeq package.
 #' @export
 tcc_to_dexseq <- function(se_tcc,
                           pseudotime,

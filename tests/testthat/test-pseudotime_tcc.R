@@ -89,7 +89,7 @@ test_that("pseudotime_tcc works as expected", {
             window_size = 3, window_step = 3
         )
     )
-    expect_true(class(se) == "SummarizedExperiment")
+    assertthat::assert_that(methods::is(se, "SummarizedExperiment"))
     expect_identical(dim(se), c(8L, 19L))
     expect_true(all(grepl("^Cells_", colnames(se))))
     expect_identical(dim(SummarizedExperiment::colData(se)), c(19L, 1L))

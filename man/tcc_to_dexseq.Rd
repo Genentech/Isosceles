@@ -45,7 +45,7 @@ multicore parallelization.}
 }
 \value{
 A DEXSeqDataSet object containing PSI count data for pseudotime
-windows, suitabe for further analysis using the DEXSeq package.
+windows, suitable for further analysis using the DEXSeq package.
 }
 \description{
 Aggregates TCC values using pseudotime windows and creates a DEXSeqDataSet
