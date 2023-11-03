@@ -61,10 +61,12 @@ test_that("add_psi_counts works as expected", {
 
     # Testing if function returns the expected output
     expect_silent(
+      suppressMessages(
         se <- add_psi_counts(
-            se_psi = se_window_psi,
-            se_gene = se_window_gene
+          se_psi = se_window_psi,
+          se_gene = se_window_gene
         )
+      )
     )
     assertthat::assert_that(methods::is(se, "SummarizedExperiment"))
     se_copy <- se
