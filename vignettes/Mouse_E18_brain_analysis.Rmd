@@ -245,19 +245,41 @@ p4 <- plot_density(
 
 Isosceles can also be used to aggregate PSI event counts at the pseudotime 
 window level and create a DEXSeqDataSet object suitable for the analysis of 
-their changes along a pseudotime trajectory. Given the number of PSI events 
-found in annotations, we recommend filtering them (e.g. by the number of cells
-showing signs of the event's inclusion) - in this vignette we'll restrict the 
-analysis to the row names of the (already pre-filtered) `sce_psi` object. We 
-can prepare a DEXSeqDataSet object for the glutamatergic trajectory 1 using the
-following command:
+their changes along a pseudotime trajectory (the workflow can be easily modified 
+to allow for any method of cell aggregation or experiment design). Given the 
+number of PSI events  found in annotations, we recommend filtering them 
+(e.g. by the number of cells showing signs of the event's inclusion) - in this 
+vignette we'll restrict the analysis to the row names of the (already 
+pre-filtered) `sce_psi` object. We can prepare a DEXSeqDataSet object for the
+glutamatergic trajectory 1 using the following commands:
 ```{r, message = FALSE, warning = FALSE}
-dxd <- tcc_to_dexseq(
+# Aggregate TCC values using moving window over pseudotime
+se_window_tcc <- pseudotime_tcc(
     se_tcc = se_tcc,
     pseudotime = pseudotime_matrix[, "glut_1"],
-    psi_events = rownames(sce_psi),
     window_size = 30,
     window_step = 15
+)
+se_window_gene <- tcc_to_gene(
+    se_tcc = se_window_tcc
+)
+se_window_transcript <- tcc_to_transcript(
+    se_tcc = se_window_tcc,
+    use_length_normalization = FALSE
+)
+se_window_psi <- transcript_to_psi(
+    se = se_window_transcript,
+)
+se_window_psi <- add_psi_counts(
+    se_psi = se_window_psi,
+    se_gene = se_window_gene
+)
+# Prepare the DEXSeqDataSet object
+window_pseudotime <- as.numeric(scale(se_window_psi$pseudotime))
+dxd <- psi_to_dexseq(
+    se_psi = se_window_psi,
+    condition = window_pseudotime,
+    psi_events = rownames(sce_psi)
 )
 ```
 
@@ -266,17 +288,12 @@ Print the DEXSeqDataSet object:
 dxd
 ```
 
-The object's design allows for an easy analysis of changes along pseudotime:
-```{r, message = FALSE, warning = FALSE}
-design(dxd)
-```
-
 Standard DEXSeq workflow can be used for further analysis:
 ```{r, message = FALSE, warning = FALSE}
 dxd <- estimateSizeFactors(dxd)
 dxd <- estimateDispersions(dxd)
 dxd <- testForDEU(dxd)
-dxd <- estimateExonFoldChanges(dxd, fitExpToVar = "pseudotime")
+dxd <- estimateExonFoldChanges(dxd, fitExpToVar = "condition")
 ```
 
 Process the DEXSeq output to make it more readable:
