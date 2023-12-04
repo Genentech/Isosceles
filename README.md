@@ -8,6 +8,8 @@ from long reads, supporting both bulk RNA-Seq and scRNA-Seq technologies.
   <img src="docs/Isosceles_header.gif" width="600">
 </p>
 
+Preprint: https://www.biorxiv.org/content/10.1101/2023.11.30.566884
+
 ## Installation
 
 Isosceles can be installed using the following commands:
