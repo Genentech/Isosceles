@@ -20,6 +20,9 @@ test_that("prepare_bam_transcripts works as expected", {
     expect_error(prepare_bam_transcripts(bam_parsed = NULL),
                  regexp = "bam_parsed is not a data frame",
                  fixed = TRUE)
+    expect_error(prepare_bam_transcripts(bam_parsed = rbind(bam_parsed, bam_parsed)),
+                 regexp = "bam_parsed$intron_positions contains non-unique values",
+                 fixed = TRUE)
     expect_error(prepare_bam_transcripts(bam_parsed = bam_parsed,
                                          anno_data = NULL),
                  regexp = "anno_data is not a list",

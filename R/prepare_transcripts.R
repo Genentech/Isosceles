@@ -54,6 +54,11 @@ prepare_transcripts <- function(gtf_file,
     assertthat::assert_that(file.exists(genome_fasta_file))
     if (!is.null(bam_parsed)) {
         assertthat::assert_that(is.data.frame(bam_parsed))
+        assertthat::assert_that(
+            length(bam_parsed$intron_positions) ==
+                length(unique(bam_parsed$intron_positions)),
+            msg = "bam_parsed$intron_positions contains non-unique values"
+        )
     }
     assertthat::assert_that(assertthat::is.count(min_intron_length))
     assertthat::assert_that(assertthat::is.count(max_intron_length))

@@ -45,6 +45,11 @@ prepare_bam_transcripts <- function(bam_parsed,
 
     # Check arguments
     assertthat::assert_that(is.data.frame(bam_parsed))
+    assertthat::assert_that(
+        length(bam_parsed$intron_positions) ==
+            length(unique(bam_parsed$intron_positions)),
+        msg = "bam_parsed$intron_positions contains non-unique values"
+    )
     assertthat::assert_that(is.list(anno_data))
     assertthat::assert_that(assertthat::has_name(anno_data, "gene_df"))
     assertthat::assert_that(is.data.frame(anno_data$gene_df))

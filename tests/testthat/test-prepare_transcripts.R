@@ -37,6 +37,11 @@ test_that("prepare_transcripts works as expected", {
                  fixed = TRUE)
     expect_error(prepare_transcripts(gtf_file = gtf_file,
                                      genome_fasta_file = genome_fasta_file,
+                                     bam_parsed = rbind(bam_parsed, bam_parsed)),
+                 regexp = "bam_parsed$intron_positions contains non-unique values",
+                 fixed = TRUE)
+    expect_error(prepare_transcripts(gtf_file = gtf_file,
+                                     genome_fasta_file = genome_fasta_file,
                                      bam_parsed = bam_parsed,
                                      min_intron_length = NULL),
                  regexp = "min_intron_length is not a count",
