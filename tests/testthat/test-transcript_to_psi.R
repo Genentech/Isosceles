@@ -67,7 +67,7 @@ test_that("transcript_to_psi works as expected", {
         se <- transcript_to_psi(se = se_transcript)
     )
     expect_true(class(se) == "RangedSummarizedExperiment")
-    expect_identical(dim(se), c(96L, 1L))
+    expect_identical(dim(se), c(89L, 1L))
     expect_identical(colnames(se), colnames(se_transcript))
     expect_identical(colnames(SummarizedExperiment::rowData(se)),
                      c("gene_id", "type"))
@@ -76,14 +76,14 @@ test_that("transcript_to_psi works as expected", {
     expect_identical(names(table(SummarizedExperiment::rowData(se)$type)),
                      c("A3", "A5", "CE", "RI", "TES", "TSS"))
     expect_identical(as.numeric(table(SummarizedExperiment::rowData(se)$type)),
-                     c(5, 6, 44, 8, 14, 19))
+                     c(3, 6, 44, 8, 10, 18))
     expect_true(grepl("GRanges", class(SummarizedExperiment::rowRanges(se))))
     expect_identical(SummarizedExperiment::assayNames(se),
                      c("psi"))
     expect_identical(class(SummarizedExperiment::assay(se, "psi")),
                      class(SummarizedExperiment::assay(se_transcript, "relative_expression")))
     expect_identical(round(colSums(SummarizedExperiment::assay(se, "psi"))),
-                     c(Sample = 32))
+                     c(Sample = 34))
     expect_true(all(SummarizedExperiment::assay(se, "psi") >= 0))
     expect_true(all(SummarizedExperiment::assay(se, "psi") <= 1))
     expect_identical(S4Vectors::metadata(se), list())

@@ -30,7 +30,9 @@ test_that("bam_to_read_structures works as expected", {
                    regexp = "read_id",
                    fixed = TRUE)
     expect_true(is.data.frame(bam_data))
-    expect_identical(dim(bam_data), c(144L, 5L))
+    expect_identical(dim(bam_data), c(74L, 5L))
+    expect_identical(length(bam_data$intron_positions),
+                     length(unique(bam_data$intron_positions)))
     expect_identical(colnames(bam_data),
                      c("intron_positions", "read_count", "chromosome",
                        "start_positions", "end_positions"))

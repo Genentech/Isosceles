@@ -83,7 +83,7 @@ test_that("assign_intron_strand works as expected", {
     )
     expect_identical(
         as.numeric(table(BiocGenerics::strand(intron_granges_stranded))),
-        c(42, 94, 16)
+        c(36, 46, 4)
     )
 
     # Testing if function returns the expected output (case 2)
@@ -102,7 +102,7 @@ test_that("assign_intron_strand works as expected", {
     )
     expect_identical(
         as.numeric(table(BiocGenerics::strand(intron_granges_stranded))),
-        c(42, 91, 19)
+        c(36, 45, 5)
     )
 
     # Testing if function returns the expected output (case 3)
@@ -121,6 +121,6 @@ test_that("assign_intron_strand works as expected", {
     )
     expect_identical(
         as.numeric(table(BiocGenerics::strand(intron_granges_stranded))),
-        c(42, 92, 18)
+        c(36, 45, 5)
     )
 })

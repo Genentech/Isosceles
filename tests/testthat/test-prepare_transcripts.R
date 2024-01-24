@@ -110,7 +110,7 @@ test_that("prepare_transcripts works as expected", {
     expect_identical(names(tx_list),
                      c("tx_df", "tx_granges","tx_exon_granges_list",
                        "tx_intron_granges_list"))
-    expect_identical(dim(tx_list$tx_df), c(249L, 12L))
+    expect_identical(dim(tx_list$tx_df), c(179L, 12L))
     expect_identical(colnames(tx_list$tx_df),
                      c("transcript_id", "position", "intron_positions",
                        "gene_id", "gene_name", "compatible_gene_ids",
@@ -120,39 +120,39 @@ test_that("prepare_transcripts works as expected", {
     expect_identical(sum(is.na(tx_list$tx_df$hash_id)), 0L)
     expect_identical(sum(is.na(tx_list$tx_df$position)), 0L)
     expect_identical(sum(is.na(tx_list$tx_df$intron_positions)), 8L)
-    expect_identical(sum(is.na(tx_list$tx_df$gene_id)), 12L)
-    expect_identical(sum(is.na(tx_list$tx_df$gene_name)), 12L)
-    expect_identical(sum(is.na(tx_list$tx_df$compatible_gene_ids)), 2L)
-    expect_identical(sum(is.na(tx_list$tx_df$compatible_gene_names)), 2L)
-    expect_identical(sum(is.na(tx_list$tx_df$compatible_tx)), 138L)
+    expect_identical(sum(is.na(tx_list$tx_df$gene_id)), 11L)
+    expect_identical(sum(is.na(tx_list$tx_df$gene_name)), 11L)
+    expect_identical(sum(is.na(tx_list$tx_df$compatible_gene_ids)), 1L)
+    expect_identical(sum(is.na(tx_list$tx_df$compatible_gene_names)), 1L)
+    expect_identical(sum(is.na(tx_list$tx_df$compatible_tx)), 69L)
     expect_identical(names(table(tx_list$tx_df$splicing_support_level)),
                      c("AF", "AP", "AS", "AX", "DN", "EC", "NC", "PC"))
     expect_identical(as.numeric(table(tx_list$tx_df$splicing_support_level)),
-                     c(10, 105, 53, 14, 26, 6, 5, 30))
+                     c(10, 105, 24, 4, 15, 1, 1, 19))
     expect_identical(names(table(tx_list$tx_df$fivethree_support_level)),
                      c("3T", "5T", "FL", "FT", "NA"))
     expect_identical(as.numeric(table(tx_list$tx_df$fivethree_support_level)),
-                     c(3, 36, 123, 9, 78))
+                     c(1, 17, 118, 4, 39))
     expect_identical(sum(is.na(tx_list$tx_df$read_count)), 105L)
-    expect_identical(sum(tx_list$tx_df$read_count, na.rm = TRUE), 399L)
-    expect_identical(sum(is.na(tx_list$tx_df$relative_expression)), 117L)
-    expect_identical(sum(tx_list$tx_df$relative_expression, na.rm = TRUE), 5)
+    expect_identical(sum(tx_list$tx_df$read_count, na.rm = TRUE), 114L)
+    expect_identical(sum(is.na(tx_list$tx_df$relative_expression)), 116L)
+    expect_identical(sum(tx_list$tx_df$relative_expression, na.rm = TRUE), 4)
     expect_true(class(tx_list$tx_granges) == "GRanges")
-    expect_identical(length(tx_list$tx_granges), 249L)
+    expect_identical(length(tx_list$tx_granges), 179L)
     expect_identical(
         names(table(BiocGenerics::strand(tx_list$tx_granges))),
         c("+", "-", "*")
     )
     expect_identical(
         as.numeric(table(BiocGenerics::strand(tx_list$tx_granges))),
-        c(82, 153, 14)
+        c(79, 96, 4)
     )
     expect_true(grepl("GRangesList", class(tx_list$tx_exon_granges_list)))
-    expect_identical(length(tx_list$tx_exon_granges_list), 249L)
-    expect_identical(length(unlist(tx_list$tx_exon_granges_list)), 1991L)
+    expect_identical(length(tx_list$tx_exon_granges_list), 179L)
+    expect_identical(length(unlist(tx_list$tx_exon_granges_list)), 1352L)
     expect_true(grepl("GRangesList", class(tx_list$tx_intron_granges_list)))
-    expect_identical(length(tx_list$tx_intron_granges_list), 249L)
-    expect_identical(length(unlist(tx_list$tx_intron_granges_list)), 1742L)
+    expect_identical(length(tx_list$tx_intron_granges_list), 179L)
+    expect_identical(length(unlist(tx_list$tx_intron_granges_list)), 1173L)
 
     # Testing if function returns the expected output (reference data only)
     expect_message(
