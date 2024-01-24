@@ -39,7 +39,12 @@ bam_to_read_structures <- function(bam_files,
         bam_file_con <- Rsamtools::BamFile(bam_file, yieldSize = chunk_size)
         bam_param <- Rsamtools::ScanBamParam(
             what = "qname",
-            flag = Rsamtools::scanBamFlag(isSupplementaryAlignment = FALSE)
+            flag = Rsamtools::scanBamFlag(
+                isSupplementaryAlignment = FALSE,
+                isSecondaryAlignment = FALSE,
+                isNotPassingQualityControls = FALSE,
+                isDuplicate = FALSE
+            )
         )
         open(bam_file_con)
         repeat {
