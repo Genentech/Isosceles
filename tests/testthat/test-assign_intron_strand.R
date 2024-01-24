@@ -57,6 +57,12 @@ test_that("assign_intron_strand works as expected", {
     expect_error(assign_intron_strand(intron_granges = intron_granges,
                                       anno_data = anno_data,
                                       genome_fasta_file = genome_fasta_file,
+                                      max_intron_length = NULL),
+                 regexp = "max_intron_length is not a count",
+                 fixed = TRUE)
+    expect_error(assign_intron_strand(intron_granges = intron_granges,
+                                      anno_data = anno_data,
+                                      genome_fasta_file = genome_fasta_file,
                                       known_intron_motifs = NULL),
                  regexp = "known_intron_motifs is not a character vector",
                  fixed = TRUE)
@@ -122,5 +128,25 @@ test_that("assign_intron_strand works as expected", {
     expect_identical(
         as.numeric(table(BiocGenerics::strand(intron_granges_stranded))),
         c(36, 45, 5)
+    )
+
+    # Testing if function returns the expected output (case 4)
+    expect_silent(
+        intron_granges_stranded <- assign_intron_strand(
+            intron_granges = intron_granges, anno_data = anno_data,
+            genome_fasta_file = genome_fasta_file,
+            min_intron_length = 100, max_intron_length = 1000,
+            rescue_annotated_introns = TRUE
+        )
+    )
+    expect_identical(BiocGenerics::unstrand(intron_granges_stranded),
+                     intron_granges)
+    expect_identical(
+        names(table(BiocGenerics::strand(intron_granges_stranded))),
+        c("+", "-", "*")
+    )
+    expect_identical(
+        as.numeric(table(BiocGenerics::strand(intron_granges_stranded))),
+        c(17, 31, 38)
     )
 })

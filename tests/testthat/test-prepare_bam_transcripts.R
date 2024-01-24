@@ -98,6 +98,12 @@ test_that("prepare_bam_transcripts works as expected", {
     expect_error(prepare_bam_transcripts(bam_parsed = bam_parsed,
                                          anno_data = anno_data,
                                          genome_fasta_file = genome_fasta_file,
+                                         max_intron_length = NULL),
+                 regexp = "max_intron_length is not a count",
+                 fixed = TRUE)
+    expect_error(prepare_bam_transcripts(bam_parsed = bam_parsed,
+                                         anno_data = anno_data,
+                                         genome_fasta_file = genome_fasta_file,
                                          known_intron_motifs = NULL),
                  regexp = "known_intron_motifs is not a character vector",
                  fixed = TRUE)

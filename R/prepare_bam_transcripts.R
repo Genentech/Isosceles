@@ -9,6 +9,8 @@
 #' @param genome_fasta_file A string containing a genome FASTA file path.
 #' @param min_intron_length An integer scalar specifying the minimal length
 #' of introns to assign strand to.
+#' @param max_intron_length An integer scalar specifying the maximum length
+#' of introns to assign strand to.
 #' @param known_intron_motifs A character vector specifying the known intron
 #' motifs.
 #' @param rescue_annotated_introns A logical scalar specifying if introns
@@ -34,6 +36,7 @@ prepare_bam_transcripts <- function(bam_parsed,
                                     anno_data,
                                     genome_fasta_file,
                                     min_intron_length = 30,
+                                    max_intron_length = 5e6,
                                     known_intron_motifs = c("GT-AG"),
                                     rescue_annotated_introns = FALSE,
                                     known_intron_granges = NULL,
@@ -54,6 +57,7 @@ prepare_bam_transcripts <- function(bam_parsed,
     assertthat::assert_that(assertthat::is.string(genome_fasta_file))
     assertthat::assert_that(file.exists(genome_fasta_file))
     assertthat::assert_that(assertthat::is.count(min_intron_length))
+    assertthat::assert_that(assertthat::is.count(max_intron_length))
     assertthat::assert_that(is.character(known_intron_motifs))
     assertthat::assert_that(assertthat::is.flag(rescue_annotated_introns))
     if (!is.null(known_intron_granges)) {
@@ -83,6 +87,7 @@ prepare_bam_transcripts <- function(bam_parsed,
                                        anno_data = anno_data,
                                        genome_fasta_file = genome_fasta_file,
                                        min_intron_length = min_intron_length,
+                                       max_intron_length = max_intron_length,
                                        known_intron_motifs = known_intron_motifs,
                                        rescue_annotated_introns = rescue_annotated_introns)
     nr_intron_positions <- intron_data$nr_intron_positions

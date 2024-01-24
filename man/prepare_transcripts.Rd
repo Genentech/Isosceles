@@ -9,6 +9,7 @@ prepare_transcripts(
   genome_fasta_file,
   bam_parsed,
   min_intron_length = 30,
+  max_intron_length = 5e+06,
   known_intron_motifs = c("GT-AG"),
   rescue_annotated_introns = FALSE,
   known_intron_granges = NULL,
@@ -27,6 +28,9 @@ returned by the \code{\link{bam_to_read_structures}} function. If NULL,
 only reference transcripts are used.}
 
 \item{min_intron_length}{An integer scalar specifying the minimal length
+of introns to assign strand to.}
+
+\item{max_intron_length}{An integer scalar specifying the maximum length
 of introns to assign strand to.}
 
 \item{known_intron_motifs}{A character vector specifying the known intron

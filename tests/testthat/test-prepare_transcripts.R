@@ -44,6 +44,12 @@ test_that("prepare_transcripts works as expected", {
     expect_error(prepare_transcripts(gtf_file = gtf_file,
                                      genome_fasta_file = genome_fasta_file,
                                      bam_parsed = bam_parsed,
+                                     max_intron_length = NULL),
+                 regexp = "max_intron_length is not a count",
+                 fixed = TRUE)
+    expect_error(prepare_transcripts(gtf_file = gtf_file,
+                                     genome_fasta_file = genome_fasta_file,
+                                     bam_parsed = bam_parsed,
                                      known_intron_motifs = NULL),
                  regexp = "known_intron_motifs is not a character vector",
                  fixed = TRUE)
