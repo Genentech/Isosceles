@@ -101,6 +101,17 @@ bam_to_read_structures <- function(bam_files,
     }, BPPARAM = BPPARAM)
     read_summary <- do.call(rbind, read_summary)
 
+    # Remove inter-chromosomal alignments
+    is_same_seq_name <- sapply(
+        strsplit(read_summary$intron_positions, ","),
+        function(intron_positions) {
+            seq_names <- sapply(strsplit(intron_positions, ":"), "[", 1)
+            same_seq_name <- length(unique(seq_names)) == 1
+            return(same_seq_name)
+        }
+    )
+    read_summary <- read_summary[is_same_seq_name,]
+
     # Merge read structures from different BAM files
     read_summary <- read_summary %>%
         dplyr::group_by(.data$intron_positions) %>%
