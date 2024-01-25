@@ -8,6 +8,8 @@
 #' @param genome_fasta_file A string containing a genome FASTA file path.
 #' @param min_intron_length An integer scalar specifying the minimal length
 #' of introns to assign strand to.
+#' @param max_intron_length An integer scalar specifying the maximum length
+#' of introns to assign strand to.
 #' @param known_intron_motifs A character vector specifying the known intron
 #' motifs.
 #' @param rescue_annotated_introns A logical scalar specifying if introns
@@ -20,6 +22,7 @@ assign_intron_strand <- function(intron_granges,
                                  anno_data,
                                  genome_fasta_file,
                                  min_intron_length = 30,
+                                 max_intron_length = 5e6,
                                  known_intron_motifs = c("GT-AG"),
                                  rescue_annotated_introns = FALSE) {
 
@@ -31,6 +34,7 @@ assign_intron_strand <- function(intron_granges,
     assertthat::assert_that(assertthat::is.string(genome_fasta_file))
     assertthat::assert_that(file.exists(genome_fasta_file))
     assertthat::assert_that(assertthat::is.count(min_intron_length))
+    assertthat::assert_that(assertthat::is.count(max_intron_length))
     assertthat::assert_that(is.character(known_intron_motifs))
     assertthat::assert_that(assertthat::is.flag(rescue_annotated_introns))
 
@@ -58,7 +62,9 @@ assign_intron_strand <- function(intron_granges,
     intron_seq_plus <- BSgenome::getSeq(genome_seq, intron_granges_plus)
     intron_lenght_plus <- BiocGenerics::width(intron_seq_plus)
     intron_seq_plus[intron_lenght_plus < min_intron_length] <-
-        strrep("N", min_intron_length)
+        strrep("N", 4)
+    intron_seq_plus[intron_lenght_plus > max_intron_length] <-
+        strrep("N", 4)
     intron_motif_plus <- glue::glue(
         "{XVector::subseq(intron_seq_plus, start = 1, width = 2)}", "-",
         "{XVector::subseq(intron_seq_plus, end = BiocGenerics::width(intron_seq_plus), width = 2)}"
@@ -70,7 +76,9 @@ assign_intron_strand <- function(intron_granges,
     intron_seq_minus <- BSgenome::getSeq(genome_seq, intron_granges_minus)
     intron_lenght_minus <- BiocGenerics::width(intron_seq_minus)
     intron_seq_minus[intron_lenght_minus < min_intron_length] <-
-        strrep("N", min_intron_length)
+        strrep("N", 4)
+    intron_seq_minus[intron_lenght_minus > max_intron_length] <-
+        strrep("N", 4)
     intron_motif_minus <- glue::glue(
         "{XVector::subseq(intron_seq_minus, start = 1, width = 2)}", "-",
         "{XVector::subseq(intron_seq_minus, end = BiocGenerics::width(intron_seq_minus), width = 2)}"

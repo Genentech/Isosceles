@@ -5,6 +5,7 @@ process_intron_data <- function(bam_parsed,
                                 anno_data,
                                 genome_fasta_file,
                                 min_intron_length = 30,
+                                max_intron_length = 5e6,
                                 known_intron_motifs = c("GT-AG"),
                                 rescue_annotated_introns = FALSE) {
 
@@ -18,6 +19,7 @@ process_intron_data <- function(bam_parsed,
     assertthat::assert_that(assertthat::is.string(genome_fasta_file))
     assertthat::assert_that(file.exists(genome_fasta_file))
     assertthat::assert_that(assertthat::is.count(min_intron_length))
+    assertthat::assert_that(assertthat::is.count(max_intron_length))
     assertthat::assert_that(is.character(known_intron_motifs))
     assertthat::assert_that(assertthat::is.flag(rescue_annotated_introns))
 
@@ -37,6 +39,7 @@ process_intron_data <- function(bam_parsed,
                                               anno_data = anno_data,
                                               genome_fasta_file = genome_fasta_file,
                                               min_intron_length = min_intron_length,
+                                              max_intron_length = max_intron_length,
                                               known_intron_motifs = known_intron_motifs,
                                               rescue_annotated_introns = rescue_annotated_introns)
     nr_intron_positions <- as.character(nr_intron_granges)

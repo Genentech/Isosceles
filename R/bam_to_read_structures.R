@@ -39,7 +39,12 @@ bam_to_read_structures <- function(bam_files,
         bam_file_con <- Rsamtools::BamFile(bam_file, yieldSize = chunk_size)
         bam_param <- Rsamtools::ScanBamParam(
             what = "qname",
-            flag = Rsamtools::scanBamFlag(isSupplementaryAlignment = FALSE)
+            flag = Rsamtools::scanBamFlag(
+                isSupplementaryAlignment = FALSE,
+                isSecondaryAlignment = FALSE,
+                isNotPassingQualityControls = FALSE,
+                isDuplicate = FALSE
+            )
         )
         open(bam_file_con)
         repeat {
@@ -95,6 +100,17 @@ bam_to_read_structures <- function(bam_files,
         return(bam_read_summary)
     }, BPPARAM = BPPARAM)
     read_summary <- do.call(rbind, read_summary)
+
+    # Remove inter-chromosomal alignments
+    is_same_seq_name <- sapply(
+        strsplit(read_summary$intron_positions, ","),
+        function(intron_positions) {
+            seq_names <- sapply(strsplit(intron_positions, ":"), "[", 1)
+            same_seq_name <- length(unique(seq_names)) == 1
+            return(same_seq_name)
+        }
+    )
+    read_summary <- read_summary[is_same_seq_name,]
 
     # Merge read structures from different BAM files
     read_summary <- read_summary %>%

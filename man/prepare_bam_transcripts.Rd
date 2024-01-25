@@ -9,6 +9,7 @@ prepare_bam_transcripts(
   anno_data,
   genome_fasta_file,
   min_intron_length = 30,
+  max_intron_length = 5e+06,
   known_intron_motifs = c("GT-AG"),
   rescue_annotated_introns = FALSE,
   known_intron_granges = NULL,
@@ -26,6 +27,9 @@ the \code{\link{prepare_reference_annotations}} function.}
 \item{genome_fasta_file}{A string containing a genome FASTA file path.}
 
 \item{min_intron_length}{An integer scalar specifying the minimal length
+of introns to assign strand to.}
+
+\item{max_intron_length}{An integer scalar specifying the maximum length
 of introns to assign strand to.}
 
 \item{known_intron_motifs}{A character vector specifying the known intron

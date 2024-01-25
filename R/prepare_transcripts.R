@@ -10,6 +10,8 @@
 #' only reference transcripts are used.
 #' @param min_intron_length An integer scalar specifying the minimal length
 #' of introns to assign strand to.
+#' @param max_intron_length An integer scalar specifying the maximum length
+#' of introns to assign strand to.
 #' @param known_intron_motifs A character vector specifying the known intron
 #' motifs.
 #' @param rescue_annotated_introns A logical scalar specifying if introns
@@ -37,6 +39,7 @@ prepare_transcripts <- function(gtf_file,
                                 genome_fasta_file,
                                 bam_parsed,
                                 min_intron_length = 30,
+                                max_intron_length = 5e6,
                                 known_intron_motifs = c("GT-AG"),
                                 rescue_annotated_introns = FALSE,
                                 known_intron_granges = NULL,
@@ -51,8 +54,14 @@ prepare_transcripts <- function(gtf_file,
     assertthat::assert_that(file.exists(genome_fasta_file))
     if (!is.null(bam_parsed)) {
         assertthat::assert_that(is.data.frame(bam_parsed))
+        assertthat::assert_that(
+            length(bam_parsed$intron_positions) ==
+                length(unique(bam_parsed$intron_positions)),
+            msg = "bam_parsed$intron_positions contains non-unique values"
+        )
     }
     assertthat::assert_that(assertthat::is.count(min_intron_length))
+    assertthat::assert_that(assertthat::is.count(max_intron_length))
     assertthat::assert_that(is.character(known_intron_motifs))
     assertthat::assert_that(assertthat::is.flag(rescue_annotated_introns))
     if (!is.null(known_intron_granges)) {
@@ -96,7 +105,9 @@ prepare_transcripts <- function(gtf_file,
     if (!is.null(bam_parsed)) {
         tx_list_bam <- prepare_bam_transcripts(
             bam_parsed = bam_parsed, anno_data = anno_data,
-            genome_fasta_file = genome_fasta_file, min_intron_length = min_intron_length,
+            genome_fasta_file = genome_fasta_file,
+            min_intron_length = min_intron_length,
+            max_intron_length = max_intron_length,
             known_intron_motifs = known_intron_motifs,
             rescue_annotated_introns = rescue_annotated_introns,
             known_intron_granges = known_intron_granges,

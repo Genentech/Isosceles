@@ -156,7 +156,12 @@ bam_to_tcc <- function(bam_files,
         }
         bam_param <- Rsamtools::ScanBamParam(
             what = "qname",
-            flag = Rsamtools::scanBamFlag(isSupplementaryAlignment = FALSE),
+            flag = Rsamtools::scanBamFlag(
+                isSupplementaryAlignment = FALSE,
+                isSecondaryAlignment = FALSE,
+                isNotPassingQualityControls = FALSE,
+                isDuplicate = FALSE
+            ),
             tag = bam_tags
         )
         open(bam_file_con)
