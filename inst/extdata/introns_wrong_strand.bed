@@ -1,0 +1,6 @@
+sequence	2500	6999	.	0	+
+sequence	7500	7799	.	0	+
+sequence	7900	10999	.	0	+
+sequence	8500	8999	.	0	-
+sequence	9700	10399	.	0	-
+sequence	8500	10399	.	0	-
