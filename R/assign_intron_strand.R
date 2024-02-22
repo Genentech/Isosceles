@@ -100,6 +100,7 @@ assign_intron_strand <- function(intron_granges,
     intron_strand <- rep("*", times = length(intron_granges))
     intron_strand[is_strand_plus] <- "+"
     intron_strand[is_strand_minus] <- "-"
+    intron_strand[is_strand_plus & is_strand_minus] <- "*"
     BiocGenerics::strand(intron_granges) <- intron_strand
 
     return(intron_granges)
