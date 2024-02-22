@@ -29,6 +29,57 @@ prepare_reference_annotations <- function(gtf_file) {
             S4Vectors::mcols(exon_granges)$gene_id
     }
 
+    # Prepare and correct reference annotations GRanges data
+    transcript_granges <- GenomicFeatures::transcripts(
+        txdb, columns = c("tx_name", "gene_id")
+    )
+    tx_to_gene <- stats::setNames(
+        unlist(S4Vectors::mcols(transcript_granges)$gene_id),
+        S4Vectors::mcols(transcript_granges)$tx_name
+    )
+    exon_granges_list <- GenomicFeatures::exonsBy(txdb, by = "tx", use.names = TRUE)
+    exon_granges_list <- exon_granges_list[S4Vectors::mcols(transcript_granges)$tx_name]
+    tx_exon_strands <- sapply(exon_granges_list, function(granges) {
+        unique(BiocGenerics::strand(granges))
+    })
+    original_tx_strands <- BiocGenerics::strand(transcript_granges)
+    BiocGenerics::strand(transcript_granges) <- tx_exon_strands
+    intron_granges_list <- IRanges::psetdiff(transcript_granges, exon_granges_list)
+    intron_granges <- unlist(intron_granges_list)
+    S4Vectors::mcols(intron_granges)$tx_name <- names(intron_granges)
+    S4Vectors::mcols(intron_granges)$gene_id <- tx_to_gene[names(intron_granges)]
+    names(intron_granges) <- NULL
+    intron_granges_list <- GenomicRanges::split(
+        intron_granges, S4Vectors::mcols(intron_granges)$tx_name
+    )
+
+    # Give warnings if there are any issues with the input GTF file
+    wrong_strand_tx_ids <- names(tx_exon_strands)[
+        as.vector(tx_exon_strands != original_tx_strands)
+    ]
+    if (length(wrong_strand_tx_ids > 0)) {
+        warning(paste0("WARNING: the following transcripts have different ",
+                       "strand than their exons: ",
+                       paste(wrong_strand_tx_ids, collapse = ", "),
+                       "\n",
+                       "The transcript strand values will be corrected."))
+    }
+    wrong_strand_gene_ids <- tapply(
+        as.vector(tx_exon_strands), tx_to_gene[names(tx_exon_strands)],
+        function(x) {length(unique(x))}
+    )
+    wrong_strand_gene_ids <- names(wrong_strand_gene_ids[
+        wrong_strand_gene_ids > 1
+    ])
+    if (length(wrong_strand_gene_ids > 0)) {
+        warning(paste0("WARNING: the following genes contain transcripts ",
+                       "with different strand values: ",
+                       paste(wrong_strand_gene_ids, collapse = ", "),
+                       "\n",
+                       "This might cause some of the downstream functions ",
+                       "(e.g. PSI analysis) to give nonsensical results."))
+    }
+
     # Prepare gene data
     gene_df <- S4Vectors::mcols(exon_granges) %>%
         as.data.frame() %>%
@@ -36,7 +87,6 @@ prepare_reference_annotations <- function(gtf_file) {
         dplyr::distinct()
 
     # Prepare intron data
-    intron_granges <- GenomicFeatures::tidyIntrons(txdb)
     intron_df <- data.frame(
         position = as.character(intron_granges),
         transcript_id = S4Vectors::mcols(intron_granges)$tx_name,
@@ -44,9 +94,6 @@ prepare_reference_annotations <- function(gtf_file) {
     )
 
     # Prepare transcript data
-    transcript_granges <- GenomicFeatures::transcripts(
-        txdb, columns = c("tx_name", "gene_id")
-    )
     transcript_position_df <- data.frame(
         transcript_id = S4Vectors::mcols(transcript_granges)$tx_name,
         tx_chromosome = as.character(GenomeInfoDb::seqnames(transcript_granges)),
@@ -113,13 +160,13 @@ prepare_reference_annotations <- function(gtf_file) {
 
     # Prepare transcript first/last exon/intron data
     transcript_exon_first_last_df <-
-        GenomicFeatures::exonsBy(txdb, by = "tx", use.names = TRUE) %>%
+        exon_granges_list %>%
         get_first_last_grange() %>%
         dplyr::rename(transcript_id = "feature_id",
                       first_exon_ref = "first_grange",
                       last_exon_ref = "last_grange")
     transcript_intron_first_last_df <-
-        GenomicFeatures::intronsByTranscript(txdb, use.names = TRUE) %>%
+        intron_granges_list %>%
         get_first_last_grange() %>%
         dplyr::rename(transcript_id = "feature_id",
                       first_intron_ref = "first_grange",

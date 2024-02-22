@@ -1,0 +1,13 @@
+sequence	source	gene	2000	12000	.	+	0	gene_id "Gene_1";
+sequence	source	transcript	2000	12000	.	+	0	gene_id "Gene_1"; transcript_id "Transcript_1";
+sequence	source	exon	2000	2500	.	+	0	gene_id "Gene_1"; transcript_id "Transcript_1";
+sequence	source	exon	7000	7500	.	+	0	gene_id "Gene_1"; transcript_id "Transcript_1";
+sequence	source	exon	7800	7900	.	+	0	gene_id "Gene_1"; transcript_id "Transcript_1";
+sequence	source	exon	11000	12000	.	+	0	gene_id "Gene_1"; transcript_id "Transcript_1";
+sequence	source	transcript	8000	11000	.	+	0	gene_id "Gene_1"; transcript_id "Transcript_2";
+sequence	source	exon	8000	8500	.	-	0	gene_id "Gene_1"; transcript_id "Transcript_2";
+sequence	source	exon	9000	9700	.	-	0	gene_id "Gene_1"; transcript_id "Transcript_2";
+sequence	source	exon	10400	11000	.	-	0	gene_id "Gene_1"; transcript_id "Transcript_2";
+sequence	source	transcript	8000	11000	.	+	0	gene_id "Gene_1"; transcript_id "Transcript_3";
+sequence	source	exon	8000	8500	.	-	0	gene_id "Gene_1"; transcript_id "Transcript_3";
+sequence	source	exon	10400	11000	.	-	0	gene_id "Gene_1"; transcript_id "Transcript_3";
