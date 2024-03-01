@@ -117,6 +117,14 @@ Data in the SummarizedExperiment objects can be accessed using the following com
 * **rowData(se)** - additional data regarding the analyzed features (e.g. reference transcript IDs for transcript level data)
 * **rowRanges(se)** - a GRangesList object (transcript level data) or a GRanges object (PSI level data) containing the genomic positions of the analyzed features
 
+# Parallelization
+
+Many functions in the Isosceles package can make use of multiple CPU cores, specified using the *ncpu* argument. The following tips should help you find the optimal *ncpu* value for your analysis:
+
+* Functions that take BAM files as an input (`bam_to_read_structures` and `bam_to_tcc`) can process each of them on a separate CPU core.
+* The `tcc_to_transcript` function parallelizes the EM algorithm computations at the SummarizedExperiment column level (samples for bulk RNA-Seq, cells for scRNA-Seq data).
+* In case of the `transcript_to_psi` function, PSI region detection can be parallelized at the gene level.
+
 # Bulk RNA-Seq analysis
 
 ## Preparing input data
