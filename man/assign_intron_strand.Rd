@@ -11,7 +11,7 @@ assign_intron_strand(
   min_intron_length = 30,
   max_intron_length = 5e+06,
   known_intron_motifs = c("GT-AG"),
-  rescue_annotated_introns = FALSE
+  rescue_annotated_introns = TRUE
 )
 }
 \arguments{

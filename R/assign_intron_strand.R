@@ -24,7 +24,7 @@ assign_intron_strand <- function(intron_granges,
                                  min_intron_length = 30,
                                  max_intron_length = 5e6,
                                  known_intron_motifs = c("GT-AG"),
-                                 rescue_annotated_introns = FALSE) {
+                                 rescue_annotated_introns = TRUE) {
 
     # Check arguments
     assertthat::assert_that(methods::is(intron_granges, "GRanges"))

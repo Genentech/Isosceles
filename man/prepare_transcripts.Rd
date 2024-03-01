@@ -7,11 +7,11 @@
 prepare_transcripts(
   gtf_file,
   genome_fasta_file,
-  bam_parsed,
+  bam_parsed = NULL,
   min_intron_length = 30,
   max_intron_length = 5e+06,
   known_intron_motifs = c("GT-AG"),
-  rescue_annotated_introns = FALSE,
+  rescue_annotated_introns = TRUE,
   known_intron_granges = NULL,
   min_bam_splice_read_count = 2,
   min_bam_splice_fraction = 0.1,

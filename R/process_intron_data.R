@@ -7,7 +7,7 @@ process_intron_data <- function(bam_parsed,
                                 min_intron_length = 30,
                                 max_intron_length = 5e6,
                                 known_intron_motifs = c("GT-AG"),
-                                rescue_annotated_introns = FALSE) {
+                                rescue_annotated_introns = TRUE) {
 
     # Check arguments
     assertthat::assert_that(is.data.frame(bam_parsed))
