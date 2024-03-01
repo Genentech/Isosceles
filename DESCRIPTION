@@ -19,6 +19,7 @@ Imports:
     tidyselect (>= 1.1.2),
     dplyr (>= 1.0.9),
     tidyr (>= 1.2.0),
+    forcats (>= 0.5.1),
     glue (>= 1.6.2),
     digest (>= 0.6.29),
     Rcpp (>= 1.0.9),
