@@ -53,7 +53,8 @@ library(Isosceles)
 Isosceles requires the following input files:
 
   * BAM file(s) containing aligned long reads
-    * We recommend [minimap2](https://github.com/lh3/minimap2) for all long-read alignments. 
+    * We recommend [minimap2](https://github.com/lh3/minimap2) for all long-read alignments.
+    * As Isosceles doesn't perform post-alignment splice junction correction, we also recommend running minimap2 with the '--junc-bed' flag. The intron position BED file required by it can be easily created using the `gtf_to_intron_bed` function.
     * Isosceles requires the BAM file for single-cell data to contain a tag storing the cell barcode. Several pipelines are suitable for this purpose, including [Sicelore](https://github.com/ucagenomix/sicelore), which is the default tag name (`BC` tag), but it can be changed using the *barcode_tag* argument of the `bam_to_tcc` function.
   * FASTA file containing the genomic sequences
   * GTF file containing the genomic annotations
@@ -69,7 +70,7 @@ Isosceles can used in of the following run modes, specified when the `bam_to_tcc
 
 # Genome annotations
 
-Isosceles selects the appropriate set of transcripts to quantify, depending on the given run mode, using the genomic annotations that are prepared with the `prepare_transcripts` function. This function needs a GTF file with reference annotations, and, optionally, transcript structures extracted from BAM files using the `bam_to_read_structures` function (which is necessary for detecting de novo transcripts).
+Isosceles selects the appropriate set of transcripts to quantify, depending on the given run mode, using the genomic annotations that are prepared with the `prepare_transcripts` function. This function needs a GTF file with reference annotations, and, optionally, transcript structures extracted from BAM files using the `bam_to_read_structures` function (which is necessary for detecting de novo transcripts). If de novo transcript detection is enabled, the numbers of spliced reads assigned to different splicing compatibility levels (described in detail in the Isosceles paper) can be plotted using the `plot_splicing_support_levels` function.
 
 There are several important aspects of the `prepare_transcripts` function to consider:
 
