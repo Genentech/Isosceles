@@ -55,10 +55,58 @@ Isosceles requires the following input files:
   * BAM file(s) containing aligned long reads
     * We recommend [minimap2](https://github.com/lh3/minimap2) for all long-read alignments.
     * As Isosceles doesn't perform post-alignment splice junction correction, we also recommend running minimap2 with the '--junc-bed' flag. The intron position BED file required by it can be easily created using the `gtf_to_intron_bed` function.
-    * Isosceles requires the BAM file for single-cell data to contain a tag storing the cell barcode. Several pipelines are suitable for this purpose, including [Sicelore](https://github.com/ucagenomix/sicelore), which is the default tag name (`BC` tag), but it can be changed using the *barcode_tag* argument of the `bam_to_tcc` function.
+    * Isosceles requires the BAM file for single-cell data to contain a tag storing the cell barcode - you can find more information on the topic in the [Preparing single-cell data](#preparing-single-cell-data) section.
   * FASTA file containing the genomic sequences
   * GTF file containing the genomic annotations
     * Isosceles requires the chromosome names to match between the FASTA file and the GTF file. No automatic conversion between alternative chromosome naming conventions (e.g. '1' and 'chr1') is performed.
+
+# Preparing single-cell data
+
+When analyzing scRNA-Seq data, Isosceles requires its input BAM files to contain a tag storing the cell barcode (`BC` tag by default, but it can be changed using the *barcode_tag* argument of the `bam_to_tcc` function). Several pipelines are suitable for this purpose, and the most popular options are described below. Depending on the pipeline, some additional steps (such as UMI deduplication) might need to be undertaken in order to make the output BAM file compatible with Isosceles.
+
+## Sicelore
+
+[Sicelore](https://github.com/ucagenomix/sicelore) is suite of tools designed to analyze long read single-cell sequencing data, utilizing Illumina short reads to guide cell barcode and UMI assignment. A tagged molecule BAM file created by following steps 1-8 of the workflow described on Sicelore's [webpage](https://github.com/ucagenomix/sicelore) can be used directly by Isosceles. Cell barcodes are stored in the `BC` tag, which is the default setting of the `bam_to_tcc` function.
+
+## Sicelore v2.1
+
+[Sicelore v2.1](https://github.com/ucagenomix/sicelore-2.1) is the next release of the Sicelore suite that doesn't rely on Illumina short read data for cell barcode and UMI assignment. A BAM file suitable for Isosceles analysis can be created by following steps 1-4b of the workflow described on the project's [webpage](https://github.com/ucagenomix/sicelore-2.1). As with the original version of Sicelore, cell barcodes are stored in the `BC` tag.
+
+## wf-single-cell
+
+**WARNING: wf-single-cell currently seems to contain [a bug](https://github.com/epi2me-labs/wf-single-cell/issues/78) causing it to produce BAM files with incorrect alignments. Until the bug is fixed, we don't recommend using wf-single-cell results as an input for Isosceles.**
+
+[wf-single-cell](https://github.com/epi2me-labs/wf-single-cell) is a Nextflow-based pipeline for cell barcode and UMI identification in Oxford Nanopore long read data. Detailed instructions on running the workflow can be found on its [webpage](https://github.com/epi2me-labs/wf-single-cell) - we recommend running it with the '--merge_bam True' flag in order to obtain one, merged BAM file for the processed data. As the output BAM file is not deduplicated by UMI, some additional steps need to be taken before it can be used with Isosceles.
+
+First, aligned reads tagged with UMI sequences that are shorter than expected (and therefore interfering with UMI deduplication) need to be filtered out. This can be achieved with [samtools](https://www.htslib.org) ('$alias' should to be replaced with a prefix appropriate for the given analysis):
+
+```bash
+samtools view -b \
+  --expr 'length([UB]) == 12' \
+  $alias/bams/$alias.tagged.sorted.bam \
+  > filtered.bam
+samtools index filtered.bam
+```
+
+In this case we used UMI length of 12 bp (appropriate for 3' 10xv3 data), but that value might vary depending on the used protocol.
+
+Read deduplication by UMI and mapping coordinates can be performed using [UMI-tools](https://github.com/CGATOxford/UMI-tools):
+
+```bash
+umi_tools dedup \
+  --extract-umi-method=tag \
+  --method=directional \
+  --per-gene \
+  --per-cell \
+  --umi-tag=UB \
+  --cell-tag=CB \
+  --gene-tag=GN \
+  --stdin filtered.bam \
+  --stdout dedup.bam
+samtools index dedup.bam
+```
+
+The deduplicated BAM file can now be used by Isosceles. As cell barcodes are stored in the `CB` tag in this case, it needs to be specified using the *barcode_tag* argument of the `bam_to_tcc` function.
 
 # Run modes
 
@@ -74,7 +122,7 @@ Isosceles selects the appropriate set of transcripts to quantify, depending on t
 
 There are several important aspects of the `prepare_transcripts` function to consider:
 
-  * Reference annotations from Ensembl or GENCODE are generally recommended. However, Isosceles can also work with merged GTF files that combine both reference and de novo detected transcripts from an external source. Examples of programs that produce these merged files include [StringTie](https://ccb.jhu.edu/software/stringtie/) and [IsoQaunt](https://github.com/ablab/IsoQuant). Utilizing merged annotations as reference can improve the sensitivity of discovering new transcripts without significantly increasing the false discovery rate. More details about the benchmarks can be found in the Isosceles paper and the [Isosceles_paper](https://github.com/timbitz/Isosceles_paper) repository.
+  * Reference annotations from Ensembl or GENCODE are generally recommended. However, Isosceles can also work with merged GTF files that combine both reference and de novo detected transcripts from an external source. Examples of programs that produce these merged files include [StringTie](https://ccb.jhu.edu/software/stringtie/) and [IsoQuant](https://github.com/ablab/IsoQuant). Utilizing merged annotations as reference can improve the sensitivity of discovering new transcripts without significantly increasing the false discovery rate. More details about the benchmarks can be found in the Isosceles paper and the [Isosceles_paper](https://github.com/timbitz/Isosceles_paper) repository.
   * Isosceles assigns new IDs to all transcripts (whether they are reference or de novo detected) based on stable hash identifiers. This simplifies the process of matching de novo transcripts across different data sets from the same genome build, irrespective of other experimental variables. The corresponding reference IDs compatible with each transcript can be found in transcript level SummarizedExperiment object's rowData (`rowData(se)$compatible_tx`).
   * Genes and transcripts are merged according to specific rules:
     * If annotated genes share introns, they are merged and assigned a new ID and symbol, comprising the original IDs and symbols separated by commas.
