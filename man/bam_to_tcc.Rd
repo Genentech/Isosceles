@@ -7,7 +7,7 @@
 bam_to_tcc(
   bam_files,
   transcript_data,
-  run_mode = "strict",
+  run_mode = "de_novo_loose",
   min_read_count = 1,
   min_relative_expression = 0,
   extend_spliced_transcripts = 100,
