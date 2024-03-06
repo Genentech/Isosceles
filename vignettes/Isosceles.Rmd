@@ -116,6 +116,8 @@ Isosceles can used in of the following run modes, specified when the `bam_to_tcc
   * **de_novo_strict** - de novo transcripts enabled, but all splice sites must be known (i.e. found in reference annotations or provided by the user).
   * **de_novo_loose** - de novo transcripts enabled, but all splice sites must be known or reproducibly passing filters in the aligned reads
 
+The default settings of de novo transcript detection used by the `bam_to_tcc` function should work well for a eukaryotic transcriptome, but for the analysis of spike-in data, such as SIRVs, we recommend increasing the read count threshold (the *min_read_count* argument) to a higher value (e.g. 50).
+
 # Genome annotations
 
 Isosceles selects the appropriate set of transcripts to quantify, depending on the given run mode, using the genomic annotations that are prepared with the `prepare_transcripts` function. This function needs a GTF file with reference annotations, and, optionally, transcript structures extracted from BAM files using the `bam_to_read_structures` function (which is necessary for detecting de novo transcripts). If de novo transcript detection is enabled, the numbers of spliced reads assigned to different splicing compatibility levels (described in detail in the Isosceles paper) can be plotted using the `plot_splicing_support_levels` function.
