@@ -68,7 +68,7 @@ test_that("add_psi_counts works as expected", {
         )
       )
     )
-    assertthat::assert_that(methods::is(se, "SummarizedExperiment"))
+    expect_true(methods::is(se, "SummarizedExperiment"))
     se_copy <- se
     SummarizedExperiment::assay(se_copy, "counts") <- NULL
     SummarizedExperiment::assay(se_copy, "other_counts") <- NULL
