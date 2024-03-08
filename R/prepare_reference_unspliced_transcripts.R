@@ -6,6 +6,10 @@
 #' the \code{\link{prepare_reference_annotations}} function.
 #' @param bin_size An integer scalar specifying the bin size for transcript
 #' start and end position binning.
+#' @param use_full_hash A logical scalar specifying if full value of the MD5
+#' hash (32 characters) should be used for the stable hash identifier rather
+#' than its 16-character substring. This option should not be used unless you
+#' encounter a hashing collision error (extremely unlikely).
 #' @return A named list containing following elements:
 #' \describe{
 #'   \item{tx_df}{a data frame storing reference unspliced transcript data}
@@ -15,13 +19,15 @@
 #' }
 #' @keywords internal
 prepare_reference_unspliced_transcripts <- function(anno_data,
-                                                    bin_size = 50) {
+                                                    bin_size = 50,
+                                                    use_full_hash = FALSE) {
 
     # Check arguments
     assertthat::assert_that(is.list(anno_data))
     assertthat::assert_that(assertthat::has_name(anno_data, "transcript_df"))
     assertthat::assert_that(is.data.frame(anno_data$transcript_df))
     assertthat::assert_that(assertthat::is.count(bin_size))
+    assertthat::assert_that(assertthat::is.flag(use_full_hash))
 
     # Prepare unspliced transcript data
     transcript_df <- anno_data$transcript_df %>%
@@ -31,9 +37,10 @@ prepare_reference_unspliced_transcripts <- function(anno_data,
     tx_granges <- methods::as(transcript_df$position, "GRanges")
     tx_chromosome <- as.character(GenomeInfoDb::seqnames(tx_granges))
     tx_strand <- as.character(BiocGenerics::strand(tx_granges))
+    hash_length <- ifelse(use_full_hash, 32, 16)
     hash_id <- paste0(tx_chromosome, tx_strand) %>%
-        sapply(digest::digest) %>%
-        substring(0, 4) %>%
+        sapply(digest::digest, algo = "md5") %>%
+        substring(0, hash_length - 12) %>%
         unname()
     hash_id <- paste0("000000000000", hash_id)
     names(tx_granges) <- hash_id

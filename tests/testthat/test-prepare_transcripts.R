@@ -106,6 +106,12 @@ test_that("prepare_transcripts works as expected", {
                                      bin_size = NULL),
                  regexp = "bin_size is not a count",
                  fixed = TRUE)
+    expect_error(prepare_transcripts(gtf_file = gtf_file,
+                                     genome_fasta_file = genome_fasta_file,
+                                     bam_parsed = bam_parsed,
+                                     use_full_hash = NULL),
+                 regexp = "use_full_hash is not a flag",
+                 fixed = TRUE)
 
     # Testing if function returns the expected output (reference and BAM data)
     expect_message(
@@ -164,6 +170,12 @@ test_that("prepare_transcripts works as expected", {
     expect_true(grepl("GRangesList", class(tx_list$tx_intron_granges_list)))
     expect_identical(length(tx_list$tx_intron_granges_list), 179L)
     expect_identical(length(unlist(tx_list$tx_intron_granges_list)), 1173L)
+    tx_list_full_hash <- prepare_transcripts(
+        gtf_file = gtf_file, genome_fasta_file = genome_fasta_file,
+        bam_parsed = bam_parsed, use_full_hash = TRUE
+    )
+    expect_identical(min(nchar(tx_list$tx_df$transcript_id)), 44L)
+    expect_identical(min(nchar(tx_list_full_hash$tx_df$transcript_id)), 64L)
 
     # Testing if function returns the expected output (reference data only)
     expect_message(

@@ -152,6 +152,12 @@ test_that("prepare_bam_transcripts works as expected", {
                                          min_bam_splice_fraction = 42),
                  regexp = "min_bam_splice_fraction not less than or equal to 1",
                  fixed = TRUE)
+    expect_error(prepare_bam_transcripts(bam_parsed = bam_parsed,
+                                         anno_data = anno_data,
+                                         genome_fasta_file = genome_fasta_file,
+                                         use_full_hash = NULL),
+                 regexp = "use_full_hash is not a flag",
+                 fixed = TRUE)
 
     # Testing if function returns the expected output
     expect_message(
@@ -209,4 +215,11 @@ test_that("prepare_bam_transcripts works as expected", {
     expect_true(grepl("GRangesList", class(tx_list$tx_intron_granges_list)))
     expect_identical(length(tx_list$tx_intron_granges_list), 74L)
     expect_identical(length(unlist(tx_list$tx_intron_granges_list)), 447L)
+    tx_list_full_hash <- prepare_bam_transcripts(
+        bam_parsed = bam_parsed, anno_data = anno_data,
+        genome_fasta_file = genome_fasta_file,
+        use_full_hash = TRUE
+    )
+    expect_identical(unique(nchar(tx_list$tx_df$hash_id)), 16L)
+    expect_identical(unique(nchar(tx_list_full_hash$tx_df$hash_id)), 32L)
 })

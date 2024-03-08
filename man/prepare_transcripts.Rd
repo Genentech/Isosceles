@@ -15,7 +15,8 @@ prepare_transcripts(
   known_intron_granges = NULL,
   min_bam_splice_read_count = 2,
   min_bam_splice_fraction = 0.1,
-  bin_size = 50
+  bin_size = 50,
+  use_full_hash = FALSE
 )
 }
 \arguments{
@@ -53,6 +54,11 @@ aligned reads.}
 
 \item{bin_size}{An integer scalar specifying the bin size for transcript
 start and end position binning.}
+
+\item{use_full_hash}{A logical scalar specifying if full value of the MD5
+hash (32 characters) should be used for the stable hash identifier rather
+than its 16-character substring. This option should not be used unless you
+encounter a hashing collision error (extremely unlikely).}
 }
 \value{
 A named list containing following elements:

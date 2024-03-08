@@ -14,7 +14,8 @@ prepare_bam_transcripts(
   rescue_annotated_introns = TRUE,
   known_intron_granges = NULL,
   min_bam_splice_read_count = 2,
-  min_bam_splice_fraction = 0.1
+  min_bam_splice_fraction = 0.1,
+  use_full_hash = FALSE
 )
 }
 \arguments{
@@ -49,6 +50,11 @@ threshold for splice sites confirmed by aligned reads.}
 \item{min_bam_splice_fraction}{A numeric scalar specifying the minimum
 connectivity fraction to a known splice site for splice sites confirmed by
 aligned reads.}
+
+\item{use_full_hash}{A logical scalar specifying if full value of the MD5
+hash (32 characters) should be used for the stable hash identifier rather
+than its 16-character substring. This option should not be used unless you
+encounter a hashing collision error (extremely unlikely).}
 }
 \value{
 A named list containing following elements:

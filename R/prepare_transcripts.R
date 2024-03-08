@@ -27,6 +27,10 @@
 #' aligned reads.
 #' @param bin_size An integer scalar specifying the bin size for transcript
 #' start and end position binning.
+#' @param use_full_hash A logical scalar specifying if full value of the MD5
+#' hash (32 characters) should be used for the stable hash identifier rather
+#' than its 16-character substring. This option should not be used unless you
+#' encounter a hashing collision error (extremely unlikely).
 #' @return A named list containing following elements:
 #' \describe{
 #'   \item{tx_df}{a data frame storing extracted transcript data}
@@ -45,7 +49,8 @@ prepare_transcripts <- function(gtf_file,
                                 known_intron_granges = NULL,
                                 min_bam_splice_read_count = 2,
                                 min_bam_splice_fraction = 0.1,
-                                bin_size = 50) {
+                                bin_size = 50,
+                                use_full_hash = FALSE) {
 
     # Check arguments
     assertthat::assert_that(assertthat::is.string(gtf_file))
@@ -73,13 +78,14 @@ prepare_transcripts <- function(gtf_file,
     assertthat::assert_that(min_bam_splice_fraction >= 0)
     assertthat::assert_that(min_bam_splice_fraction <= 1)
     assertthat::assert_that(assertthat::is.count(bin_size))
+    assertthat::assert_that(assertthat::is.flag(use_full_hash))
 
     # Prepare reference annotation data
     anno_data <- prepare_reference_annotations(gtf_file)
 
     # Prepare spliced reference transcripts
     tx_list_spliced <- prepare_reference_spliced_transcripts(
-        anno_data, bin_size = bin_size
+        anno_data, bin_size = bin_size, use_full_hash = use_full_hash
     )
     tx_df <- tx_list_spliced$tx_df
     tx_granges <- tx_list_spliced$tx_granges
@@ -89,7 +95,7 @@ prepare_transcripts <- function(gtf_file,
     # Prepare unspliced reference transcripts
     if (any(!anno_data$transcript_df$is_spliced)) {
         tx_list_unspliced <- prepare_reference_unspliced_transcripts(
-            anno_data, bin_size = bin_size
+            anno_data, bin_size = bin_size, use_full_hash = use_full_hash
         )
         tx_df <- rbind(tx_df, tx_list_unspliced$tx_df)
         tx_granges <- suppressWarnings(c(tx_granges, tx_list_unspliced$tx_granges))
@@ -112,7 +118,8 @@ prepare_transcripts <- function(gtf_file,
             rescue_annotated_introns = rescue_annotated_introns,
             known_intron_granges = known_intron_granges,
             min_bam_splice_read_count = min_bam_splice_read_count,
-            min_bam_splice_fraction = min_bam_splice_fraction
+            min_bam_splice_fraction = min_bam_splice_fraction,
+            use_full_hash = use_full_hash
         )
         tx_df <- rbind(tx_df, tx_list_bam$tx_df)
         tx_granges <- suppressWarnings(c(tx_granges, tx_list_bam$tx_granges))

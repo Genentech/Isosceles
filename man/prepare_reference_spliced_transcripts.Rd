@@ -4,7 +4,11 @@
 \alias{prepare_reference_spliced_transcripts}
 \title{Prepare reference spliced transcript data}
 \usage{
-prepare_reference_spliced_transcripts(anno_data, bin_size = 50)
+prepare_reference_spliced_transcripts(
+  anno_data,
+  bin_size = 50,
+  use_full_hash = FALSE
+)
 }
 \arguments{
 \item{anno_data}{A list containing genome annotation data returned by
@@ -12,6 +16,11 @@ the \code{\link{prepare_reference_annotations}} function.}
 
 \item{bin_size}{An integer scalar specifying the bin size for transcript
 start and end position binning.}
+
+\item{use_full_hash}{A logical scalar specifying if full value of the MD5
+hash (32 characters) should be used for the stable hash identifier rather
+than its 16-character substring. This option should not be used unless you
+encounter a hashing collision error (extremely unlikely).}
 }
 \value{
 A named list containing following elements:

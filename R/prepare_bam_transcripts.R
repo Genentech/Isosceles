@@ -24,6 +24,10 @@
 #' @param min_bam_splice_fraction A numeric scalar specifying the minimum
 #' connectivity fraction to a known splice site for splice sites confirmed by
 #' aligned reads.
+#' @param use_full_hash A logical scalar specifying if full value of the MD5
+#' hash (32 characters) should be used for the stable hash identifier rather
+#' than its 16-character substring. This option should not be used unless you
+#' encounter a hashing collision error (extremely unlikely).
 #' @return A named list containing following elements:
 #' \describe{
 #'   \item{tx_df}{a data frame storing extracted transcript data}
@@ -41,7 +45,8 @@ prepare_bam_transcripts <- function(bam_parsed,
                                     rescue_annotated_introns = TRUE,
                                     known_intron_granges = NULL,
                                     min_bam_splice_read_count = 2,
-                                    min_bam_splice_fraction = 0.1) {
+                                    min_bam_splice_fraction = 0.1,
+                                    use_full_hash = FALSE) {
 
     # Check arguments
     assertthat::assert_that(is.data.frame(bam_parsed))
@@ -73,12 +78,14 @@ prepare_bam_transcripts <- function(bam_parsed,
     assertthat::assert_that(length(min_bam_splice_fraction) == 1)
     assertthat::assert_that(min_bam_splice_fraction >= 0)
     assertthat::assert_that(min_bam_splice_fraction <= 1)
+    assertthat::assert_that(assertthat::is.flag(use_full_hash))
 
     # Helper functions
+    hash_length <- ifelse(use_full_hash, 32, 16)
     make_hash <- function(x) {
         x %>%
-            sapply(digest::digest) %>%
-            substring(0, 16) %>%
+            sapply(digest::digest, algo = "md5") %>%
+            substring(0, hash_length) %>%
             `names<-`(NULL)
     }
     median_position <- function(x) {
@@ -125,7 +132,8 @@ prepare_bam_transcripts <- function(bam_parsed,
         intron_positions = tx_intron_positions
     )
     assertthat::assert_that(
-        length(tx_df$hash_id) == length(unique(tx_df$hash_id))
+        length(tx_df$hash_id) == length(unique(tx_df$hash_id)),
+        msg = "A hashing collision has occurred"
     )
 
     # Assign transcripts to genes

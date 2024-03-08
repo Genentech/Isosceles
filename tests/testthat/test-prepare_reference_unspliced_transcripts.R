@@ -21,6 +21,10 @@ test_that("prepare_reference_unspliced_transcripts works as expected", {
                                                          bin_size = NULL),
                  regexp = "bin_size is not a count",
                  fixed = TRUE)
+    expect_error(prepare_reference_unspliced_transcripts(anno_data = anno_data,
+                                                         use_full_hash = NULL),
+                 regexp = "use_full_hash is not a flag",
+                 fixed = TRUE)
 
     # Testing if function returns the expected output
     expect_silent(
@@ -74,4 +78,10 @@ test_that("prepare_reference_unspliced_transcripts works as expected", {
     expect_true(grepl("GRangesList", class(tx_list$tx_intron_granges_list)))
     expect_identical(length(tx_list$tx_intron_granges_list), 8L)
     expect_identical(length(unlist(tx_list$tx_intron_granges_list)), 0L)
+    tx_list_full_hash <- prepare_reference_unspliced_transcripts(
+        anno_data = anno_data,
+        use_full_hash = TRUE
+    )
+    expect_identical(unique(nchar(tx_list$tx_df$hash_id)), 16L)
+    expect_identical(unique(nchar(tx_list_full_hash$tx_df$hash_id)), 32L)
 })
