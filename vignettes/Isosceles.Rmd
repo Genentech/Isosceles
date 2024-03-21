@@ -74,8 +74,6 @@ When analyzing scRNA-Seq data, Isosceles requires its input BAM files to contain
 
 ## wf-single-cell
 
-**WARNING: wf-single-cell currently seems to contain [a bug](https://github.com/epi2me-labs/wf-single-cell/issues/78) causing it to produce BAM files with incorrect alignments. Until the bug is fixed, we don't recommend using wf-single-cell results as an input for Isosceles.**
-
 [wf-single-cell](https://github.com/epi2me-labs/wf-single-cell) is a Nextflow-based pipeline for cell barcode and UMI identification in Oxford Nanopore long read data. Detailed instructions on running the workflow can be found on its [webpage](https://github.com/epi2me-labs/wf-single-cell) - we recommend running it with the '--merge_bam True' flag in order to obtain one, merged BAM file for the processed data. As the output BAM file is not deduplicated by UMI, some additional steps need to be taken before it can be used with Isosceles.
 
 First, aligned reads tagged with UMI sequences that are shorter than expected (and therefore interfering with UMI deduplication) need to be filtered out. This can be achieved with [samtools](https://www.htslib.org) ('$alias' should to be replaced with a prefix appropriate for the given analysis):
