@@ -31,11 +31,11 @@ merge_annotated_genes <- function(gene_df, intron_df) {
         dplyr::distinct()
 
     # Creating a shared intron graph & gene clustering
-    gene_graph <- igraph::graph.data.frame(
+    gene_graph <- igraph::graph_from_data_frame(
         intron_pairs, directed = FALSE,
         vertices = seq_along(gene_df$gene_id)
     )
-    gene_cluster_id <- igraph::clusters(gene_graph)$membership
+    gene_cluster_id <- igraph::components(gene_graph)$membership
 
     # Preparing merged gene data
     merged_gene_df <- gene_df %>%
