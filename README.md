@@ -17,7 +17,16 @@ Isosceles can be installed using the following commands:
 install.packages(c("BiocManager", "devtools"))
 BiocManager::install(c("scran", "scater", "uwot", "dittoSeq", "DEXSeq", 
                        "Nebulosa", "ggbio", "BiocStyle"))
-devtools::install_github("timbitz/Isosceles", dependencies = TRUE, upgrade = TRUE)
+devtools::install_github("timbitz/Isosceles", dependencies = TRUE, upgrade = TRUE,
+                         INSTALL_opts = "--install-tests")
+```
+
+We found that some versions of Isosceles' dependencies don't work together well, 
+which might cause problems with testing the package or building the vignettes. 
+If you encounter such issues, re-installing certain packages might be helpful: 
+```r
+install.packages("irlba") 
+devtools::install_github("powellgenomicslab/Nebulosa", upgrade = FALSE) 
 ```
 
 Load the Isosceles package:
