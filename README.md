@@ -47,6 +47,6 @@ testthat::test_package("Isosceles")
 ```
 
 In case of any problems, we recommend using the Isosceles Singularity image you
-can download from [Zenodo](https://zenodo.org/record/10064997/files/isosceles.sif)
+can download from [Zenodo](https://zenodo.org/doi/10.5281/zenodo.8180648)
 or installing the package in a
 [Docker container using a Bioconductor image](https://www.bioconductor.org/help/docker).
