@@ -39,7 +39,7 @@ Isosceles can be installed using the following commands:
 install.packages(c("BiocManager", "devtools"))
 BiocManager::install(c("scran", "scater", "uwot", "dittoSeq", "DEXSeq", 
                        "Nebulosa", "ggbio", "BiocStyle"))
-devtools::install_github("timbitz/Isosceles", dependencies = TRUE,
+devtools::install_github("Genentech/Isosceles", dependencies = TRUE,
                          upgrade = TRUE, INSTALL_opts = "--install-tests")
 ```
 
@@ -130,7 +130,7 @@ Isosceles selects the appropriate set of transcripts to quantify, depending on t
 
 There are several important aspects of the `prepare_transcripts` function to consider:
 
-  * Reference annotations from Ensembl or GENCODE are generally recommended. However, Isosceles can also work with merged GTF files that combine both reference and de novo detected transcripts from an external source. Examples of programs that produce these merged files include [StringTie](https://ccb.jhu.edu/software/stringtie/) and [IsoQuant](https://github.com/ablab/IsoQuant). Utilizing merged annotations as reference can improve the sensitivity of discovering new transcripts without significantly increasing the false discovery rate. More details about the benchmarks can be found in the Isosceles paper and the [Isosceles_paper](https://github.com/timbitz/Isosceles_paper) repository.
+  * Reference annotations from Ensembl or GENCODE are generally recommended. However, Isosceles can also work with merged GTF files that combine both reference and de novo detected transcripts from an external source. Examples of programs that produce these merged files include [StringTie](https://ccb.jhu.edu/software/stringtie/) and [IsoQuant](https://github.com/ablab/IsoQuant). Utilizing merged annotations as reference can improve the sensitivity of discovering new transcripts without significantly increasing the false discovery rate. More details about the benchmarks can be found in the Isosceles paper and the [Isosceles_Paper](https://github.com/Genentech/Isosceles_Paper) repository.
   * Isosceles assigns new IDs to all transcripts (whether they are reference or de novo detected) based on stable hash identifiers. This simplifies the process of matching de novo transcripts across different data sets from the same genome build, irrespective of other experimental variables. The corresponding reference IDs compatible with each transcript can be found in transcript level SummarizedExperiment object's rowData (`rowData(se)$compatible_tx`).
   * Genes and transcripts are merged according to specific rules:
     * If annotated genes share introns, they are merged and assigned a new ID and symbol, comprising the original IDs and symbols separated by commas.

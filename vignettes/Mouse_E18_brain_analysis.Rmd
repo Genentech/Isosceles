@@ -37,7 +37,7 @@ PSI events showing differences in expression along or between different cell
 lineages or trajectories. The analysis is based on mouse E18 brain scRNA-Seq 
 data from the Lebrigand et al. 2020 paper - all the details regarding how the 
 data was processed can be found in the `mouse_E18_analysis` directory of the 
-[Isosceles_paper](https://github.com/timbitz/Isosceles_Paper) repository.
+[Isosceles_Paper](https://github.com/Genentech/Isosceles_Paper) repository.
 
 Load the required packages:
 ```{r, message = FALSE}

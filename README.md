@@ -17,7 +17,7 @@ Isosceles can be installed using the following commands:
 install.packages(c("BiocManager", "devtools"))
 BiocManager::install(c("scran", "scater", "uwot", "dittoSeq", "DEXSeq", 
                        "Nebulosa", "ggbio", "BiocStyle"))
-devtools::install_github("timbitz/Isosceles", dependencies = TRUE, upgrade = TRUE,
+devtools::install_github("Genentech/Isosceles", dependencies = TRUE, upgrade = TRUE,
                          INSTALL_opts = "--install-tests")
 ```
 
@@ -36,8 +36,8 @@ library(Isosceles)
 
 ## Usage
 
-You can follow along with our vignettes ([Introduction to the Isosceles package](https://timbitz.github.io/Isosceles/docs/Isosceles.html), [Mouse E18 brain data analysis](https://timbitz.github.io/Isosceles/docs/Mouse_E18_brain_analysis.html))
-or the [reference manual](https://github.com/timbitz/Isosceles/blob/devel/docs/Isosceles.pdf)!
+You can follow along with our vignettes ([Introduction to the Isosceles package](https://genentech.github.io/Isosceles/docs/Isosceles.html), [Mouse E18 brain data analysis](https://genentech.github.io/Isosceles/docs/Mouse_E18_brain_analysis.html))
+or the [reference manual](https://github.com/Genentech/Isosceles/blob/devel/docs/Isosceles.pdf)!
 
 ## Troubleshooting
 
