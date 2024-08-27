@@ -8,7 +8,8 @@ from long reads, supporting both bulk RNA-Seq and scRNA-Seq technologies.
   <img src="docs/Isosceles_header.gif" width="600">
 </p>
 
-Preprint: https://www.biorxiv.org/content/10.1101/2023.11.30.566884
+
+Kabza M., Ritter A., Byrne A., Sereti K., Le D., Stephenson W., Sterne-Weiler T. Accurate long-read transcript discovery and quantification at single-cell, pseudo-bulk and bulk resolution with Isosceles. _Nat Commun_ **15**, 7316 (2024). https://doi.org/10.1038/s41467-024-51584-3
 
 ## Installation
 
