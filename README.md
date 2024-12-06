@@ -40,6 +40,12 @@ library(Isosceles)
 You can follow along with our vignettes ([Introduction to the Isosceles package](https://genentech.github.io/Isosceles/docs/Isosceles.html), [Mouse E18 brain data analysis](https://genentech.github.io/Isosceles/docs/Mouse_E18_brain_analysis.html))
 or the [reference manual](https://github.com/Genentech/Isosceles/blob/devel/docs/Isosceles.pdf)!
 
+## Best practices
+
+  * We recommend [minimap2](https://github.com/lh3/minimap2) for all long-read alignments.
+  * **As Isosceles doesn't perform post-alignment splice junction correction, we also recommend running minimap2 with the '\-\-junc-bed' flag.** The intron position BED file required by it can be easily created using the `gtf_to_intron_bed` function.
+  * The default settings of de novo transcript detection used by the `bam_to_tcc` function should work well for a eukaryotic transcriptome, but for the analysis of spike-in data, such as SIRVs, we recommend increasing the read count threshold (the *min_read_count* argument) to a higher value (e.g. 50).
+
 ## Troubleshooting
 
 You can check if the package works correctly by running its unit tests:
