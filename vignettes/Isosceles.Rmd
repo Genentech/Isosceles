@@ -56,13 +56,19 @@ Load the Isosceles package:
 library(Isosceles)
 ```
 
+# Best practices
+
+  * We recommend [minimap2](https://github.com/lh3/minimap2) for all long-read alignments.
+  * **As Isosceles doesn't perform post-alignment splice junction correction, we also recommend running minimap2 with the '\-\-junc-bed' flag.** The intron position BED file required by it can be easily created using the `gtf_to_intron_bed` function.
+  * The default settings of de novo transcript detection used by the `bam_to_tcc` function should work well for a eukaryotic transcriptome, but for the analysis of spike-in data, such as SIRVs, we recommend increasing the read count threshold (the *min_read_count* argument) to a higher value (e.g. 50).
+
 # Input data
 
 Isosceles requires the following input files:
 
   * BAM file(s) containing aligned long reads
     * We recommend [minimap2](https://github.com/lh3/minimap2) for all long-read alignments.
-    * As Isosceles doesn't perform post-alignment splice junction correction, we also recommend running minimap2 with the '--junc-bed' flag. The intron position BED file required by it can be easily created using the `gtf_to_intron_bed` function.
+    * **As Isosceles doesn't perform post-alignment splice junction correction, we also recommend running minimap2 with the '\-\-junc-bed' flag.** The intron position BED file required by it can be easily created using the `gtf_to_intron_bed` function.
     * Isosceles requires the BAM file for single-cell data to contain a tag storing the cell barcode - you can find more information on the topic in the [Preparing single-cell data](#preparing-single-cell-data) section.
   * FASTA file containing the genomic sequences
   * GTF file containing the genomic annotations
@@ -82,7 +88,7 @@ When analyzing scRNA-Seq data, Isosceles requires its input BAM files to contain
 
 ## wf-single-cell
 
-[wf-single-cell](https://github.com/epi2me-labs/wf-single-cell) is a Nextflow-based pipeline for cell barcode and UMI identification in Oxford Nanopore long read data. Detailed instructions on running the workflow can be found on its [webpage](https://github.com/epi2me-labs/wf-single-cell) - we recommend running it with the '--merge_bam True' flag in order to obtain one, merged BAM file for the processed data. As the output BAM file is not deduplicated by UMI, some additional steps need to be taken before it can be used with Isosceles.
+[wf-single-cell](https://github.com/epi2me-labs/wf-single-cell) is a Nextflow-based pipeline for cell barcode and UMI identification in Oxford Nanopore long read data. Detailed instructions on running the workflow can be found on its [webpage](https://github.com/epi2me-labs/wf-single-cell) - we recommend running it with the '\-\-merge_bam True' flag in order to obtain one, merged BAM file for the processed data. As the output BAM file is not deduplicated by UMI, some additional steps need to be taken before it can be used with Isosceles.
 
 First, aligned reads tagged with UMI sequences that are shorter than expected (and therefore interfering with UMI deduplication) need to be filtered out. This can be achieved with [samtools](https://www.htslib.org) ('$alias' should to be replaced with a prefix appropriate for the given analysis):
 
