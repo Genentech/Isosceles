@@ -43,7 +43,7 @@ or the [reference manual](https://github.com/Genentech/Isosceles/blob/devel/docs
 ## Best practices
 
   * We recommend [minimap2](https://github.com/lh3/minimap2) for all long-read alignments.
-  * **Isosceles doesn't perform post-hoc splice junction correction, so is critical to run minimap2 with the '\-\-junc-bed' flag.** The intron position BED file required by it can be easily created using the `gtf_to_intron_bed` function.
+  * **Isosceles doesn't perform post-hoc splice junction correction, so it is critical to run minimap2 with the '\-\-junc-bed' flag.** The intron position BED file required by it can be easily created using the `gtf_to_intron_bed` function.
   * The default settings of de novo transcript detection used by the `bam_to_tcc` function should work well for most expected read depths across eukaryotic transcriptomes, but for the analysis of spike-in data, such as SIRVs, we recommend increasing the read count threshold (the *min_read_count* argument) to a higher value (e.g. 50).
 
 ## Troubleshooting
