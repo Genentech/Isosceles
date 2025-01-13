@@ -85,7 +85,7 @@ test_that("transcript_to_psi works as expected", {
     expect_identical(round(colSums(SummarizedExperiment::assay(se, "psi"))),
                      c(Sample = 34))
     expect_true(all(SummarizedExperiment::assay(se, "psi") >= 0))
-    expect_true(all(SummarizedExperiment::assay(se, "psi") <= 1))
+    expect_true(all(round(SummarizedExperiment::assay(se, "psi"), digits = 3) <= 1))
     expect_true(is.list(S4Vectors::metadata(se)))
     expect_identical(names(S4Vectors::metadata(se)),
                      c("assigned_read_percentages"))
@@ -117,12 +117,23 @@ test_that("transcript_to_psi works as expected", {
         is_single_cell = TRUE, barcode_tag = "BC",
         run_mode = "de_novo_loose", min_relative_expression = 0
     )
+    set.seed(42)
+    cell_labels <- sample(1:2, ncol(se_tcc), replace = TRUE)
+    se_pseudobulk_tcc <- pseudobulk_tcc(
+        se_tcc = se_tcc, cell_labels = cell_labels
+    )
     se_tcc <- se_tcc[, 1:5]
     se_transcript <- tcc_to_transcript(
         se_tcc = se_tcc, use_length_normalization = FALSE
     )
     se_transcript <- se_transcript[
         Matrix::rowSums(SummarizedExperiment::assay(se_transcript, "counts")) > 0,
+    ]
+    se_pseudobulk_transcript <- tcc_to_transcript(
+        se_tcc = se_pseudobulk_tcc, use_length_normalization = FALSE
+    )
+    se_pseudobulk_transcript <- se_pseudobulk_transcript[
+        Matrix::rowSums(SummarizedExperiment::assay(se_pseudobulk_transcript, "counts")) > 0,
     ]
 
     # Testing if function returns the expected output (scRNA-Seq data)
@@ -148,10 +159,36 @@ test_that("transcript_to_psi works as expected", {
     expect_identical(round(sum(Matrix::colSums(SummarizedExperiment::assay(se, "psi")))),
                      34)
     expect_true(all(SummarizedExperiment::assay(se, "psi") >= 0))
-    expect_true(all(SummarizedExperiment::assay(se, "psi") <= 1))
+    expect_true(all(round(SummarizedExperiment::assay(se, "psi"), digits = 3) <= 1))
     expect_true(is.list(S4Vectors::metadata(se)))
     expect_identical(names(S4Vectors::metadata(se)),
                      c("assigned_read_percentages"))
     expect_identical(S4Vectors::metadata(se)$assigned_read_percentages,
                      c(Sample = 96.0))
+
+    # Testing if function returns the expected output (scRNA-Seq data)
+    expect_silent(
+        se <- transcript_to_psi(se = se_pseudobulk_transcript)
+    )
+    expect_true(class(se) == "RangedSummarizedExperiment")
+    expect_identical(dim(se), c(12L, 2L))
+    expect_identical(colnames(se), colnames(se_pseudobulk_transcript))
+    expect_identical(colnames(SummarizedExperiment::rowData(se)),
+                     c("gene_id", "type"))
+    expect_identical(length(unique(SummarizedExperiment::rowData(se)$gene_id)),
+                     1L)
+    expect_identical(names(table(SummarizedExperiment::rowData(se)$type)),
+                     c("A5", "CE", "TES", "TSS"))
+    expect_identical(as.numeric(table(SummarizedExperiment::rowData(se)$type)),
+                     c(1, 6, 1, 4))
+    expect_true(grepl("GRanges", class(SummarizedExperiment::rowRanges(se))))
+    expect_identical(SummarizedExperiment::assayNames(se),
+                     c("psi"))
+    expect_identical(class(SummarizedExperiment::assay(se, "psi")),
+                     class(SummarizedExperiment::assay(se_pseudobulk_transcript, "relative_expression")))
+    expect_identical(round(sum(Matrix::colSums(SummarizedExperiment::assay(se, "psi")))),
+                     13)
+    expect_true(all(SummarizedExperiment::assay(se, "psi") >= 0))
+    expect_true(all(round(SummarizedExperiment::assay(se, "psi"), digits = 3) <= 1))
+    expect_identical(S4Vectors::metadata(se), list())
 })

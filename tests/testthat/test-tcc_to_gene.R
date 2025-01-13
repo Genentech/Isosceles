@@ -118,6 +118,11 @@ test_that("tcc_to_gene works as expected", {
         is_single_cell = TRUE, barcode_tag = "BC",
         run_mode = "de_novo_loose", min_relative_expression = 0
     )
+    set.seed(42)
+    cell_labels <- sample(1:2, ncol(se_tcc), replace = TRUE)
+    se_pseudobulk_tcc <- pseudobulk_tcc(
+        se_tcc = se_tcc, cell_labels = cell_labels
+    )
 
     # Testing if function returns the expected output (scRNA-Seq data)
     expect_silent(
@@ -156,4 +161,39 @@ test_that("tcc_to_gene works as expected", {
                      c("assigned_read_percentages"))
     expect_identical(S4Vectors::metadata(se)$assigned_read_percentages,
                      c(Sample = 96.0))
+
+    # Testing if function returns the expected output (scRNA-Seq pseudobulk data)
+    expect_silent(
+        se <- tcc_to_gene(se_tcc = se_pseudobulk_tcc)
+    )
+    expect_true(class(se) == "SummarizedExperiment")
+    expect_identical(
+        dim(se),
+        c(length(unique(S4Vectors::metadata(se_pseudobulk_tcc)$transcript_df$gene_id)),
+          ncol(se_pseudobulk_tcc))
+    )
+    expect_identical(colnames(se), colnames(se_pseudobulk_tcc))
+    expect_identical(
+        rownames(se),
+        levels(factor(S4Vectors::metadata(se_pseudobulk_tcc)$transcript_df$gene_id))
+    )
+    expect_identical(dim(SummarizedExperiment::colData(se)), c(ncol(se), 0L))
+    expect_identical(colnames(SummarizedExperiment::rowData(se)),
+                     c("gene_id", "gene_name"))
+    expect_true(is.null(SummarizedExperiment::rowRanges(se)))
+    expect_identical(SummarizedExperiment::assayNames(se),
+                     c("counts", "tpm", "relative_expression"))
+    expect_identical(class(SummarizedExperiment::assay(se, "counts")),
+                     class(SummarizedExperiment::assay(se_pseudobulk_tcc, "counts")))
+    expect_identical(class(SummarizedExperiment::assay(se, "tpm")),
+                     class(SummarizedExperiment::assay(se_pseudobulk_tcc, "tpm")))
+    expect_identical(class(SummarizedExperiment::assay(se, "relative_expression")),
+                     class(SummarizedExperiment::assay(se_pseudobulk_tcc, "relative_expression")))
+    expect_identical(round(Matrix::colSums(SummarizedExperiment::assay(se, "counts"))),
+                     round(Matrix::colSums(SummarizedExperiment::assay(se_pseudobulk_tcc, "counts"))))
+    expect_identical(round(Matrix::colSums(SummarizedExperiment::assay(se, "tpm"))),
+                     round(Matrix::colSums(SummarizedExperiment::assay(se_pseudobulk_tcc, "tpm"))))
+    expect_identical(round(Matrix::colSums(SummarizedExperiment::assay(se, "relative_expression"))),
+                     round(Matrix::colSums(SummarizedExperiment::assay(se_pseudobulk_tcc, "relative_expression"))))
+    expect_identical(S4Vectors::metadata(se), list())
 })
