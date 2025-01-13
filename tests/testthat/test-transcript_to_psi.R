@@ -86,7 +86,11 @@ test_that("transcript_to_psi works as expected", {
                      c(Sample = 34))
     expect_true(all(SummarizedExperiment::assay(se, "psi") >= 0))
     expect_true(all(SummarizedExperiment::assay(se, "psi") <= 1))
-    expect_identical(S4Vectors::metadata(se), list())
+    expect_true(is.list(S4Vectors::metadata(se)))
+    expect_identical(names(S4Vectors::metadata(se)),
+                     c("assigned_read_percentages"))
+    expect_identical(S4Vectors::metadata(se)$assigned_read_percentages,
+                     c(Sample = 53.5))
 
     # Preparing test data (scRNA-Seq data)
     bam_file <- system.file(
@@ -145,5 +149,9 @@ test_that("transcript_to_psi works as expected", {
                      34)
     expect_true(all(SummarizedExperiment::assay(se, "psi") >= 0))
     expect_true(all(SummarizedExperiment::assay(se, "psi") <= 1))
-    expect_identical(S4Vectors::metadata(se), list())
+    expect_true(is.list(S4Vectors::metadata(se)))
+    expect_identical(names(S4Vectors::metadata(se)),
+                     c("assigned_read_percentages"))
+    expect_identical(S4Vectors::metadata(se)$assigned_read_percentages,
+                     c(Sample = 96.0))
 })

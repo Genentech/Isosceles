@@ -87,7 +87,11 @@ test_that("tcc_to_gene works as expected", {
                      round(colSums(SummarizedExperiment::assay(se_tcc, "tpm"))))
     expect_identical(round(colSums(SummarizedExperiment::assay(se, "relative_expression"))),
                      round(colSums(SummarizedExperiment::assay(se_tcc, "relative_expression"))))
-    expect_identical(S4Vectors::metadata(se), list())
+    expect_true(is.list(S4Vectors::metadata(se)))
+    expect_identical(names(S4Vectors::metadata(se)),
+                     c("assigned_read_percentages"))
+    expect_identical(S4Vectors::metadata(se)$assigned_read_percentages,
+                     c(Sample = 53.5))
 
     # Preparing test data (scRNA-Seq data)
     bam_file <- system.file(
@@ -147,5 +151,9 @@ test_that("tcc_to_gene works as expected", {
                      round(Matrix::colSums(SummarizedExperiment::assay(se_tcc, "tpm"))))
     expect_identical(round(Matrix::colSums(SummarizedExperiment::assay(se, "relative_expression"))),
                      round(Matrix::colSums(SummarizedExperiment::assay(se_tcc, "relative_expression"))))
-    expect_identical(S4Vectors::metadata(se), list())
+    expect_true(is.list(S4Vectors::metadata(se)))
+    expect_identical(names(S4Vectors::metadata(se)),
+                     c("assigned_read_percentages"))
+    expect_identical(S4Vectors::metadata(se)$assigned_read_percentages,
+                     c(Sample = 96.0))
 })

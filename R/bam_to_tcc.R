@@ -346,9 +346,15 @@ bam_to_tcc <- function(bam_files,
         })
         count_df <- count_df[ec_gene_count == 1,]
 
+        ## Calculate the percentage of reads assigned to ECs
+        assigned_read_percentage <- round(
+            sum(count_df$count) / length(read_length) * 100, digits = 1
+        )
+
         return(list(
             ec_count_df = count_df,
-            read_length = read_length
+            read_length = read_length,
+            assigned_read_percentage = assigned_read_percentage
         ))
     }, BPPARAM = BPPARAM)
     ec_count_df <- lapply(bam_list, "[[", "ec_count_df")
@@ -358,6 +364,10 @@ bam_to_tcc <- function(bam_files,
     mean_read_length <- lapply(bam_list, "[[", "read_length") %>%
         unlist() %>%
         mean()
+
+    # Prepare assigned read percentage data
+    assigned_read_percentages <- sapply(bam_list, "[[", "assigned_read_percentage")
+    names(assigned_read_percentages) <- names(bam_files)
 
     # Prepare sample IDs
     sample_ids <- names(bam_files)
@@ -435,6 +445,7 @@ bam_to_tcc <- function(bam_files,
     S4Vectors::metadata(se)$transcript_df <- tx_df
     S4Vectors::metadata(se)$transcript_exon_granges_list <- tx_exon_granges_list
     S4Vectors::metadata(se)$mean_read_length <- mean_read_length
+    S4Vectors::metadata(se)$assigned_read_percentages <- assigned_read_percentages
 
     return(se)
 }

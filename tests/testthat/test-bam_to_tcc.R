@@ -161,7 +161,8 @@ test_that("bam_to_tcc works as expected", {
     expect_true(is.list(S4Vectors::metadata(se)))
     expect_identical(names(S4Vectors::metadata(se)),
                      c("compatibility_matrix", "transcript_df",
-                       "transcript_exon_granges_list", "mean_read_length"))
+                       "transcript_exon_granges_list", "mean_read_length",
+                       "assigned_read_percentages"))
     expect_true(class(S4Vectors::metadata(se)$compatibility_matrix) == "dgCMatrix")
     expect_identical(dim(S4Vectors::metadata(se)$compatibility_matrix),
                      c(18L, 105L))
@@ -178,6 +179,8 @@ test_that("bam_to_tcc works as expected", {
     expect_identical(length(unlist(S4Vectors::metadata(se)$transcript_exon_granges_list)),
                      831L)
     expect_identical(round(S4Vectors::metadata(se)$mean_read_length), 1315)
+    expect_identical(S4Vectors::metadata(se)$assigned_read_percentages,
+                     c(Sample = 45.0))
 
     # Testing if function returns the expected output (bulk RNA-Seq data, de_novo_strict mode)
     expect_message(
@@ -211,7 +214,8 @@ test_that("bam_to_tcc works as expected", {
     expect_true(is.list(S4Vectors::metadata(se)))
     expect_identical(names(S4Vectors::metadata(se)),
                      c("compatibility_matrix", "transcript_df",
-                       "transcript_exon_granges_list", "mean_read_length"))
+                       "transcript_exon_granges_list", "mean_read_length",
+                       "assigned_read_percentages"))
     expect_true(class(S4Vectors::metadata(se)$compatibility_matrix) == "dgCMatrix")
     expect_identical(dim(S4Vectors::metadata(se)$compatibility_matrix),
                      c(20L, 107L))
@@ -229,6 +233,8 @@ test_that("bam_to_tcc works as expected", {
     expect_identical(length(unlist(S4Vectors::metadata(se)$transcript_exon_granges_list)),
                      855L)
     expect_identical(round(S4Vectors::metadata(se)$mean_read_length), 1315)
+    expect_identical(S4Vectors::metadata(se)$assigned_read_percentages,
+                     c(Sample = 46.5))
 
     # Testing if function returns the expected output (bulk RNA-Seq data, de_novo_loose mode)
     expect_message(
@@ -262,7 +268,8 @@ test_that("bam_to_tcc works as expected", {
     expect_true(is.list(S4Vectors::metadata(se)))
     expect_identical(names(S4Vectors::metadata(se)),
                      c("compatibility_matrix", "transcript_df",
-                       "transcript_exon_granges_list", "mean_read_length"))
+                       "transcript_exon_granges_list", "mean_read_length",
+                       "assigned_read_percentages"))
     expect_true(class(S4Vectors::metadata(se)$compatibility_matrix) == "dgCMatrix")
     expect_identical(dim(S4Vectors::metadata(se)$compatibility_matrix),
                      c(26L, 112L))
@@ -280,6 +287,8 @@ test_that("bam_to_tcc works as expected", {
     expect_identical(length(unlist(S4Vectors::metadata(se)$transcript_exon_granges_list)),
                      909L)
     expect_identical(round(S4Vectors::metadata(se)$mean_read_length), 1315)
+    expect_identical(S4Vectors::metadata(se)$assigned_read_percentages,
+                     c(Sample = 53.5))
 
     # Testing if function returns the expected output (bulk RNA-Seq data, de_novo_full mode)
     expect_warning(
@@ -313,7 +322,8 @@ test_that("bam_to_tcc works as expected", {
     expect_true(is.list(S4Vectors::metadata(se)))
     expect_identical(names(S4Vectors::metadata(se)),
                      c("compatibility_matrix", "transcript_df",
-                       "transcript_exon_granges_list", "mean_read_length"))
+                       "transcript_exon_granges_list", "mean_read_length",
+                       "assigned_read_percentages"))
     expect_true(class(S4Vectors::metadata(se)$compatibility_matrix) == "dgCMatrix")
     expect_identical(dim(S4Vectors::metadata(se)$compatibility_matrix),
                      c(24L, 17L))
@@ -331,6 +341,8 @@ test_that("bam_to_tcc works as expected", {
     expect_identical(length(unlist(S4Vectors::metadata(se)$transcript_exon_granges_list)),
                      175L)
     expect_identical(round(S4Vectors::metadata(se)$mean_read_length), 1315)
+    expect_identical(S4Vectors::metadata(se)$assigned_read_percentages,
+                     c(Sample = 45.7))
 
     # Preparing test data (scRNA-Seq data)
     bam_file <- system.file(
@@ -384,7 +396,8 @@ test_that("bam_to_tcc works as expected", {
     expect_true(is.list(S4Vectors::metadata(se)))
     expect_identical(names(S4Vectors::metadata(se)),
                      c("compatibility_matrix", "transcript_df",
-                       "transcript_exon_granges_list", "mean_read_length"))
+                       "transcript_exon_granges_list", "mean_read_length",
+                       "assigned_read_percentages"))
     expect_true(class(S4Vectors::metadata(se)$compatibility_matrix) == "dgCMatrix")
     expect_identical(dim(S4Vectors::metadata(se)$compatibility_matrix),
                      c(6L, 4109L))
@@ -401,6 +414,8 @@ test_that("bam_to_tcc works as expected", {
     expect_identical(length(unlist(S4Vectors::metadata(se)$transcript_exon_granges_list)),
                      29269L)
     expect_identical(round(S4Vectors::metadata(se)$mean_read_length), 1014)
+    expect_identical(S4Vectors::metadata(se)$assigned_read_percentages,
+                     c(Sample = 89.3))
 
     # Testing if function returns the expected output (scRNA-Seq data, de_novo_strict mode)
     expect_message(
@@ -433,7 +448,8 @@ test_that("bam_to_tcc works as expected", {
     expect_true(is.list(S4Vectors::metadata(se)))
     expect_identical(names(S4Vectors::metadata(se)),
                      c("compatibility_matrix", "transcript_df",
-                       "transcript_exon_granges_list", "mean_read_length"))
+                       "transcript_exon_granges_list", "mean_read_length",
+                       "assigned_read_percentages"))
     expect_true(class(S4Vectors::metadata(se)$compatibility_matrix) == "dgCMatrix")
     expect_identical(dim(S4Vectors::metadata(se)$compatibility_matrix),
                      c(8L, 4111L))
@@ -451,6 +467,8 @@ test_that("bam_to_tcc works as expected", {
     expect_identical(length(unlist(S4Vectors::metadata(se)$transcript_exon_granges_list)),
                      29282L)
     expect_identical(round(S4Vectors::metadata(se)$mean_read_length), 1014)
+    expect_identical(S4Vectors::metadata(se)$assigned_read_percentages,
+                     c(Sample = 96.0))
 
     # Testing if function returns the expected output (scRNA-Seq data, de_novo_loose mode)
     expect_message(
@@ -483,7 +501,8 @@ test_that("bam_to_tcc works as expected", {
     expect_true(is.list(S4Vectors::metadata(se)))
     expect_identical(names(S4Vectors::metadata(se)),
                      c("compatibility_matrix", "transcript_df",
-                       "transcript_exon_granges_list", "mean_read_length"))
+                       "transcript_exon_granges_list", "mean_read_length",
+                       "assigned_read_percentages"))
     expect_true(class(S4Vectors::metadata(se)$compatibility_matrix) == "dgCMatrix")
     expect_identical(dim(S4Vectors::metadata(se)$compatibility_matrix),
                      c(8L, 4111L))
@@ -501,6 +520,8 @@ test_that("bam_to_tcc works as expected", {
     expect_identical(length(unlist(S4Vectors::metadata(se)$transcript_exon_granges_list)),
                      29282L)
     expect_identical(round(S4Vectors::metadata(se)$mean_read_length), 1014)
+    expect_identical(S4Vectors::metadata(se)$assigned_read_percentages,
+                     c(Sample = 96.0))
 
     # Testing if function returns the expected output (scRNA-Seq data, de_novo_full mode)
     expect_warning(
@@ -533,7 +554,8 @@ test_that("bam_to_tcc works as expected", {
     expect_true(is.list(S4Vectors::metadata(se)))
     expect_identical(names(S4Vectors::metadata(se)),
                      c("compatibility_matrix", "transcript_df",
-                       "transcript_exon_granges_list", "mean_read_length"))
+                       "transcript_exon_granges_list", "mean_read_length",
+                       "assigned_read_percentages"))
     expect_true(class(S4Vectors::metadata(se)$compatibility_matrix) == "dgCMatrix")
     expect_identical(dim(S4Vectors::metadata(se)$compatibility_matrix),
                      c(7L, 6L))
@@ -551,4 +573,6 @@ test_that("bam_to_tcc works as expected", {
     expect_identical(length(unlist(S4Vectors::metadata(se)$transcript_exon_granges_list)),
                      35L)
     expect_identical(round(S4Vectors::metadata(se)$mean_read_length), 1014)
+    expect_identical(S4Vectors::metadata(se)$assigned_read_percentages,
+                     c(Sample = 88.0))
 })

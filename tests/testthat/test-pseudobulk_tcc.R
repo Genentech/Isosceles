@@ -67,6 +67,25 @@ test_that("pseudobulk_tcc works as expected", {
                      round(Matrix::rowSums(SummarizedExperiment::assay(se_tcc, "counts"))))
     expect_true(all(round(Matrix::colSums(SummarizedExperiment::assay(se, "tpm"))) == 1e6))
     expect_true(all(round(Matrix::colSums(SummarizedExperiment::assay(se, "relative_expression"))) == 1))
-    expect_identical(S4Vectors::metadata(se),
-                     S4Vectors::metadata(se_tcc))
+    expect_true(is.list(S4Vectors::metadata(se)))
+    expect_identical(names(S4Vectors::metadata(se)),
+                     c("compatibility_matrix", "transcript_df",
+                       "transcript_exon_granges_list", "mean_read_length"))
+    expect_true(class(S4Vectors::metadata(se)$compatibility_matrix) == "dgCMatrix")
+    expect_identical(dim(S4Vectors::metadata(se)$compatibility_matrix),
+                     c(8L, 4111L))
+    expect_true(is.data.frame(S4Vectors::metadata(se)$transcript_df))
+    expect_identical(dim(S4Vectors::metadata(se)$transcript_df),
+                     c(4111L, 12L))
+    expect_identical(colnames(S4Vectors::metadata(se)$transcript_df),
+                     colnames(transcript_data$tx_df))
+    expect_true(all(S4Vectors::metadata(se)$transcript_df$fivethree_support_level == "FL"))
+    expect_true(all(S4Vectors::metadata(se)$transcript_df$splicing_support_level %in%
+                        c("AP", "EC", "NC", "DN")))
+    expect_true(grepl("GRangesList", class(S4Vectors::metadata(se)$transcript_exon_granges_list)))
+    expect_identical(length(S4Vectors::metadata(se)$transcript_exon_granges_list),
+                     4111L)
+    expect_identical(length(unlist(S4Vectors::metadata(se)$transcript_exon_granges_list)),
+                     29282L)
+    expect_identical(round(S4Vectors::metadata(se)$mean_read_length), 1014)
 })

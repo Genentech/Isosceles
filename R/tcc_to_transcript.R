@@ -114,6 +114,8 @@ tcc_to_transcript <- function(se_tcc,
     SummarizedExperiment::assay(se, "tpm") <- calculate_tpm(se)
     SummarizedExperiment::assay(se, "relative_expression") <-
         calculate_relative_expression(se)
+    S4Vectors::metadata(se)$assigned_read_percentages <-
+        S4Vectors::metadata(se_tcc)$assigned_read_percentages
 
     return(se)
 }

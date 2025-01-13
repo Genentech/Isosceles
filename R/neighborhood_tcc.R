@@ -64,6 +64,7 @@ neighborhood_tcc <- function(se_tcc,
         colData = SummarizedExperiment::colData(se_tcc)
     )
     S4Vectors::metadata(se) <- S4Vectors::metadata(se_tcc)
+    S4Vectors::metadata(se)$assigned_read_percentages <- NULL
     SummarizedExperiment::assay(se, "tpm") <- calculate_tpm(se)
     SummarizedExperiment::assay(se, "relative_expression") <-
         calculate_relative_expression(se)

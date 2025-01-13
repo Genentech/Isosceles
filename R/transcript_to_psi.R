@@ -213,6 +213,8 @@ transcript_to_psi <- function(se,
     )
     row_data_columns <- c("gene_id", "type")
     SummarizedExperiment::rowData(se_psi) <- regions_data[, row_data_columns]
+    S4Vectors::metadata(se_psi)$assigned_read_percentages <-
+        S4Vectors::metadata(se)$assigned_read_percentages
 
     # Remove regions with no expression
     region_selector <-

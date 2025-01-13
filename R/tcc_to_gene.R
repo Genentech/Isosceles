@@ -75,6 +75,8 @@ tcc_to_gene <- function(se_tcc) {
         rowData = gene_df,
         colData = SummarizedExperiment::colData(se_tcc)
     )
+    S4Vectors::metadata(se)$assigned_read_percentages <-
+        S4Vectors::metadata(se_tcc)$assigned_read_percentages
 
     return(se)
 }

@@ -35,6 +35,7 @@ pseudobulk_tcc <- function(se_tcc,
     SummarizedExperiment::rowData(se_pseudobulk) <-
         SummarizedExperiment::rowData(se_tcc)
     S4Vectors::metadata(se_pseudobulk) <- S4Vectors::metadata(se_tcc)
+    S4Vectors::metadata(se_pseudobulk)$assigned_read_percentages <- NULL
     SummarizedExperiment::assay(se_pseudobulk, "tpm") <-
         calculate_tpm(se_pseudobulk)
     SummarizedExperiment::assay(se_pseudobulk, "relative_expression") <-
