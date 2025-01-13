@@ -369,6 +369,22 @@ bam_to_tcc <- function(bam_files,
     assigned_read_percentages <- sapply(bam_list, "[[", "assigned_read_percentage")
     names(assigned_read_percentages) <- names(bam_files)
 
+    # Throw a warning for samples with low assigned read percentage
+    assigned_read_percentage_threshold <- 50
+    assigned_read_percentages_low <- assigned_read_percentages[
+        assigned_read_percentages < assigned_read_percentage_threshold
+    ]
+    if (length(assigned_read_percentages_low) > 0) {
+        warning("Some of the samples (",
+                paste0(names(assigned_read_percentages_low), collapse = ", "),
+                ") have low percentage (<",
+                sprintf("%.1f", assigned_read_percentage_threshold),
+                "%) of reads assigned to the provided transcript set. ",
+                "Please check if you're using the correct annotations and ",
+                "that the aligner is provided with the annotated splice junctions ",
+                "(e.g. the '--junc-bed' flag for minimap2).")
+    }
+
     # Prepare sample IDs
     sample_ids <- names(bam_files)
     if (is_single_cell) {

@@ -130,12 +130,12 @@ test_that("bam_to_tcc works as expected", {
                  fixed = TRUE)
 
     # Testing if function returns the expected output (bulk RNA-Seq data, strict mode)
-    expect_message(
+    expect_warning(
         se <- bam_to_tcc(
             bam_files = bam_files, transcript_data = transcript_data,
             run_mode = "strict"
         ),
-        regexp = "read_id",
+        regexp = "have low percentage",
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")
@@ -183,12 +183,12 @@ test_that("bam_to_tcc works as expected", {
                      c(Sample = 45.0))
 
     # Testing if function returns the expected output (bulk RNA-Seq data, de_novo_strict mode)
-    expect_message(
+    expect_warning(
         se <- bam_to_tcc(
             bam_files = bam_files, transcript_data = transcript_data,
             run_mode = "de_novo_strict", min_relative_expression = 0
         ),
-        regexp = "read_id",
+        regexp = "have low percentage",
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")
@@ -292,11 +292,15 @@ test_that("bam_to_tcc works as expected", {
 
     # Testing if function returns the expected output (bulk RNA-Seq data, de_novo_full mode)
     expect_warning(
-        se <- bam_to_tcc(
-            bam_files = bam_files, transcript_data = transcript_data,
-            run_mode = "de_novo_full", min_relative_expression = 0
+        expect_warning(
+            se <- bam_to_tcc(
+                bam_files = bam_files, transcript_data = transcript_data,
+                run_mode = "de_novo_full", min_relative_expression = 0
+            ),
+            regexp = "experimental feature",
+            fixed = TRUE
         ),
-        regexp = "experimental feature",
+        regexp = "have low percentage",
         fixed = TRUE
     )
     expect_true(class(se) == "SummarizedExperiment")
